@@ -39,8 +39,6 @@ public class ApplicationConstantControllerTest {
                 .build();
     }
 
-
-
     @Test
     public void getById() throws Exception {
         Mockito.when(applicationconstantService.findById(ArgumentMatchers.anyString())).thenReturn(ApplicationConstantBuilder.getDto());
