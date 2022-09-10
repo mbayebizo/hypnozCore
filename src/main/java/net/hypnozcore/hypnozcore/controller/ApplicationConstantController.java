@@ -46,11 +46,7 @@ public class ApplicationConstantController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/page-query")
-    public ResponseEntity<Page<ApplicationConstantDto>> pageQuery(ApplicationConstantDto applicationConstantDto, @PageableDefault(sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ApplicationConstantDto> applicationConstantPage = applicationConstantService.findByCondition(applicationConstantDto, pageable);
-        return ResponseEntity.ok(applicationConstantPage);
-    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@RequestBody @Validated ApplicationConstantDto applicationConstantDto, @PathVariable("id") String id) {

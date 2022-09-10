@@ -39,22 +39,7 @@ public class ApplicationConstantControllerTest {
                 .build();
     }
 
-    @Test
-    public void findAllByPage() throws Exception {
-        Page<ApplicationConstantDto> page = new PageImpl<>(Collections.singletonList(ApplicationConstantBuilder.getDto()));
 
-        Mockito.when(applicationconstantService.findByCondition(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(page);
-
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get(ENDPOINT_URL)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data.content", Matchers.hasSize(1)));
-
-        Mockito.verify(applicationconstantService, Mockito.times(1)).findByCondition(ArgumentMatchers.any(), ArgumentMatchers.any());
-        Mockito.verifyNoMoreInteractions(applicationconstantService);
-
-    }
 
     @Test
     public void getById() throws Exception {
