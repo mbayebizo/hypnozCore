@@ -10,9 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -50,7 +48,6 @@ public class FileUtils {
     }
 
 
-
     public static String getFileExtension(File tmpFichier) {
         int posPoint = tmpFichier.getName().lastIndexOf('.');
         if (0 < posPoint && posPoint <= tmpFichier.getName().length() - 2) {
@@ -68,7 +65,6 @@ public class FileUtils {
             f.mkdirs();
         }
     }
-
 
 
     public static long getTaille(String pathDestination) {
@@ -98,10 +94,10 @@ public class FileUtils {
         if (t <= 1000) {
             s = t + " Bytes";
         } else if (t <= 1000000) {
-            r = (double)t / 1000;
+            r = (double) t / 1000;
             s = r + " KB";
         } else if (t <= 1000000000) {
-            r = (double)t / 1000000;
+            r = (double) t / 1000000;
             s = r + " MB";
         }
         return s;
@@ -114,10 +110,10 @@ public class FileUtils {
         if (t <= 1000) {
             s = t + " Bytes";
         } else if (t <= 1000000) {
-            r = (double)t / 1000;
+            r = (double) t / 1000;
             s = r + " KB";
         } else if (t <= 1000000000) {
-            r = (double)t / 1000000;
+            r = (double) t / 1000000;
             s = r + " MB";
         }
         return s;
@@ -192,4 +188,8 @@ public class FileUtils {
         return l;
     }
 
+    public static void deletefile(String path) throws IOException {
+            Files.deleteIfExists(Paths.get(path));
+
+    }
 }

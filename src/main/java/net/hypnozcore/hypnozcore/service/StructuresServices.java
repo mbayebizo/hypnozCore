@@ -108,7 +108,7 @@ public class StructuresServices {
         Path rootLocation = Paths.get(pathImage + HypnozCoreCostance.STRUCTURE  + strid +  HypnozCoreCostance.IMAGE_LOGO + logo + '.' + extension);
         try {
             if (FileUtils.existed(rootLocation.toFile().getPath())) {
-                FileUtils.deleteFile(rootLocation.toFile().getPath());
+                FileUtils.deletefile(rootLocation.toFile().getPath());
             }
             Files.copy(file.getInputStream(), rootLocation);
             return rootLocation.toFile().getPath();
