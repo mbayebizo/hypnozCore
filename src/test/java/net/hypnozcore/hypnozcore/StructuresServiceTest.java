@@ -169,7 +169,7 @@ class StructuresServiceTest {
         verify(mockRepository).deleteById(1L);
     }
 
-    @Test
+ /*   @Test
     void testFindById() {
         // Setup
         final StructuresDto expectedResult = StructuresDto.builder().build();
@@ -185,7 +185,7 @@ class StructuresServiceTest {
 
         // Verify the results
         assertThat(result).isEqualTo(expectedResult);
-    }
+    }*/
 
     @Test
     void testFindById_StructuresRepositoryReturnsAbsent() {
