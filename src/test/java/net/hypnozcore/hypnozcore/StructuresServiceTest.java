@@ -4,6 +4,8 @@ import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.mapper.StructuresMapper;
 import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.repository.StructuresRepository;
+import net.hypnozcore.hypnozcore.service.GenerateDefaultDocService;
+import net.hypnozcore.hypnozcore.service.GenerateMenuService;
 import net.hypnozcore.hypnozcore.service.StructuresServices;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,10 +31,14 @@ class StructuresServiceTest {
     private StructuresMapper mockStructuresMapper;
 
     private StructuresServices structuresServiceUnderTest;
+    @Mock
+    private GenerateMenuService generateMenuService;
+    @Mock
+    private GenerateDefaultDocService generateDefaultDocService;
 
     @BeforeEach
     void setUp() {
-        structuresServiceUnderTest = new StructuresServices(mockRepository, mockStructuresMapper);
+        structuresServiceUnderTest = new StructuresServices(mockRepository, mockStructuresMapper, generateMenuService, generateDefaultDocService);
     }
 
     @Test
@@ -79,9 +79,9 @@ class StructuresServiceTest {
     }
 
     @Test
-    public void testExceptionRaisonSocialSave() {
+    void testExceptionRaisonSocialSave() {
         // Setup
-        ResponseException exception = assertThrows(ResponseException.class,()->{
+        ResponseException exception = assertThrows(ResponseException.class, () -> {
             final StructuresDto structuresDto = StructuresDto.builder()
                     .sigle("teqsdqsdq")
                     .raisonSocial("r")
@@ -115,12 +115,13 @@ class StructuresServiceTest {
 
 
         // Verify the results
-        assertEquals("raison.social.error.description",exception.getMessage());
+        assertEquals("raison.social.error.description", exception.getMessage());
     }
+
     @Test
     void testExceptionSigleSave() {
         // Setup
-        ResponseException exception = assertThrows(ResponseException.class,()->{
+        ResponseException exception = assertThrows(ResponseException.class, () -> {
             final StructuresDto structuresDto = StructuresDto.builder()
                     .sigle("t")
                     .raisonSocial("rxcxcwxcwxcwxc")
@@ -154,7 +155,7 @@ class StructuresServiceTest {
 
 
         // Verify the results
-        assertEquals("sigle.error.description",exception.getMessage());
+        assertEquals("sigle.error.description", exception.getMessage());
     }
 
 

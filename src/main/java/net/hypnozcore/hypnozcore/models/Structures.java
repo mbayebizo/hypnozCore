@@ -3,10 +3,12 @@ package net.hypnozcore.hypnozcore.models;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serial;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "structures")
@@ -16,7 +18,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "{id}")
 @Builder
 public class Structures extends AbstractEntity{
     @Serial
@@ -45,4 +46,17 @@ public class Structures extends AbstractEntity{
     private String responsable;
     private String qualiteResponsable;
     private String capital;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Structures that = (Structures) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

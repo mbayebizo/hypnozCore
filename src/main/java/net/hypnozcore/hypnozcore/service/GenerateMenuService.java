@@ -19,19 +19,19 @@ import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Transactional
 public class GenerateMenuService {
     static final Logger LOGGER = LoggerFactory.getLogger(GenerateMenuService.class);
     final ModulesRepository modulesRepository;
@@ -113,23 +113,26 @@ public class GenerateMenuService {
     @SneakyThrows
     public List<Fonctions> createDefaultFonctions(List<Applications> applicationsList){
         //read file
-        Resource resource = new ClassPathResource("config/fonction.json");
+        Resource resource = new ClassPathResource("config/fonctions.json");
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<FonctionsDto>> typeReference = new TypeReference<List<FonctionsDto>>(){};
         List<FonctionsDto> fonctionsDtoList= objectMapper.readValue(resource.getInputStream(),typeReference);
 
         List<Fonctions> list = new ArrayList<>();
         for(FonctionsDto fonctionsDto:fonctionsDtoList){
-            applicationsList.stream().filter(p-> Objects.equals(p.getModule(),applications.getModule())&& Objects.equals(p.getApplication(), applications.getCode())).map(fonctionsDto->{
+           List<Fonctions> fonctionsList= applicationsList.stream().filter(p-> Objects.equals(p.getModule(),fonctionsDto.getModule())&& Objects.equals(fonctionsDto.getApplication(), p.getCode()))
+                    .map(fDto->{
                 Fonctions fonctions = fonctionsMapper.toEntity(fonctionsDto);
-                fonctions.setApplication(app.getCode());
-                fonctions.setApplicationsId(app.getId());
+                fonctions.setApplication(fDto.getCode());
+                fonctions.setApplicationsId(fDto.getId());
                 fonctions.setLibCode(FormatText.formatCode(fonctionsDto.getLibCode()));
                 fonctions.setOrdre(FormatText.getOrdre(fonctionsDto.getCode()));
-                repository.saveAndFlush(fonctions);
-                return fonctionsMapper.toDto(fonctions);
-            }).toList()
+                fonctionsRepository.saveAndFlush(fonctions);
+                return fonctions;
+            }).toList();
+           list.addAll(fonctionsList);
         }
+        return list;
     }
 
 }

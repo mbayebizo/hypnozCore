@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 
-
 import java.io.Serial;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
