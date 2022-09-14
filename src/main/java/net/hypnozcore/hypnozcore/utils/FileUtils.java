@@ -3,17 +3,11 @@ package net.hypnozcore.hypnozcore.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.http.MediaType;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.io.*;
-import java.nio.*;
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -21,25 +15,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
-import java.util.zip.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class FileUtils {
     static final int BUFFER = 2048;
 
-
-    public static File converTMultipleFile(@NotNull MultipartFile file) throws IOException {
-        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        if(convFile.createNewFile()){
-            FileOutputStream fos =   new FileOutputStream(convFile);
-            fos.write(file.getBytes());
-            fos.close();
-        }
-        return convFile;
-    }
 
     public static boolean copier(File source, File dest) {
         try {
@@ -61,28 +43,22 @@ public class FileUtils {
         }
         return true; // Résultat OK
     }
+
     public static boolean existed(String pathDestination) {
         File f = new File(pathDestination);
         return f.exists();
     }
 
-    public static boolean deleteFile(String sfile) {
-        boolean resultat = true;
-        File file = new File(sfile);
-        if (file.exists()) {
-            resultat = file.delete();
-        }
 
-        return (resultat);
-    }
+
     public static String getFileExtension(File tmpFichier) {
-        // tmpFichier.getName();
         int posPoint = tmpFichier.getName().lastIndexOf('.');
         if (0 < posPoint && posPoint <= tmpFichier.getName().length() - 2) {
             return tmpFichier.getName().substring(posPoint + 1);
         }
         return "";
     }
+
     /**
      * Creer un repertoire
      */
@@ -93,17 +69,7 @@ public class FileUtils {
         }
     }
 
-    public static boolean deleteAllFiles(String pathDestination) {
-        boolean resultat = true;
-        File file = new File(pathDestination);
-        File[] files = file.listFiles();
-        for (File f : Objects.requireNonNull(files)) {
-            if (f.isFile() && f.exists()) {
-                f.delete();
-            }
-        }
-        return (resultat);
-    }
+
 
     public static long getTaille(String pathDestination) {
         File f = new File(pathDestination);
@@ -124,6 +90,7 @@ public class FileUtils {
         }
         return t;
     }
+
     public static String getStringTaille(File f) {
         long t = f.length();
         double r = 0;
@@ -131,14 +98,15 @@ public class FileUtils {
         if (t <= 1000) {
             s = t + " Bytes";
         } else if (t <= 1000000) {
-            r = t / 1000;
+            r = (double)t / 1000;
             s = r + " KB";
         } else if (t <= 1000000000) {
-            r = t / 1000000;
+            r = (double)t / 1000000;
             s = r + " MB";
         }
         return s;
     }
+
     public static String getStringTaille(long t) {
         double r = 0;
 
@@ -156,7 +124,6 @@ public class FileUtils {
     }
 
     public static String getFileExtension(String tmpFichier) {
-        // tmpFichier.getName();
         int posPoint = tmpFichier.lastIndexOf('.');
         if (0 < posPoint && posPoint <= tmpFichier.length() - 2) {
             return tmpFichier.substring(posPoint + 1);
@@ -165,7 +132,6 @@ public class FileUtils {
     }
 
     public static String getFileName(String tmpFichier) {
-        // tmpFichier.getName();
         int posPoint = tmpFichier.lastIndexOf('.');
         if (0 < posPoint && posPoint <= tmpFichier.length() - 2) {
             return tmpFichier.substring(0, posPoint);
@@ -210,106 +176,6 @@ public class FileUtils {
         return s[1];
     }
 
-    public static String saveJsonFile(String json, String filename, String path, boolean zip) {
-        try {
-            if (existed(path)) {
-                FileWriter writer = new FileWriter(new StringBuilder().append(path).append(filename).append(".json").toString());
-                writer.write(json);
-                writer.close();
-                if (zip) {
-                    compresser(path + filename + ".json", path, filename);
-                }
-            } else {
-                return "LE CHEMIN SUIVANT N'EXISTE PAS : " + path;
-            }
-            return "-1";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-
-    }
-
-    public static void compresser(String fileathSource,
-                                  String pathDestination, String filename) {
-
-        try {
-            File f = new File(fileathSource);
-            try (FileOutputStream dest = new FileOutputStream(pathDestination
-                    + filename + ".zip")) {
-
-                CheckedOutputStream checksum = new CheckedOutputStream(dest,
-                        new Adler32());
-                BufferedOutputStream buff = new BufferedOutputStream(checksum);
-                ZipOutputStream out = new ZipOutputStream(buff);
-                out.setMethod(ZipOutputStream.DEFLATED);
-                out.setLevel(Deflater.BEST_COMPRESSION);
-                byte[] data = new byte[BUFFER];
-                FileInputStream fi = new FileInputStream(f);
-                BufferedInputStream buffi = new BufferedInputStream(fi, BUFFER);
-                ZipEntry entry = new ZipEntry(filename + "."
-                        + getFileExtension(f).toLowerCase());
-                out.putNextEntry(entry);
-                int count;
-                while ((count = buffi.read(data, 0, BUFFER)) != -1) {
-                    out.write(data, 0, count);
-                }
-                out.closeEntry();
-                buffi.close();
-                out.close();
-                buff.close();
-                checksum.close();
-            }
-            deleteFile(fileathSource);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void decompresser(final String fileName,
-                                    final String folderName, final boolean deleteZipAfter)
-            throws IOException {
-        final File file = new File(fileName);
-        final File folder = new File(folderName);
-        try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
-                new FileInputStream(file.getCanonicalFile())))) {
-            ZipEntry ze;
-            // Parcourt tous les fichiers
-            while (null != (ze = zis.getNextEntry())) {
-                final File f = new File(folder.getCanonicalPath(), ze.getName());
-                if (f.exists())
-                    f.delete();
-
-                // Création des dossiers
-                if (ze.isDirectory()) {
-                    f.mkdirs();
-                    continue;
-                }
-                f.getParentFile().mkdirs();
-                final OutputStream fos = new BufferedOutputStream(
-                        new FileOutputStream(f));
-
-                // Ecriture des fichiers
-                try {
-                    try {
-                        final byte[] buf = new byte[8192];
-                        int bytesRead;
-                        while (-1 != (bytesRead = zis.read(buf)))
-                            fos.write(buf, 0, bytesRead);
-                    } finally {
-                        fos.close();
-                    }
-                } catch (final IOException ioe) {
-                    f.delete();
-                    throw ioe;
-                }
-            }
-        }
-        if (deleteZipAfter) {
-            file.delete();
-        }
-
-    }
 
     public static List<String> getFileNameFromDirectory(String path) {
         List<String> l = new ArrayList<>();
@@ -326,20 +192,4 @@ public class FileUtils {
         return l;
     }
 
-    public static void setReporExcelResponse(String filePath, HttpServletResponse response) throws IOException {
-        File dfile = new File(filePath);
-        FileInputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(dfile);
-            response.setHeader("Content-Disposition", "attachment; filename=\"etat.xls\"");
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            ServletOutputStream outputStream = response.getOutputStream();
-            IOUtils.copy(inputStream, outputStream);
-        } catch (IOException e){
-            e.printStackTrace();
-        } finally {
-            Objects.requireNonNull(inputStream).close();
-        }
-
-    }
 }
