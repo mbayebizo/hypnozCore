@@ -1,9 +1,10 @@
 package net.hypnozcore.hypnozcore.utils;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OsUtils {
 
     public static final int OS_TYPE_LINUX = 1;

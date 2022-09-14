@@ -99,21 +99,4 @@ public class StructuresServices {
         return ResponseEntity.ok().body(structureDto);
     }
 
-    public String uploadLogoSociete(MultipartFile file, Long strid, String logo) {
-        String pathImage = OsUtils.getOsHomeDir();
-        if (FileUtils.existed(pathImage) && !FileUtils.existed(pathImage + HypnozCoreCostance.STRUCTURE + strid + HypnozCoreCostance.IMAGE_LOGO))
-            FileUtils.mkdir(pathImage + HypnozCoreCostance.STRUCTURE + strid +  HypnozCoreCostance.IMAGE_LOGO);
-
-        String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(".".lastIndexOf(file.getOriginalFilename()) + 1);
-        Path rootLocation = Paths.get(pathImage + HypnozCoreCostance.STRUCTURE  + strid +  HypnozCoreCostance.IMAGE_LOGO + logo + '.' + extension);
-        try {
-            if (FileUtils.existed(rootLocation.toFile().getPath())) {
-                FileUtils.deletefile(rootLocation.toFile().getPath());
-            }
-            Files.copy(file.getInputStream(), rootLocation);
-            return rootLocation.toFile().getPath();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
