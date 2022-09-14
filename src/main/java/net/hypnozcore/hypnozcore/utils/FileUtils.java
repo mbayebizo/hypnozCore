@@ -114,10 +114,10 @@ public class FileUtils {
         if (t <= 1000) {
             s = t + " Bytes";
         } else if (t <= 1000000) {
-            r = (t / 1000);
+            r = (double)t / 1000;
             s = r + " KB";
         } else if (t <= 1000000000) {
-            r = (t / 1000000);
+            r = (double)t / 1000000;
             s = r + " MB";
         }
         return s;
