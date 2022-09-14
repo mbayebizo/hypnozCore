@@ -189,7 +189,12 @@ public class FileUtils {
     }
 
     public static void deletefile(String path) throws IOException {
+        try{
             Files.deleteIfExists(Paths.get(path));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
 
     }
 }
