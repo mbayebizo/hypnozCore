@@ -36,7 +36,7 @@ public class FileUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug("Faux {e}",e);
             return false; // Erreur
         }
         return true; // Résultat OK
@@ -192,7 +192,7 @@ public class FileUtils {
         try{
             Files.deleteIfExists(Paths.get(path));
         }catch (IOException e){
-            e.printStackTrace();
+            log.debug("Faux {e}",e);
         }
 
 
