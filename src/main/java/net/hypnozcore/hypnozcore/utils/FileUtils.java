@@ -183,7 +183,7 @@ public class FileUtils {
             l.addAll(result);
 
         } catch (IOException e) {
-            e.printStackTrace();
+          log.debug("Faux {e}",e);
         }
         return l;
     }
