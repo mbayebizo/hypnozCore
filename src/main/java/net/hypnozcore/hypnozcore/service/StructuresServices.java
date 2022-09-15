@@ -7,9 +7,6 @@ import net.hypnozcore.hypnozcore.models.Applications;
 import net.hypnozcore.hypnozcore.models.Modules;
 import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.repository.StructuresRepository;
-import net.hypnozcore.hypnozcore.utils.FileUtils;
-import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
-import net.hypnozcore.hypnozcore.utils.OsUtils;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
@@ -18,15 +15,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
