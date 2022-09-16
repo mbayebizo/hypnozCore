@@ -43,7 +43,7 @@ class StructuresServiceTest {
         structuresServiceUnderTest = new StructuresServices(mockRepository, mockStructuresMapper, generateMenuService, generateDefaultDocService);
     }
 
- /*   @Test
+   @Test
     void testSave() {
         // Setup
         final StructuresDto structuresDto = StructuresDto.builder()
@@ -58,24 +58,55 @@ class StructuresServiceTest {
         final StructuresDto expectedResult = StructuresDto.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
                 .build();
         when(mockStructuresMapper.toEntity(StructuresDto.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
-                .build())).thenReturn(Structures.builder().build());
-        lenient().when(mockRepository.save(Structures.builder()
-                .sigle("teste")
-                .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
                 .build())).thenReturn(Structures.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
+                .build());
+        lenient().when(mockRepository.save(Structures.builder()
+                .sigle("teste")
+                .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
+                .build())).thenReturn(Structures.builder()
+                .sigle("teste")
+                .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
                 .build());
         when(mockStructuresMapper.toDto(Structures.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
                 .build())).thenReturn(StructuresDto.builder()
                 .sigle("teste")
                 .raisonSocial("raison social")
+                .adresse("test deress")
+                .bilanSocail("500000")
+                .dateFiscale(LocalDate.now())
+                .typeEntreprise(TypeEntreprise.SA)
                 .build());
 
         // Run the test
@@ -83,7 +114,7 @@ class StructuresServiceTest {
 
         // Verify the results
         assertThat(result).isEqualTo(expectedResult);
-    }*/
+    }
 
     @Test
     void testExceptionRaisonSocialSave() {
@@ -176,10 +207,12 @@ class StructuresServiceTest {
         verify(mockRepository).deleteById(1L);
     }
 
- /*   @Test
+  @Test
     void testFindById() {
         // Setup
-        final StructuresDto expectedResult = StructuresDto.builder().build();
+        final StructuresDto expectedResult = StructuresDto.builder()
+                .raisonSocial("raison social")
+                .build();
 
         // Configure StructuresRepository.findById(...).
         final Optional<Structures> structures = Optional.of(Structures.builder().build());
@@ -192,7 +225,7 @@ class StructuresServiceTest {
 
         // Verify the results
         assertThat(result).isEqualTo(expectedResult);
-    }*/
+    }
 
     @Test
     void testFindById_StructuresRepositoryReturnsAbsent() {
