@@ -18,6 +18,9 @@ public class HypnozCoreCostance {
     public static final String DIR_LOG = "logs";
     public static final String STRUCTURE="/structure";
     public static final String IMAGE_LOGO="image/logos/";
+    public static final String CODE_NOT_EMPTY="code ne peut pas etre null";
+    public static final String TAILLE_SIZE_INCORRECT="La Taille n'est pas respecté";
+
 
     public static void logDebug(Object o){
         log.debug("Faux {e}",o);

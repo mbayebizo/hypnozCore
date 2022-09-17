@@ -3,7 +3,11 @@ package net.hypnozcore.hypnozcore.service;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnozcore.hypnozcore.dto.GroupesDto;
 import net.hypnozcore.hypnozcore.mapper.GroupesMapper;
+import net.hypnozcore.hypnozcore.models.Groupes;
 import net.hypnozcore.hypnozcore.repository.GroupesRepository;
+import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
+import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
+import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +36,8 @@ public class GroupesServices {
 
     public ResponseEntity<GroupesDto> save(GroupesDto groupesDto){
             validateGroupe(groupesDto);
-        return ResponseEntity.ok().body(groupesDto);
+        Groupes groupes = groupesRepository.saveAndFlush(groupesMapper.toEntity(groupesDto));
+        return ResponseEntity.ok().body(groupesMapper.toDto(groupes));
     }
 
     private void validateGroupe(GroupesDto groupesDto) {
@@ -41,7 +46,13 @@ public class GroupesServices {
         Set<ConstraintViolation<GroupesDto>> constraintViolations= validator.validate(groupesDto);
         if(!constraintViolations.isEmpty()){
             for (ConstraintViolation<GroupesDto> contraintes: constraintViolations) {
-                log.debug("Debug truc est {0}",contraintes.getMessage());
+                if (HypnozCoreCostance.CODE_NOT_EMPTY.equals(contraintes.getMessageTemplate())){
+                    throw new ResponseException(RequestErrorEnum.CODE_GROUPE_EMPTY);
+                }
+                if(HypnozCoreCostance.TAILLE_SIZE_INCORRECT.equals(contraintes.getMessageTemplate())){
+                    throw  new ResponseException(RequestErrorEnum.SIZE_CODE_EMPTY);
+                }
+
             }
         }
     }
