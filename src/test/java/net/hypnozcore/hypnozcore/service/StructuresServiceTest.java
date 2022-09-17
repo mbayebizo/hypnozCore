@@ -1,4 +1,4 @@
-package net.hypnozcore.hypnozcore;
+package net.hypnozcore.hypnozcore.service;
 
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
@@ -9,6 +9,7 @@ import net.hypnozcore.hypnozcore.service.GenerateDefaultDocService;
 import net.hypnozcore.hypnozcore.service.GenerateMenuService;
 import net.hypnozcore.hypnozcore.service.StructuresServices;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -87,82 +88,70 @@ class StructuresServiceTest {
 
     @Test
     void testExceptionRaisonSocialSave() {
+        final StructuresDto structuresDto = StructuresDto.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build();
+        final StructuresDto expectedResult = StructuresDto.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build();
+        lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build())).thenReturn(Structures.builder().build());
+        lenient().when(mockRepository.save(Structures.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build())).thenReturn(Structures.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build());
+        lenient().when(mockStructuresMapper.toDto(Structures.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build())).thenReturn(StructuresDto.builder()
+                .sigle("teqsdqsdq")
+                .raisonSocial("r")
+                .build());
+
+        // Run the test
         // Setup
-        ResponseException exception = assertThrows(ResponseException.class, () -> {
-            final StructuresDto structuresDto = StructuresDto.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build();
-            final StructuresDto expectedResult = StructuresDto.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build();
-            lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build())).thenReturn(Structures.builder().build());
-            lenient().when(mockRepository.save(Structures.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build())).thenReturn(Structures.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build());
-            lenient().when(mockStructuresMapper.toDto(Structures.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build())).thenReturn(StructuresDto.builder()
-                    .sigle("teqsdqsdq")
-                    .raisonSocial("r")
-                    .build());
-
-            // Run the test
-            final StructuresDto result = structuresServiceUnderTest.save(structuresDto).getBody();
-        });
-
-
-        // Verify the results
-        assertEquals("raison.social.error.description", exception.getMessage());
+        Assert.assertThrows(ResponseException.class, () -> structuresServiceUnderTest.save(structuresDto).getBody());
     }
 
     @Test
     void testExceptionSigleSave() {
         // Setup
-        ResponseException exception = assertThrows(ResponseException.class, () -> {
-            final StructuresDto structuresDto = StructuresDto.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build();
-            final StructuresDto expectedResult = StructuresDto.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build();
-            lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build())).thenReturn(Structures.builder().build());
-            lenient().when(mockRepository.save(Structures.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build())).thenReturn(Structures.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build());
-            lenient().when(mockStructuresMapper.toDto(Structures.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build())).thenReturn(StructuresDto.builder()
-                    .sigle("t")
-                    .raisonSocial("rxcxcwxcwxcwxc")
-                    .build());
+        final StructuresDto structuresDto = StructuresDto.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build();
+        final StructuresDto expectedResult = StructuresDto.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build();
+        lenient().when(mockStructuresMapper.toEntity(StructuresDto.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build())).thenReturn(Structures.builder().build());
+        lenient().when(mockRepository.save(Structures.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build())).thenReturn(Structures.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build());
+        lenient().when(mockStructuresMapper.toDto(Structures.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build())).thenReturn(StructuresDto.builder()
+                .sigle("t")
+                .raisonSocial("rxcxcwxcwxcwxc")
+                .build());
 
-            // Run the test
-            final StructuresDto result = structuresServiceUnderTest.save(structuresDto).getBody();
-        });
-
-
-        // Verify the results
-        assertEquals("sigle.error.description", exception.getMessage());
+        // Run the test
+        Assert.assertThrows(ResponseException.class, () -> structuresServiceUnderTest.save(structuresDto).getBody());
     }
 
 
