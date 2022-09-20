@@ -19,7 +19,9 @@ public enum RequestErrorEnum {
     ID_STRUCTURE_EMPTY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name(),"ID Structure not Found","ID Structure not Found\"" ),
     CODE_GROUPE_EMPTY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name(),"Code Groupe is empty","Code Groupe is empty\"" ),
     SIZE_CODE_EMPTY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name(),"La taille du code est incorrect","La taille du code est incorrect\"" ),
-    NOT_FOUND_GROUPE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"GROUPE Not FOUND" ,"Find GROUPE not found" ),;
+    NOT_FOUND_GROUPE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"GROUPE Not FOUND" ,"Find GROUPE not found" ),
+    MDP_INCORRECT(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Veillez donner un bon mot de passe" ,"Veillez donner un bon mot de passe" ),
+    ;
 
     final HttpStatus httpStatus;
     final String errorCode;

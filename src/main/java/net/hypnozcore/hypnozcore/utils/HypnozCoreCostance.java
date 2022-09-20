@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HypnozCoreCostance {
     public static  final String REGEX_0_9= "[^0-9]";
-    public static  final String REGEX_PASSWORD="([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,20})";
+    public static  final String REGEX_MDP="([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,20})";
     public static  final String DEFAULT_DOC_SERVEUR_NAME = "hypnozcore";
     public static  final String DEFAULT_DOC_SERVEUR_STRUCTURE = "structure";
     public static  final String DEFAULT_DOC_SERVEUR_MODELS = "models";

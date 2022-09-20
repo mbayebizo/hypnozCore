@@ -7,6 +7,7 @@ import net.hypnozcore.hypnozcore.repository.GroupesRepository;
 import net.hypnozcore.hypnozcore.repository.UsersRepository;
 import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
+import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +39,12 @@ public class UsersServices {
 
     private void valideUser(UsersDto usersDto) {
         if(!isvalidePassword(usersDto.getPwd())){
-            throw new ResponseException(ResponseException.PASSWORD_INCORRECT);
+            throw new ResponseException(RequestErrorEnum.MDP_INCORRECT);
         }
     }
 
     private boolean isvalidePassword(String pwd) {
-        Pattern pattern = Pattern.compile(HypnozCoreCostance.REGEX_PASSWORD);
+        Pattern pattern = Pattern.compile(HypnozCoreCostance.REGEX_MDP);
         if(pwd==null) return false;
         Matcher m = pattern.matcher(pwd);
         return m.matches();
