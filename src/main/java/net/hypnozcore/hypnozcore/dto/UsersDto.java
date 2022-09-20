@@ -41,10 +41,11 @@ public class UsersDto extends AbstractDto {
     String photo;
     String signature;
     @Size(max = 255)
-            @NotBlank(message = HypnozCoreCostance.LOGIN_NOT_EMPTY)
+    @NotBlank(message = HypnozCoreCostance.LOGIN_NOT_EMPTY)
     String login;
     @Size(max = 255)
     String pwd;
     GroupesDto groupes;
+    StructuresDto structuresDto;
     
 }
