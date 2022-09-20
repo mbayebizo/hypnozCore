@@ -8,6 +8,7 @@ import java.io.Serial;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseException extends RuntimeException{
+    public static final String PASSWORD_INCORRECT = "Veillez donner un bon mot de passe";
     @Serial
     static final long serialVersionUID= -3515390014108856326L;
 

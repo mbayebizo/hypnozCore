@@ -42,7 +42,9 @@ public class GroupesServices {
     public ResponseEntity<GroupesDto> save(GroupesDto groupesDto){
             validateGroupe(groupesDto);
         Groupes groupes = groupesRepository.saveAndFlush(groupesMapper.toEntity(groupesDto));
-        return ResponseEntity.ok().body(groupesMapper.toDto(groupes));
+        GroupesDto grpDto =groupesMapper.toDto(groupes);
+        LOGGER.debug(GroupesServices.class.getName(),HypnozCoreCostance.CREATED,grpDto);
+        return ResponseEntity.ok().body(grpDto);
     }
 
     public ResponseEntity<GroupesDto>update(GroupesDto groupesDto, Long id){
@@ -50,9 +52,11 @@ public class GroupesServices {
         try {
             var grp= groupesRepository
                     .findById(id)
-                    .map(oldEntity -> updateWithOld(oldEntity, groupesDto))
+                    .map(oldEntity -> groupesRepository.saveAndFlush(groupesMapper.toEntity(groupesDto)))
                     .orElseThrow(() ->  new  ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE));
-            return ResponseEntity.status(HttpStatus.CREATED).body(groupesMapper.toDto(grp));
+            GroupesDto grpDto =groupesMapper.toDto(grp);
+            LOGGER.debug(GroupesServices.class.getName(),HypnozCoreCostance.UPDATED,grpDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(grpDto);
 
         } catch (ResponseException e) {
             log.error(e.getMessage(), e);
@@ -60,18 +64,13 @@ public class GroupesServices {
         }
     }
 
-    private Groupes updateWithOld(Groupes oldEntity, GroupesDto groupesDto) {
-        try {
-            return groupesRepository.saveAndFlush(groupesMapper.toEntity(groupesDto));
-        } catch (ResponseException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
-        }
-    }
-    public ResponseEntity<List<Groupes>> list(Long sid) {
+
+    public ResponseEntity<List<GroupesDto>> list(Long sid) {
         try {
             List<Groupes> groupeList= groupesRepository.findAll().stream().filter(grp->grp.getStructuresId().equals(sid)).toList();
-            return  ResponseEntity.status(HttpStatus.ACCEPTED).body(groupeList);
+            List<GroupesDto> groupesDtoList = groupesMapper.toDto(groupeList);
+            LOGGER.debug(GroupesServices.class.getName(),HypnozCoreCostance.FIND_LIST,groupesDtoList);
+            return  ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesDtoList);
         } catch (ResponseException e) {
             log.error(e.getMessage(), e);
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
@@ -80,12 +79,17 @@ public class GroupesServices {
 
     public ResponseEntity<Optional<GroupesDto>> findById(Long id) {
         try {
-
             Optional<Groupes> grpOptional = Optional.ofNullable(id).flatMap(groupesRepository::findById);
-            if(grpOptional.isPresent())
-                return ResponseEntity.status(HttpStatus.OK).body(Optional.of(groupesMapper.toDto(grpOptional.get())));
-            else
+            GroupesDto groupesDto;
+            if (grpOptional.isPresent()) {
+                groupesDto = groupesMapper.toDto(grpOptional.get());
+                LOGGER.debug(GroupesServices.class.getName(), HypnozCoreCostance.FIND_LIST, groupesDto);
+                return ResponseEntity.status(HttpStatus.OK).body(Optional.of(groupesDto));
+            }
+            else{
                 throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+            }
+
         } catch (ResponseException e) {
             log.error(e.getMessage(), e);
            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);

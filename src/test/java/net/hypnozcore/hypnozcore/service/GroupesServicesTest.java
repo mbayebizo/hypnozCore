@@ -1,72 +1,123 @@
 package net.hypnozcore.hypnozcore.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
 import net.hypnozcore.hypnozcore.dto.GroupesDto;
 import net.hypnozcore.hypnozcore.mapper.GroupesMapper;
-import net.hypnozcore.hypnozcore.mapper.StructuresMapper;
 import net.hypnozcore.hypnozcore.repository.GroupesRepository;
-import net.hypnozcore.hypnozcore.repository.StructuresRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.validation.ValidatorFactory;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ActiveProfiles({"dev"})
+@ExtendWith(SpringExtension.class)
 class GroupesServicesTest {
+    @MockBean
+    private GroupesMapper groupesMapper;
 
-    @Mock
-    private GroupesRepository mockRepository;
-    @Mock
-    private GroupesMapper mockGroupeMapper;
+    @MockBean
+    private GroupesRepository groupesRepository;
 
+    @Autowired
+    private GroupesServices groupesServices;
 
-    private GroupesServices groupesServicesUnderTest;
-
-
-    @BeforeEach
-    void setUp() {
-        groupesServicesUnderTest = new GroupesServices(mockRepository,mockGroupeMapper);
-    }
-
+    /**
+     * Method under test: {@link GroupesServices#save(GroupesDto)}
+     */
     @Test
-    @DisplayName("throws EmptyStackException when popped")
-    void shouldBeCodeIsNull() {
-        GroupesDto groupesDto = GroupesDto.builder().build();
-        Assert.assertThrows(ResponseException.class, () -> groupesServicesUnderTest.save(groupesDto).getBody());
-    }
- @Test
-    void shouldBeSizeCodeIncorrect() {
-        GroupesDto groupesDto = GroupesDto.builder()
-                .code("t")
-                .build();
-     Assert.assertThrows(ResponseException.class, () -> groupesServicesUnderTest.save(groupesDto).getBody());
+    void testSave() {
+        GroupesDto groupesDto = mock(GroupesDto.class);
+        when(groupesDto.getCode()).thenReturn("Code");
+        assertThrows(ResponseException.class, () -> groupesServices.save(groupesDto));
+        verify(groupesDto).getCode();
     }
 
+    /**
+     * Method under test: {@link GroupesServices#save(GroupesDto)}
+     */
     @Test
-    void shouldBeCreateGroupeCorrect() {
-        GroupesDto groupesDto = GroupesDto.builder()
-                .code("Cpt")
-                .libelle("Comptabilité")
-                .build();
-
-        GroupesDto excepted = groupesServicesUnderTest.save(groupesDto).getBody();
-
-        assertThat(excepted).isNotNull();
-        assertThat(excepted.getCode()).isEqualTo(groupesDto.getCode());
-
-
+    void testSave2() {
+        GroupesDto groupesDto = mock(GroupesDto.class);
+        when(groupesDto.getCode()).thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
+        assertThrows(ResponseException.class, () -> groupesServices.save(groupesDto));
+        verify(groupesDto).getCode();
     }
 
+    /**
+     * Method under test: {@link GroupesServices#update(GroupesDto, Long)}
+     */
+    @Test
+    void testUpdate() {
+        GroupesDto groupesDto = mock(GroupesDto.class);
+        when(groupesDto.getCode()).thenReturn("Code");
+        assertThrows(ResponseException.class, () -> groupesServices.update(groupesDto, 123L));
+        verify(groupesDto).getCode();
+    }
 
+    /**
+     * Method under test: {@link GroupesServices#update(GroupesDto, Long)}
+     */
+    @Test
+    void testUpdate2() {
+        GroupesDto groupesDto = mock(GroupesDto.class);
+        when(groupesDto.getCode()).thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
+        assertThrows(ResponseException.class, () -> groupesServices.update(groupesDto, 123L));
+        verify(groupesDto).getCode();
+    }
+
+    /**
+     * Method under test: {@link GroupesServices#list(Long)}
+     */
+    @Test
+    void testList() {
+        ResponseEntity<List<GroupesDto>> actualListResult = groupesServices.list(1L);
+        assertTrue(actualListResult.hasBody());
+        assertEquals(HttpStatus.ACCEPTED, actualListResult.getStatusCode());
+        assertTrue(actualListResult.getHeaders().isEmpty());
+    }
+
+    /**
+     * Method under test: {@link GroupesServices#list(Long)}
+     */
+    @Test
+    void testList2() {
+        ResponseEntity<List<GroupesDto>> actualListResult = groupesServices.list(-1264874952L);
+        assertTrue(actualListResult.hasBody());
+        assertEquals(HttpStatus.ACCEPTED, actualListResult.getStatusCode());
+        assertTrue(actualListResult.getHeaders().isEmpty());
+    }
+
+    /**
+     * Method under test: {@link GroupesServices#findById(Long)}
+     */
+    @Test
+    void testFindById() {
+        assertThrows(ResponseException.class, () -> groupesServices.findById(123L));
+        assertThrows(ResponseException.class, () -> groupesServices.findById(1L));
+    }
+
+    /**
+     * Method under test: {@link GroupesServices#findOne(Long)}
+     */
+    @Test
+    void testFindOne() {
+        assertThrows(ResponseException.class, () -> groupesServices.findOne(123L));
+    }
 }
+

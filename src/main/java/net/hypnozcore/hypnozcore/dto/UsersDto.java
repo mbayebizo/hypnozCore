@@ -3,7 +3,9 @@ package net.hypnozcore.hypnozcore.dto;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -39,6 +41,7 @@ public class UsersDto extends AbstractDto {
     String photo;
     String signature;
     @Size(max = 255)
+            @NotBlank(message = HypnozCoreCostance.LOGIN_NOT_EMPTY)
     String login;
     @Size(max = 255)
     String pwd;

@@ -11,7 +11,7 @@ import java.io.Serial;
 @Setter
 @Entity
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Where(clause = "active <> 'N'")
 @FieldDefaults(level = AccessLevel.PRIVATE)
