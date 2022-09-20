@@ -64,7 +64,7 @@ class StructuresServicesTest {
      * Method under test: {@link StructuresServices#save(StructuresDto)}
      */
     @Test
-    void testSave() {
+    void test_save_new_structures() {
         Structures structures = new Structures();
         structures.setActiviteCommerciale("Activite Commerciale");
         structures.setAdresse("Adresse");

@@ -1,5 +1,7 @@
 package net.hypnozcore.hypnozcore.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +21,9 @@ class GenerateDefaultDocServiceTest {
      * Method under test: {@link GenerateDefaultDocService#create()}
      */
     @Test
-    void testCreate() throws ResponseException {
-        // TODO: Complete this test.
-        //   Reason: R002 Missing observers.
-        //   Diffblue Cover was unable to create an assertion.
-        //   There are no fields that could be asserted on.
-
-        generateDefaultDocService.create();
+    void should_be_create_new_repertory() throws ResponseException {
+               assertEquals("/opt/hypnozcore/", generateDefaultDocService.create());
     }
+
 }
 
