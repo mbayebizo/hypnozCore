@@ -24,6 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,15 +55,20 @@ public class GenerateMenuService {
         this.structuresRepository = structuresRepository;
         this.modulesStructureRepository = modulesStructureRepository;
     }
-    @SneakyThrows
+
     public List<Modules> createDefaultModule(Structures structures){
         if(structures.getId()==null) throw new ResponseException(RequestErrorEnum.ID_STRUCTURE_EMPTY);
         //read file
         Resource resource = new ClassPathResource("config/modules.json");
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<ModulesDto>> typeReference = new TypeReference<List<ModulesDto>>(){};
-        List<ModulesDto> modulesDtoList = objectMapper.readValue(resource.getInputStream(),typeReference);
-       return modulesDtoList.stream().map(modulesDto->{
+        List<ModulesDto> modulesDtoList = null;
+        try {
+            modulesDtoList = objectMapper.readValue(resource.getInputStream(),typeReference);
+        } catch (IOException e) {
+            throw new ResponseException(RequestErrorEnum.FILE_NOT_FOUND);
+        }
+        return modulesDtoList.stream().map(modulesDto->{
            Modules modules= new Modules();
             if(modulesRepository.findByCode(modulesDto.getCode()).isEmpty()){
                 modules = modulesMapper.toEntity(modulesDto);
@@ -84,12 +90,17 @@ public class GenerateMenuService {
         }).toList();
     }
 
-    @SneakyThrows
+
     public List<Applications> createDefaultApplication(List<Modules> modulesList){
         Resource resource = new ClassPathResource("config/Applications.json");
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<ApplicationsDto>> typeReference = new TypeReference<List<ApplicationsDto>>(){};
-        List<ApplicationsDto> applicationsDtoList = objectMapper.readValue(resource.getInputStream(),typeReference);
+        List<ApplicationsDto> applicationsDtoList = null;
+        try {
+            applicationsDtoList = objectMapper.readValue(resource.getInputStream(),typeReference);
+        } catch (IOException e) {
+            throw new ResponseException(RequestErrorEnum.FILE_NOT_FOUND);
+        }
 
         List<Applications> list = new ArrayList<>();
         for (ApplicationsDto applicationsDto : applicationsDtoList) {
@@ -110,13 +121,18 @@ public class GenerateMenuService {
 
     }
 
-    @SneakyThrows
+
     public List<Fonctions> createDefaultFonctions(List<Applications> applicationsList){
         //read file
         Resource resource = new ClassPathResource("config/fonctions.json");
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<FonctionsDto>> typeReference = new TypeReference<List<FonctionsDto>>(){};
-        List<FonctionsDto> fonctionsDtoList= objectMapper.readValue(resource.getInputStream(),typeReference);
+        List<FonctionsDto> fonctionsDtoList= null;
+        try {
+            fonctionsDtoList = objectMapper.readValue(resource.getInputStream(),typeReference);
+        } catch (IOException e) {
+            throw new ResponseException(RequestErrorEnum.FILE_NOT_FOUND);
+        }
 
         List<Fonctions> list = new ArrayList<>();
         for(FonctionsDto fonctionsDto:fonctionsDtoList){

@@ -35,12 +35,12 @@ import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {UsersServices.class})
+@SpringBootTest
 @ActiveProfiles({"test"})
 @ExtendWith(SpringExtension.class)
 class UsersServicesTest {
@@ -540,6 +540,24 @@ class UsersServicesTest {
         verify(usersDto).getStructuresDto();
         verify(groupesDto).getId();
         verify(structuresDto).getId();
+    }
+
+    /**
+     * Method under test: {@link UsersServices#findUserActiveBygroupe(Long)}
+     */
+    @Test
+    void testFindUserActiveBygroupe() {
+        assertThrows(ResponseException.class, () -> usersServices.findUserActiveBygroupe(123L));
+        assertThrows(ResponseException.class, () -> usersServices.findUserActiveBygroupe(1L));
+    }
+
+    /**
+     * Method under test: {@link UsersServices#findUserBygroupe(Long)}
+     */
+    @Test
+    void testFindUserBygroupe() {
+        assertThrows(ResponseException.class, () -> usersServices.findUserBygroupe(123L));
+        assertThrows(ResponseException.class, () -> usersServices.findUserBygroupe(1L));
     }
 }
 

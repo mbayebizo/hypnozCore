@@ -21,7 +21,7 @@ public enum RequestErrorEnum {
     SIZE_CODE_EMPTY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name(),"La taille du code est incorrect","La taille du code est incorrect\"" ),
     NOT_FOUND_GROUPE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"GROUPE Not FOUND" ,"Find GROUPE not found" ),
     MDP_INCORRECT(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Veillez donner un bon mot de passe" ,"Veillez donner un bon mot de passe" ),
-    ;
+    FILE_NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "Lecture du ficher Incorrecte", "Lecture du ficher Incorrecte");
 
     final HttpStatus httpStatus;
     final String errorCode;

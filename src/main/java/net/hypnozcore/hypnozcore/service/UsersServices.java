@@ -10,14 +10,18 @@ import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -91,5 +95,34 @@ public class UsersServices {
         if(pwd==null) return false;
         Matcher m = pattern.matcher(pwd);
         return m.matches();
+    }
+
+    public ResponseEntity<List<UsersDto>> findUserActiveBygroupe(Long grpId){
+        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream().map(userGroupes -> {
+            if (userGroupes.getUsers() != null && Objects.equals(userGroupes.getUsers().getEtat(), Boolean.TRUE))
+                return usersMapper.toDto(userGroupes.getUsers());
+            return null;
+        }).toList();
+
+       if (!usersDtoSet.isEmpty()){
+           return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
+       }
+        else {
+            throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
+       }
+    }
+    public ResponseEntity<List<UsersDto>> findUserBygroupe(Long grpId){
+        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream().map(userGroupes -> {
+            if (userGroupes.getUsers() != null)
+                return usersMapper.toDto(userGroupes.getUsers());
+            return null;
+        }).toList();
+
+        if (!usersDtoSet.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
+        }
+        else {
+            throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
+        }
     }
 }
