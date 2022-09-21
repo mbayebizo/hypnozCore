@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class HypnozCoreCostance {
+
     public static  final String REGEX_0_9= "[^0-9]";
     public static  final String REGEX_MDP="([A-Za-z0-9!@#$%^&*()\\-_=+{};:,<.>]{8,20})";
     public static  final String DEFAULT_DOC_SERVEUR_NAME = "hypnozcore";
@@ -22,9 +23,11 @@ public class HypnozCoreCostance {
     public static final String CODE_NOT_EMPTY="code ne peut pas etre null";
     public static final String TAILLE_SIZE_INCORRECT="La Taille n'est pas respecté";
     public static final String CREATED ="CREATED {0}" ;
-    public static final String UPDATED ="CREATED {0}" ;
-    public static final String FIND_LIST ="CREATED {0}" ;
+    public static final String UPDATED ="UPDATED {0}" ;
+    public static final String DELETED ="DELETED {0}" ;
+    public static final String FIND_LIST ="FIND LIST {0}" ;
     public static final String LOGIN_NOT_EMPTY = "Le login ne peut pas être null";
+
 
 
     public static void logDebug(Object o){

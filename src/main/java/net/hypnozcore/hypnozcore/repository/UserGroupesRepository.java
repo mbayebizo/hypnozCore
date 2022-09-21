@@ -11,4 +11,9 @@ import java.util.Set;
 @Repository
 public interface UserGroupesRepository extends JpaRepository<UserGroupes, UserGroupes.UserGroupesPK>, JpaSpecificationExecutor<UserGroupes> {
     List<UserGroupes> findById_GroupesId(Long groupesId);
+
+    long removeById_UsersIdAllIgnoreCase(Long usersId);
+
+
+
 }

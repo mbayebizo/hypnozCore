@@ -98,11 +98,9 @@ public class UsersServices {
     }
 
     public ResponseEntity<List<UsersDto>> findUserActiveBygroupe(Long grpId){
-        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream().map(userGroupes -> {
-            if (userGroupes.getUsers() != null && Objects.equals(userGroupes.getUsers().getEtat(), Boolean.TRUE))
-                return usersMapper.toDto(userGroupes.getUsers());
-            return null;
-        }).toList();
+        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
+                .filter(ug->ug.getUsers()!= null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
+                .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
        if (!usersDtoSet.isEmpty()){
            return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
@@ -112,11 +110,9 @@ public class UsersServices {
        }
     }
     public ResponseEntity<List<UsersDto>> findUserBygroupe(Long grpId){
-        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream().map(userGroupes -> {
-            if (userGroupes.getUsers() != null)
-                return usersMapper.toDto(userGroupes.getUsers());
-            return null;
-        }).toList();
+        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
+                .filter(ug->ug.getUsers()!= null)
+                .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
         if (!usersDtoSet.isEmpty()){
             return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
@@ -125,4 +121,31 @@ public class UsersServices {
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
         }
     }
+
+    public ResponseEntity<List<UsersDto>> findUserActiveByStructure(Long grpId){
+        List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
+                .filter(ug->ug.getUsers()!= null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
+                .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
+
+        if (!usersDtoSet.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
+        }
+        else {
+            throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
+        }
+    }
+    public ResponseEntity<List<UsersDto>> findUserByStructure(Long grpId){
+        List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
+                .filter(ug->ug.getUsers()!= null)
+                .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
+
+        if (!usersDtoSet.isEmpty()){
+            return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
+        }
+        else {
+            throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
+        }
+    }
+
+
 }

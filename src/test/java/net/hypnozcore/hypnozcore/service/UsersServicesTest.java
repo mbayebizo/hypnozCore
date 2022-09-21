@@ -2,7 +2,6 @@ package net.hypnozcore.hypnozcore.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -92,6 +91,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         users.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         users.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users.setEtat(true);
         users.setFirstLog(LocalDate.ofEpochDay(1L));
         users.setFlagEtat(Etats.INACTIVE);
         users.setId(123L);
@@ -173,6 +173,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
         users1.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
         users1.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users1.setEtat(true);
         users1.setFirstLog(LocalDate.ofEpochDay(1L));
         users1.setFlagEtat(Etats.INACTIVE);
         users1.setId(123L);
@@ -235,6 +236,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         users.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         users.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users.setEtat(true);
         users.setFirstLog(LocalDate.ofEpochDay(1L));
         users.setFlagEtat(Etats.INACTIVE);
         users.setId(123L);
@@ -316,6 +318,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
         users1.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
         users1.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users1.setEtat(true);
         users1.setFirstLog(LocalDate.ofEpochDay(1L));
         users1.setFlagEtat(Etats.INACTIVE);
         users1.setId(123L);
@@ -369,8 +372,9 @@ class UsersServicesTest {
         doNothing().when(users).setCel((String) any());
         doNothing().when(users).setCivilite((String) any());
         doNothing().when(users).setCodeSecret((String) any());
-        doNothing().when(users).setConnexion(anyInt());
+        doNothing().when(users).setConnexion((Integer) any());
         doNothing().when(users).setDateNaissance((LocalDate) any());
+        doNothing().when(users).setEtat((Boolean) any());
         doNothing().when(users).setFirstLog((LocalDate) any());
         doNothing().when(users).setLangue((String) any());
         doNothing().when(users).setLastLog((LocalDate) any());
@@ -394,6 +398,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         users.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         users.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users.setEtat(true);
         users.setFirstLog(LocalDate.ofEpochDay(1L));
         users.setFlagEtat(Etats.INACTIVE);
         users.setId(123L);
@@ -475,6 +480,7 @@ class UsersServicesTest {
         LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
         users1.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
         users1.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users1.setEtat(true);
         users1.setFirstLog(LocalDate.ofEpochDay(1L));
         users1.setFlagEtat(Etats.INACTIVE);
         users1.setId(123L);
@@ -518,8 +524,9 @@ class UsersServicesTest {
         verify(users).setCel((String) any());
         verify(users).setCivilite((String) any());
         verify(users).setCodeSecret((String) any());
-        verify(users).setConnexion(anyInt());
+        verify(users).setConnexion((Integer) any());
         verify(users).setDateNaissance((LocalDate) any());
+        verify(users).setEtat((Boolean) any());
         verify(users).setFirstLog((LocalDate) any());
         verify(users).setLangue((String) any());
         verify(users).setLastLog((LocalDate) any());
@@ -557,7 +564,6 @@ class UsersServicesTest {
     @Test
     void testFindUserBygroupe() {
         assertThrows(ResponseException.class, () -> usersServices.findUserBygroupe(123L));
-        assertThrows(ResponseException.class, () -> usersServices.findUserBygroupe(1L));
     }
 }
 
