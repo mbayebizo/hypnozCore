@@ -42,16 +42,16 @@ public class UsersServices {
         this.userStructuresRepository = userStructuresRepository;
     }
 
-    public ResponseEntity<UsersDto> save(UsersDto usersDto){
+    public ResponseEntity<UsersDto> save(UsersDto usersDto) {
         valideUser(usersDto);
         Users users = usersMapper.toEntity(usersDto);
 
         Optional<Structures> structuresOptional = structuresRepository.findById(usersDto.getStructuresDto().getId());
-        if (structuresOptional.isEmpty()){
-            throw  new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+        if (structuresOptional.isEmpty()) {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
         }
         Optional<Groupes> groupesOptional = groupesRepository.findById(usersDto.getGroupes().getId());
-        if(groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())){
+        if (groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())) {
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
         }
         users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
@@ -78,109 +78,108 @@ public class UsersServices {
                 .build();
         userGroupesRepository.saveAndFlush(userGroupes);
         usersDto = usersMapper.toDto(users);
-        LOGGER.debug(UsersServices.class.getName(),HypnozCoreCostance.CREATED,usersDto);
+        LOGGER.debug(UsersServices.class.getName(), HypnozCoreCostance.CREATED, usersDto);
         return ResponseEntity.ok(usersDto);
     }
 
     private void valideUser(UsersDto usersDto) {
-        if(!isvalidePassword(usersDto.getPwd())){
+        if (!isvalidePassword(usersDto.getPwd())) {
             throw new ResponseException(RequestErrorEnum.MDP_INCORRECT);
         }
     }
 
     private boolean isvalidePassword(String pwd) {
         Pattern pattern = Pattern.compile(HypnozCoreCostance.REGEX_MDP);
-        if(pwd==null) return false;
+        if (pwd == null) return false;
         Matcher m = pattern.matcher(pwd);
         return m.matches();
     }
 
-    public ResponseEntity<List<UsersDto>> findUserActiveBygroupe(Long grpId){
+    public ResponseEntity<List<UsersDto>> findUserActiveBygroupe(Long grpId) {
         List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
-                .filter(ug->ug.getUsers()!= null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
+                .filter(ug -> ug.getUsers() != null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
-       if (!usersDtoSet.isEmpty()){
-           return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
-       }
-        else {
+        if (!usersDtoSet.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
+        } else {
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
-       }
+        }
     }
-    public ResponseEntity<List<UsersDto>> findUserBygroupe(Long grpId){
+
+    public ResponseEntity<List<UsersDto>> findUserBygroupe(Long grpId) {
         List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
-                .filter(ug->ug.getUsers()!= null)
+                .filter(ug -> ug.getUsers() != null)
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
-        if (!usersDtoSet.isEmpty()){
+        if (!usersDtoSet.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
-        }
-        else {
+        } else {
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
         }
     }
 
-    public ResponseEntity<List<UsersDto>> findUserActiveByStructure(Long grpId){
+    public ResponseEntity<List<UsersDto>> findUserActiveByStructure(Long grpId) {
         List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
-                .filter(ug->ug.getUsers()!= null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
+                .filter(ug -> ug.getUsers() != null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
-        if (!usersDtoSet.isEmpty()){
+        if (!usersDtoSet.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
-        }
-        else {
+        } else {
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
         }
     }
-    public ResponseEntity<List<UsersDto>> findUserByStructure(Long grpId){
+
+    public ResponseEntity<List<UsersDto>> findUserByStructure(Long grpId) {
         List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
-                .filter(ug->ug.getUsers()!= null)
+                .filter(ug -> ug.getUsers() != null)
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
-        if (!usersDtoSet.isEmpty()){
+        if (!usersDtoSet.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(usersDtoSet);
-        }
-        else {
+        } else {
             throw new ResponseException(RequestErrorEnum.LIST_EMPTY);
         }
     }
 
-    public ResponseEntity<UsersDto> update(UsersDto usersDto){
+    public ResponseEntity<UsersDto> update(UsersDto usersDto) {
         valideUser(usersDto);
         Users users = usersMapper.toEntity(usersDto);
         Optional<Structures> structuresOptional = structuresRepository.findById(usersDto.getStructuresDto().getId());
-        if (structuresOptional.isEmpty()){
-            throw  new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+        if (structuresOptional.isEmpty()) {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
         }
         Optional<Groupes> groupesOptional = groupesRepository.findById(usersDto.getGroupes().getId());
-        if(groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())){
+        if (groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())) {
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
         }
 
 
         Optional<Users> optionalUsers = usersRepository.findById(users.getId());
-       if(optionalUsers.isPresent()){
-           users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
-           usersRepository.saveAndFlush(users);
-       }else {
-           throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
-       }
-       usersDto = usersMapper.toDto(users);
+        if (optionalUsers.isPresent()) {
+            users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
+            usersRepository.saveAndFlush(users);
+        } else {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+        }
+        usersDto = usersMapper.toDto(users);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(usersDto);
     }
 
-public ResponseEntity<UsersDto> delete(Long id){
-    Optional<Users> optionalUsers = usersRepository.findById(id);
-    UsersDto usersDto;
-    if(optionalUsers.isPresent()){
-        usersDto = usersMapper.toDto(optionalUsers.get());
-        userGroupesRepository.removeById_UsersIdAllIgnoreCase(id);
-        userStructuresRepository.deleteById_UsersIdAllIgnoreCase(id);
-        usersRepository.deleteById(id);
-    }else {
-        throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+    public ResponseEntity<UsersDto> delete(Long id) {
+        Optional<Users> optionalUsers = usersRepository.findById(id);
+        UsersDto usersDto;
+        if (optionalUsers.isPresent()) {
+            usersDto = usersMapper.toDto(optionalUsers.get());
+            userGroupesRepository.removeById_UsersIdAllIgnoreCase(id);
+            userStructuresRepository.deleteById_UsersIdAllIgnoreCase(id);
+            usersRepository.deleteById(id);
+        } else {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+        }
+        return ResponseEntity.ok(usersDto);
     }
-    return ResponseEntity.ok(usersDto);
-}
+
 
 }
