@@ -147,5 +147,30 @@ public class UsersServices {
         }
     }
 
+    public ResponseEntity<UsersDto> update(UsersDto usersDto){
+        valideUser(usersDto);
+        Users users = usersMapper.toEntity(usersDto);
+        Optional<Structures> structuresOptional = structuresRepository.findById(usersDto.getStructuresDto().getId());
+        if (structuresOptional.isEmpty()){
+            throw  new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+        }
+        Optional<Groupes> groupesOptional = groupesRepository.findById(usersDto.getGroupes().getId());
+        if(groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())){
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+        }
+
+
+        Optional<Users> optionalUsers = usersRepository.findById(users.getId());
+       if(optionalUsers.isPresent()){
+           users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
+           usersRepository.saveAndFlush(users);
+       }else {
+           throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+       }
+       usersDto = usersMapper.toDto(users);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(usersDto);
+    }
+
+
 
 }

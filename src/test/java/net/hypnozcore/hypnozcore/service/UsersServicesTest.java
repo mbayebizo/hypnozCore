@@ -565,5 +565,23 @@ class UsersServicesTest {
     void testFindUserBygroupe() {
         assertThrows(ResponseException.class, () -> usersServices.findUserBygroupe(123L));
     }
+
+    /**
+     * Method under test: {@link UsersServices#findUserActiveByStructure(Long)}
+     */
+    @Test
+    void testFindUserActiveByStructure() {
+        assertThrows(ResponseException.class, () -> usersServices.findUserActiveByStructure(123L));
+        assertThrows(ResponseException.class, () -> usersServices.findUserActiveByStructure(1L));
+    }
+
+    /**
+     * Method under test: {@link UsersServices#findUserByStructure(Long)}
+     */
+    @Test
+    void testFindUserByStructure() {
+        assertThrows(ResponseException.class, () -> usersServices.findUserByStructure(123L));
+        assertThrows(ResponseException.class, () -> usersServices.findUserByStructure(1L));
+    }
 }
 

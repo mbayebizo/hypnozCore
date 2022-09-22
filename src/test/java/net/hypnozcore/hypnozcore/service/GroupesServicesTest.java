@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
-@ActiveProfiles({"dev"})
+@ActiveProfiles({"test"})
 @ExtendWith(SpringExtension.class)
 class GroupesServicesTest {
     @MockBean

@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {GenerateDefaultDocService.class})
-@ActiveProfiles({"dev"})
+@ActiveProfiles({"test"})
 @ExtendWith(SpringExtension.class)
 class GenerateDefaultDocServiceTest {
     @Autowired
