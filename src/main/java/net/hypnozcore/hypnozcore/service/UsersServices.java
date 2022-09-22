@@ -18,10 +18,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -171,6 +169,18 @@ public class UsersServices {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(usersDto);
     }
 
-
+public ResponseEntity<UsersDto> delete(Long id){
+    Optional<Users> optionalUsers = usersRepository.findById(id);
+    UsersDto usersDto;
+    if(optionalUsers.isPresent()){
+        usersDto = usersMapper.toDto(optionalUsers.get());
+        userGroupesRepository.removeById_UsersIdAllIgnoreCase(id);
+        userStructuresRepository.deleteById_UsersIdAllIgnoreCase(id);
+        usersRepository.deleteById(id);
+    }else {
+        throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+    }
+    return ResponseEntity.ok(usersDto);
+}
 
 }
