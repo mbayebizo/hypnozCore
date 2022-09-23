@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface UserFonctionsRepository extends JpaRepository<UserFonctions, UserFonctions.UserFonctionsPK>, JpaSpecificationExecutor<UserFonctions> {
-    List<UserFonctions> findById_FonctionsIdAndId_UsersId(Long fonctionsId, Long usersId);
+    List<UserFonctions> findByIdFonctionsIdAndIdUsersId(Long fonctionsId, Long usersId);
 
-    List<UserFonctions> findById_UsersIdAndFonctions_ApplicationsId(Long usersId, Long applicationsId);
+    List<UserFonctions> findByIdUsersIdAndFonctionsApplicationsId(Long usersId, Long applicationsId);
 
-    List<UserFonctions> findByFonctions_ApplicationsId(Long applicationsId);
+    List<UserFonctions> findByFonctionsApplicationsId(Long applicationsId);
 }

@@ -2,7 +2,6 @@ package net.hypnozcore.hypnozcore.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

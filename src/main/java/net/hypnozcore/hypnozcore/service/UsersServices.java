@@ -96,7 +96,7 @@ public class UsersServices {
     }
 
     public ResponseEntity<List<UsersDto>> findUserActiveBygroupe(Long grpId) {
-        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
+        List<UsersDto> usersDtoSet = userGroupesRepository.findByIdGroupesId(grpId).stream()
                 .filter(ug -> ug.getUsers() != null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
@@ -108,7 +108,7 @@ public class UsersServices {
     }
 
     public ResponseEntity<List<UsersDto>> findUserBygroupe(Long grpId) {
-        List<UsersDto> usersDtoSet = userGroupesRepository.findById_GroupesId(grpId).stream()
+        List<UsersDto> usersDtoSet = userGroupesRepository.findByIdGroupesId(grpId).stream()
                 .filter(ug -> ug.getUsers() != null)
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
@@ -120,7 +120,7 @@ public class UsersServices {
     }
 
     public ResponseEntity<List<UsersDto>> findUserActiveByStructure(Long grpId) {
-        List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
+        List<UsersDto> usersDtoSet = userStructuresRepository.findByIdStructuresId(grpId).stream()
                 .filter(ug -> ug.getUsers() != null && Objects.equals(ug.getUsers().getEtat(), Boolean.TRUE))
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
@@ -132,7 +132,7 @@ public class UsersServices {
     }
 
     public ResponseEntity<List<UsersDto>> findUserByStructure(Long grpId) {
-        List<UsersDto> usersDtoSet = userStructuresRepository.findById_StructuresId(grpId).stream()
+        List<UsersDto> usersDtoSet = userStructuresRepository.findByIdStructuresId(grpId).stream()
                 .filter(ug -> ug.getUsers() != null)
                 .map(userGroupes -> usersMapper.toDto(userGroupes.getUsers())).toList();
 
@@ -172,8 +172,8 @@ public class UsersServices {
         UsersDto usersDto;
         if (optionalUsers.isPresent()) {
             usersDto = usersMapper.toDto(optionalUsers.get());
-            userGroupesRepository.removeById_UsersIdAllIgnoreCase(id);
-            userStructuresRepository.deleteById_UsersIdAllIgnoreCase(id);
+            userGroupesRepository.removeByIdUsersIdAllIgnoreCase(id);
+            userStructuresRepository.deleteByIdUsersIdAllIgnoreCase(id);
             usersRepository.deleteById(id);
         } else {
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);

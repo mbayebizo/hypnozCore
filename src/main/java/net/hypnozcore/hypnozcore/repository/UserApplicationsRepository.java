@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface UserApplicationsRepository extends JpaRepository<UserApplications, UserApplications.UserApplicationsPK>, JpaSpecificationExecutor<UserApplications> {
-    List<UserApplications> findById_UsersIdAndApplications_ModulesId(Long usersId, Long modulesId);
+    List<UserApplications> findByIdUsersIdAndApplicationsModulesId(Long usersId, Long modulesId);
 }

@@ -160,7 +160,7 @@ public class GenerateMenuService {
 
     public ResponseEntity<List<Menus>> getRoles(UsersDto usersDto, ModulesDto modulesDto) {
         List<Menus> lmenu = new ArrayList<>();
-        List<UserModules> userModules = userModulesRepository.findById_ModulesIdAndId_UsersIdOrderByModules_CodeAsc(modulesDto.getId(), usersDto.getId());
+        List<UserModules> userModules = userModulesRepository.findByIdModulesIdAndIdUsersIdOrderByModulesCodeAsc(modulesDto.getId(), usersDto.getId());
         for (UserModules um : userModules) {
             if (um.getModules().getActive().equals("Y")) {
                 List<Menus> l = getMenuByUser(um);
@@ -175,7 +175,7 @@ public class GenerateMenuService {
         if (userModules.getId()!=null && userModules.getId().getUsersId() != null
                 && userModules.getId().getModulesId() != null) {
             List<UserApplications> userApplicationsList = userApplicationsRepository.
-                    findById_UsersIdAndApplications_ModulesId(userModules.getId().getUsersId(), userModules.getId().getModulesId());
+                    findByIdUsersIdAndApplicationsModulesId(userModules.getId().getUsersId(), userModules.getId().getModulesId());
             for (UserApplications userApplications : userApplicationsList) {
                 if (userApplications.getId() != null) {
                     Menus menus = Menus.builder()
@@ -187,7 +187,7 @@ public class GenerateMenuService {
                             .parentId(0)
                             .build();
                     List<UserFonctions> userFonctionsList = userFonctionsRepository
-                            .findById_UsersIdAndFonctions_ApplicationsId(userApplications.getId().getUsersId(),userApplications.getId().getApplicationsId());
+                            .findByIdUsersIdAndFonctionsApplicationsId(userApplications.getId().getUsersId(),userApplications.getId().getApplicationsId());
                     if(!userFonctionsList.isEmpty()){
                         menus.setHasSubMenu(true);
                         menusList.add(menus);

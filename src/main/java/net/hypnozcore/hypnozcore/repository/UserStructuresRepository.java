@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface UserStructuresRepository extends JpaRepository<UserStructures, UserStructures.UserStructuresPK>, JpaSpecificationExecutor<UserStructures> {
-    long deleteById_UsersIdAllIgnoreCase(Long usersId);
-    List<UserStructures> findById_StructuresId(Long structuresId);
+    long deleteByIdUsersIdAllIgnoreCase(Long usersId);
+    List<UserStructures> findByIdStructuresId(Long structuresId);
 }
