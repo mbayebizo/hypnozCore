@@ -172,7 +172,7 @@ public class GenerateMenuService {
 
     private List<Menus> getMenuByUser(UserModules userModules) {
         List<Menus> menusList = new ArrayList<>();
-        if (userModules.getId()!=null && userModules.getId().getUsersId() != null
+        if (userModules!= null && userModules.getId()!=null && userModules.getId().getUsersId() != null
                 && userModules.getId().getModulesId() != null) {
             List<UserApplications> userApplicationsList = userApplicationsRepository.
                     findByIdUsersIdAndApplicationsModulesId(userModules.getId().getUsersId(), userModules.getId().getModulesId());
