@@ -15,7 +15,6 @@ import java.io.Serializable;
 })
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserFonctions implements Persistable<UserFonctions.UserFonctionsPK> {

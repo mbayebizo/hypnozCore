@@ -14,9 +14,9 @@ import java.io.Serializable;
 })
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ModulesStructure implements Persistable<ModulesStructure.ModulesStructurePK> {
     @EmbeddedId
     private ModulesStructurePK id;

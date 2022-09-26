@@ -9,12 +9,11 @@ import java.io.Serial;
 import java.time.LocalDate;
 
 @ApiModel("Structure Dto")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-@Builder
 @ToString
 @EqualsAndHashCode
 public class StructuresDto extends AbstractDto {
