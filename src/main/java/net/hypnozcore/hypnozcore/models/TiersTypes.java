@@ -1,4 +1,4 @@
 package net.hypnozcore.hypnozcore.models;
 
-public class TiersTypes {
+public interface TiersTypes {
 }

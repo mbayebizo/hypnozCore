@@ -79,53 +79,6 @@ class GenerateMenuServiceTest {
     @Test
     @Disabled("TODO: Complete this test")
     void testCreateDefaultModule() {
-        // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   org.springframework.orm.jpa.JpaSystemException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]; nested exception is org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]
-        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:331)
-        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:233)
-        //       at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:551)
-        //       at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
-        //       at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
-        //       at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:152)
-        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-        //       at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174)
-        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-        //       at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
-        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-        //       at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215)
-        //       at jdk.proxy4.$Proxy192.saveAndFlush(null)
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.lambda$createDefaultModule$0(GenerateMenuService.java:91)
-        //       at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
-        //       at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
-        //       at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
-        //       at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-        //       at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
-        //       at java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
-        //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
-        //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
-        //       at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.createDefaultModule(GenerateMenuService.java:95)
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$FastClassBySpringCGLIB$$965de7d7.invoke(<generated>)
-        //       at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
-        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793)
-        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
-        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
-        //       at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
-        //       at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
-        //       at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
-        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
-        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
-        //       at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$EnhancerBySpringCGLIB$$701d53e4.createDefaultModule(<generated>)
-        //   In order to prevent createDefaultModule(Structures)
-        //   from throwing JpaSystemException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   createDefaultModule(Structures).
-        //   See https://diff.blue/R013 to resolve this issue.
-
         Structures structures = new Structures();
         structures.setActiviteCommerciale("Activite Commerciale");
         structures.setAdresse("Adresse");
