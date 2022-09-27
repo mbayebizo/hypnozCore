@@ -14,7 +14,6 @@ import java.io.Serializable;
 })
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupesApplications implements Persistable<GroupesApplications.GroupesApplicationsPK> {

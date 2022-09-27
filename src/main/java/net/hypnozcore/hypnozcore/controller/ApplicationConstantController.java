@@ -3,7 +3,6 @@ package net.hypnozcore.hypnozcore.controller;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnozcore.hypnozcore.dto.ApplicationConstantDto;
-import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.service.ApplicationConstantService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;

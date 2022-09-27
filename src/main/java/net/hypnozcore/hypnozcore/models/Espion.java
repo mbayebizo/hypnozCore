@@ -20,7 +20,7 @@ import java.util.Date;
 @Table(name = "espions")
 @Where(clause = "flag_etat <> 'DELETED'")
 @EqualsAndHashCode(callSuper = false)
-@SQLDelete(sql = "UPDATE espions SET flag_etat = 'DELETED' WHERE esp_id = ?", check = ResultCheckStyle.COUNT)
+@SQLDelete(sql = "UPDATE espions SET flag_etat = 'DELETED' WHERE id = ?", check = ResultCheckStyle.COUNT)
 public class Espion extends AbstractEntity{
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreat;

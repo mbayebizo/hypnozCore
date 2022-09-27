@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GenerateDefaultDocService {
     static final Logger LOGGER = LoggerFactory.getLogger(GenerateDefaultDocService.class);
 
-    public void create() throws ResponseException {
+    public String create() throws ResponseException {
         String path = OsUtils.getOsHomeDir();
         if (!FileUtils.existed(path)) {
             FileUtils.mkdir(path);
@@ -35,6 +35,7 @@ public class GenerateDefaultDocService {
             }
 
         }
+        return path;
     }
 
 }

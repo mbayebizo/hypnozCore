@@ -7,18 +7,19 @@ import net.hypnozcore.hypnozcore.models.Applications;
 import net.hypnozcore.hypnozcore.models.Modules;
 import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.repository.StructuresRepository;
+import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -60,14 +61,31 @@ public class StructuresServices {
     }
 
     public StructuresDto findById(long id) {
-        return structuresMapper.toDto(repository.findById(id).orElseThrow(ResourceNotFoundException::new));
+        StructuresDto structuresDto=null;
+        Optional<Structures> structuresOptional =repository.findById(id);
+        if(structuresOptional.isPresent()){
+            structuresDto = structuresMapper.toDto(structuresOptional.get());
+        }else {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+        }
+        return structuresDto;
     }
 
-    public StructuresDto update(StructuresDto structuresDto, Long id) {
-        StructuresDto data = findById(id);
-        Structures entity = structuresMapper.toEntity(structuresDto);
-        BeanUtils.copyProperties(data, entity);
-        return save(structuresMapper.toDto(entity)).getBody();
+    public ResponseEntity<StructuresDto>update(StructuresDto structuresDto, Long id){
+        validationSigleRaisonSocial(structuresDto);
+        try {
+            var grp= repository
+                    .findById(id)
+                    .map(oldEntity -> repository.saveAndFlush(structuresMapper.toEntity(structuresDto)))
+                    .orElseThrow(() ->  new  ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE));
+            StructuresDto strDto =structuresMapper.toDto(grp);
+            LOGGER.debug(StructuresServices.class.getName(), HypnozCoreCostance.UPDATED,strDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(strDto);
+
+        } catch (ResponseException e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+        }
     }
 
     public ResponseEntity<StructuresDto> initConfigStructure(StructuresDto structureDto) throws ResponseException {

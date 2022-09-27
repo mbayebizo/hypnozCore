@@ -8,6 +8,7 @@ import java.io.Serial;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseException extends RuntimeException{
+
     @Serial
     static final long serialVersionUID= -3515390014108856326L;
 

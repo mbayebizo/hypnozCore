@@ -24,7 +24,7 @@ public class Users extends AbstractEntity {
     String prenom;
     String patronyme;
     String codeSecret;
-    int connexion;
+    Integer connexion;
     LocalDate dateNaissance;
     String langue;
     String adresse;
@@ -41,4 +41,5 @@ public class Users extends AbstractEntity {
     String login;
     @Column
     String pwd;
+    Boolean etat;
 }

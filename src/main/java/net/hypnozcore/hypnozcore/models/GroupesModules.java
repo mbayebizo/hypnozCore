@@ -14,7 +14,6 @@ import java.io.Serializable;
 })
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupesModules implements Persistable<GroupesModules.GroupesModulesPK> {
