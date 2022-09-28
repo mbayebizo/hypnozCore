@@ -11,6 +11,7 @@ import java.util.Arrays;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum RequestErrorEnum {
     LIST_EMPTY(HttpStatus.NO_CONTENT, HttpStatus.BAD_REQUEST.name(),"Liste empty" ,"Liste est vide" ),
+    LIST_NOT_EMPTY(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Liste empty" ,"Liste est vide" ),
 
     ERROR_SIGLE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"sigle.error" ,"sigle.error.description" ),
     NOT_FOUND_STRUCTURE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Structure Not FOUND" ,"Find Structure not found" ),
