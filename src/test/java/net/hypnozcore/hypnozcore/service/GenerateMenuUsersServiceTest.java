@@ -12,7 +12,6 @@ import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
 import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
 import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
