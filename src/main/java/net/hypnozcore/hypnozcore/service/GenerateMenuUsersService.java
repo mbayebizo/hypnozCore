@@ -3,9 +3,7 @@ package net.hypnozcore.hypnozcore.service;
 import net.hypnozcore.hypnozcore.dto.Menus;
 import net.hypnozcore.hypnozcore.dto.ModulesDto;
 import net.hypnozcore.hypnozcore.dto.UsersDto;
-import net.hypnozcore.hypnozcore.models.UserApplications;
-import net.hypnozcore.hypnozcore.models.UserFonctions;
-import net.hypnozcore.hypnozcore.models.UserModules;
+import net.hypnozcore.hypnozcore.models.*;
 import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
 import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
 import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
@@ -118,5 +116,57 @@ public class GenerateMenuUsersService {
         }
         userModulesRepository.deleteByModulesAndUsers(userModulesOptional.get().getModules(), userModulesOptional.get().getUsers());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userModulesOptional.get());
+    }
+
+    public ResponseEntity<UserModules> addUserModules(Users users, Modules modules) {
+        Optional<UserModules> userModulesOptional= userModulesRepository.findByIdModulesIdAndIdUsersId(modules.getId(), users.getId());
+        if(userModulesOptional.isPresent()){
+            userModulesRepository.deleteByModulesAndUsers(modules,users);
+        }
+        UserModules userModules = UserModules.builder()
+                .id(UserModules.UserModulesPK.builder()
+                        .modulesId(modules.getId())
+                        .usersId(users.getId())
+                        .build())
+                .modules(modules)
+                .users(users)
+                .build();
+        userModulesRepository.saveAndFlush(userModules);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userModules);
+    }
+
+    public ResponseEntity<UserFonctions> addUserFonction(Users users,Fonctions fonctions){
+        Optional<UserFonctions> userFonctionsOptional = userFonctionsRepository.findByIdFonctionsIdAndIdUsersId(fonctions.getId(),users.getId());
+        if(userFonctionsOptional.isPresent()){
+            userFonctionsRepository.deleteByFonctionsAndUsers(fonctions,users);
+        }
+        UserFonctions userFonctions = UserFonctions.builder()
+                .id(UserFonctions.UserFonctionsPK.builder()
+                        .fonctionsId(fonctions.getId())
+                        .usersId(users.getId())
+                        .build())
+                .fonctions(fonctions)
+                .users(users)
+                .build();
+        userFonctionsRepository.saveAndFlush(userFonctions);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userFonctions);
+    }
+
+    public ResponseEntity<UserApplications> addUsersApplications(Users users,Applications applications){
+        Optional<UserApplications> userApplicationsOptional = userApplicationsRepository.findByIdApplicationsIdAndIdUsersId(applications.getId(), users.getId());
+        if (userApplicationsOptional.isPresent()){
+            userApplicationsRepository.deleteByApplicationsAndUsers(applications,users);
+        }
+
+        UserApplications userApplications = UserApplications.builder()
+                .id(UserApplications.UserApplicationsPK.builder()
+                        .applicationsId(applications.getId())
+                        .usersId(users.getId())
+                        .build())
+                .users(users)
+                .applications(applications)
+                .build();
+        userApplicationsRepository.saveAndFlush(userApplications);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userApplications);
     }
 }
