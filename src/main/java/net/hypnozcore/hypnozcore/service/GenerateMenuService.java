@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,6 @@ public class GenerateMenuService {
 
 
     public List<Modules>createDefaultModule(Structures structures) {
-        List<Modules> modulesList= new ArrayList<>();
         if (structures.getId() == null) throw new ResponseException(RequestErrorEnum.ID_STRUCTURE_EMPTY);
         //read file
         Resource resource = new ClassPathResource("config/modules.json");
@@ -60,7 +58,7 @@ public class GenerateMenuService {
         } catch (IOException e) {
             throw new ResponseException(RequestErrorEnum.FILE_NOT_FOUND);
         }
-        modulesList = modulesDtoList.stream().map(modules -> {
+        return modulesDtoList.stream().map(modules -> {
             if (modulesRepository.findByCode(modules.getCode()).isEmpty()) {
                 modules.setLibCode(FormatText.formatCode(modules.getLibCode()));
                 modules.setOrdre(FormatText.getOrdre(modules.getCode()));
@@ -78,7 +76,6 @@ public class GenerateMenuService {
             }
             return modules;
         }).toList();
-        return modulesList;
     }
 
 
