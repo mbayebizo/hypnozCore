@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -1033,6 +1034,140 @@ class GenerateMenuUsersServiceTest {
         assertTrue(body.isEmpty());
         assertEquals(HttpStatus.OK, actualRoles.getStatusCode());
 
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuUsersService#getMenuByUser(UserModules)}
+     */
+    @Test
+    void testGetMenuByUser() {
+        UserModules.UserModulesPK userModulesPK = new UserModules.UserModulesPK();
+        userModulesPK.setModulesId(123L);
+        userModulesPK.setUsersId(123L);
+
+        Modules modules = new Modules();
+        modules.setActive("Active");
+        modules.setCode("Code");
+        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setFlagEtat(Etats.INACTIVE);
+        modules.setIconClass("Icon Class");
+        modules.setId(123L);
+        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setLibCode("Lib Code");
+        modules.setLibDesc("Lib Desc");
+        modules.setOrdre(1);
+        modules.setStandart(1);
+        modules.setUrl("https://example.org/example");
+
+        Users users = new Users();
+        users.setAdresse("Adresse");
+        users.setBp("Bp");
+        users.setCel("Cel");
+        users.setCivilite("Civilite");
+        users.setCodeSecret("Code Secret");
+        users.setConnexion(1);
+        users.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        users.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
+        users.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users.setEtat(true);
+        users.setFirstLog(LocalDate.ofEpochDay(1L));
+        users.setFlagEtat(Etats.INACTIVE);
+        users.setId(123L);
+        users.setLangue("Langue");
+        users.setLastLog(LocalDate.ofEpochDay(1L));
+        users.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        users.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+        users.setLogin("Login");
+        users.setNom("Nom");
+        users.setPatronyme("Patronyme");
+        users.setPhoto("alice.liddell@example.org");
+        users.setPrenom("Prenom");
+        users.setPwd("Pwd");
+        users.setSignature("Signature");
+        users.setTelBureau("Tel Bureau");
+        users.setTelDomicile("Tel Domicile");
+        users.setVille("Ville");
+
+        UserModules userModules = new UserModules();
+        userModules.setId(userModulesPK);
+        userModules.setModules(modules);
+        userModules.setNew(true);
+        userModules.setUsers(users);
+        assertTrue(generateMenuUsersService.getMenuByUser(userModules).isEmpty());
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuUsersService#getMenuByUser(UserModules)}
+     */
+    @Test
+    void testGetMenuByUser2() {
+        UserModules.UserModulesPK userModulesPK = new UserModules.UserModulesPK();
+        userModulesPK.setModulesId(123L);
+        userModulesPK.setUsersId(123L);
+
+        Modules modules = new Modules();
+        modules.setActive("Active");
+        modules.setCode("Code");
+        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setFlagEtat(Etats.INACTIVE);
+        modules.setIconClass("Icon Class");
+        modules.setId(123L);
+        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setLibCode("Lib Code");
+        modules.setLibDesc("Lib Desc");
+        modules.setOrdre(1);
+        modules.setStandart(1);
+        modules.setUrl("https://example.org/example");
+
+        Users users = new Users();
+        users.setAdresse("Adresse");
+        users.setBp("Bp");
+        users.setCel("Cel");
+        users.setCivilite("Civilite");
+        users.setCodeSecret("Code Secret");
+        users.setConnexion(1);
+        users.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        users.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
+        users.setDateNaissance(LocalDate.ofEpochDay(1L));
+        users.setEtat(true);
+        users.setFirstLog(LocalDate.ofEpochDay(1L));
+        users.setFlagEtat(Etats.INACTIVE);
+        users.setId(123L);
+        users.setLangue("Langue");
+        users.setLastLog(LocalDate.ofEpochDay(1L));
+        users.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        users.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+        users.setLogin("Login");
+        users.setNom("Nom");
+        users.setPatronyme("Patronyme");
+        users.setPhoto("alice.liddell@example.org");
+        users.setPrenom("Prenom");
+        users.setPwd("Pwd");
+        users.setSignature("Signature");
+        users.setTelBureau("Tel Bureau");
+        users.setTelDomicile("Tel Domicile");
+        users.setVille("Ville");
+        UserModules.UserModulesPK id = new UserModules.UserModulesPK();
+        Modules modules1 = new Modules();
+
+        UserModules userModules = new UserModules(id, modules1, new Users(), true);
+        userModules.setId(userModulesPK);
+        userModules.setModules(modules);
+        userModules.setNew(true);
+        userModules.setUsers(users);
+        assertTrue(generateMenuUsersService.getMenuByUser(userModules).isEmpty());
     }
 
     /**

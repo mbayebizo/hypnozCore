@@ -45,7 +45,7 @@ public class GenerateMenuUsersService {
         return ResponseEntity.ok(lmenu);
     }
 
-    private List<Menus> getMenuByUser(UserModules userModules) {
+    public List<Menus> getMenuByUser(UserModules userModules) {
         List<Menus> menusList = new ArrayList<>();
         if (userModules != null  && userModules.getUsers()!= null
                 && userModules.getModules()!= null) {
