@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class GroupesApplications implements Persistable<GroupesApplications.GroupesApplicationsPK> {
     @EmbeddedId
     private GroupesApplicationsPK id;

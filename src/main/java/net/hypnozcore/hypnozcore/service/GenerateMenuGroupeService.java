@@ -77,5 +77,59 @@ public class GenerateMenuGroupeService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesModulesOptional.get());
     }
 
+    public ResponseEntity<GroupesModules> addGroupesModules(Groupes groupes,Modules modules ){
+        Optional<GroupesModules> groupesModulesOptional = groupesModulesRepository.findByIdModulesIdAndIdGroupesId(modules.getId(), groupes.getId());
+        if(groupesModulesOptional.isPresent()){
+            groupesModulesRepository.deleteByModulesAndGroupes(modules,groupes);
+        }
+
+        GroupesModules groupesModules =GroupesModules.builder()
+                .id(GroupesModules.GroupesModulesPK.builder()
+                        .groupesId(groupes.getId())
+                        .modulesId(modules.getId())
+                        .build())
+                .modules(modules)
+                .groupes(groupes)
+                .build();
+
+        groupesModulesRepository.saveAndFlush(groupesModules);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesModules);
+    }
+
+    public ResponseEntity<GroupesFonctions> addGroupesFonctions(Groupes groupes,Fonctions fonctions) {
+        Optional<GroupesFonctions> groupesFonctionsOptional = groupesFonctionsRepository.findByIdGroupesIdAndIdFonctionsId(groupes.getId(), fonctions.getId());
+        if(groupesFonctionsOptional.isPresent()){
+            groupesFonctionsRepository.deleteByFonctionsAndGroupes(fonctions,groupes);
+        }
+        GroupesFonctions groupesFonctions =GroupesFonctions.builder()
+                .id(GroupesFonctions.GroupesFonctionsPK.builder()
+                        .fonctionsId(fonctions.getId())
+                        .groupesId(groupes.getId())
+                        .build())
+                .fonctions(fonctions)
+                .groupes(groupes)
+                .build();
+        groupesFonctionsRepository.saveAndFlush(groupesFonctions);
+        return ResponseEntity.status(HttpStatus.CREATED).body(groupesFonctions);
+    }
+
+    public ResponseEntity<GroupesApplications> addGroupesApplications(Groupes groupes,Applications applications){
+        Optional<GroupesApplications> groupesApplicationsOptional = groupesApplicationsRepository.findByIdApplicationsIdAndIdGroupesId(applications.getId(),groupes.getId());
+        if(groupesApplicationsOptional.isPresent()){
+            groupesApplicationsRepository.deleteByApplicationsAndGroupes(applications,groupes);
+        }
+
+        GroupesApplications groupesApplications = GroupesApplications.builder()
+                .id(GroupesApplications.GroupesApplicationsPK.builder()
+                        .applicationsId(applications.getId())
+                        .groupesId(groupes.getId())
+                        .build())
+                .applications(applications)
+                .groupes(groupes)
+                .build();
+
+        groupesApplicationsRepository.saveAndFlush(groupesApplications);
+        return ResponseEntity.status(HttpStatus.CREATED).body(groupesApplications);
+    }
 
 }
