@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserFonctions implements Persistable<UserFonctions.UserFonctionsPK> {
     @EmbeddedId
     private UserFonctionsPK id;
