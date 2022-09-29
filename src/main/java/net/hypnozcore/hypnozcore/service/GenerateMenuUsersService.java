@@ -47,14 +47,14 @@ public class GenerateMenuUsersService {
 
     private List<Menus> getMenuByUser(UserModules userModules) {
         List<Menus> menusList = new ArrayList<>();
-        if (userModules != null && userModules.getId() != null && userModules.getId().getUsersId() != null
-                && userModules.getId().getModulesId() != null) {
+        if (userModules != null  && userModules.getUsers()!= null
+                && userModules.getModules()!= null) {
             List<UserApplications> userApplicationsList = userApplicationsRepository.
-                    findByIdUsersIdAndApplicationsModulesId(userModules.getId().getUsersId(), userModules.getId().getModulesId());
+                    findByIdUsersIdAndApplicationsModulesId(userModules.getUsers().getId(), userModules.getModules().getId());
             for (UserApplications userApplications : userApplicationsList) {
-                if (userApplications.getId() != null) {
+                if (userApplications!= null && userApplications.getApplications()!=null) {
                     Menus menus = Menus.builder()
-                            .id(userApplications.getId().getApplicationsId())
+                            .id(userApplications.getApplications().getId())
                             .title(userApplications.getApplications().getLibCode())
                             .routerLink(userApplications.getApplications().getUrl())
                             .icon(userApplications.getApplications().getIconClass())
@@ -62,11 +62,12 @@ public class GenerateMenuUsersService {
                             .parentId(0)
                             .build();
                     List<UserFonctions> userFonctionsList = userFonctionsRepository
-                            .findByIdUsersIdAndFonctionsApplicationsId(userApplications.getId().getUsersId(), userApplications.getId().getApplicationsId());
+                            .findByIdUsersIdAndFonctionsApplicationsId(userApplications.getUsers().getId(), userApplications.getApplications().getId());
                     if (!userFonctionsList.isEmpty()) {
                         menus.setHasSubMenu(true);
                         menusList.add(menus);
-                        userFonctionsList.stream().filter(userFonctions -> ((userFonctions.getFonctions().isUsed()) && ("M".equals(userFonctions.getFonctions().getType()))))
+                        userFonctionsList.stream().filter(userFonctions -> ((userFonctions.getFonctions().isUsed())
+                                        && ("M".equals(userFonctions.getFonctions().getType()))))
                                 .forEach(userFonction -> {
                                     Menus mf = Menus.builder()
                                             .id(Objects.requireNonNull(userFonction.getId()).getFonctionsId())

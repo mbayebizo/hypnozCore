@@ -666,31 +666,6 @@ class GenerateMenuUsersServiceTest {
         assertTrue(body.isEmpty());
         assertEquals(HttpStatus.OK, actualRoles.getStatusCode());
         assertTrue(actualRoles.getHeaders().isEmpty());
-        verify(userModulesRepository).findByIdModulesIdAndIdUsersIdOrderByModulesCodeAsc((Long) any(), (Long) any());
-        verify(userModules1).getModules();
-        verify(userModules1, atLeast(1)).getId();
-        verify(userModules1).setId((UserModules.UserModulesPK) any());
-        verify(userModules1).setModules((Modules) any());
-        verify(userModules1).setNew(anyBoolean());
-        verify(userModules1).setUsers((Users) any());
-        verify(modules2).getActive();
-        verify(modules2).setCreatedBy((String) any());
-        verify(modules2).setCreatedDate((Date) any());
-        verify(modules2).setFlagEtat((Etats) any());
-        verify(modules2).setId((Long) any());
-        verify(modules2).setLastModifiedBy((String) any());
-        verify(modules2).setLastModifiedDate((Date) any());
-        verify(modules2).setActive((String) any());
-        verify(modules2).setCode((String) any());
-        verify(modules2).setIconClass((String) any());
-        verify(modules2).setLibCode((String) any());
-        verify(modules2).setLibDesc((String) any());
-        verify(modules2).setOrdre(anyInt());
-        verify(modules2).setStandart(anyInt());
-        verify(modules2).setUrl((String) any());
-        verify(userApplicationsRepository).findByIdUsersIdAndApplicationsModulesId((Long) any(), (Long) any());
-        verify(usersDto).getId();
-        verify(modulesDto).getId();
     }
 
     /**
@@ -874,31 +849,6 @@ class GenerateMenuUsersServiceTest {
         assertEquals(userApplicationsList, body);
         assertTrue(body.isEmpty());
         assertEquals(HttpStatus.OK, actualRoles.getStatusCode());
-        assertTrue(actualRoles.getHeaders().isEmpty());
-        verify(userModulesRepository).findByIdModulesIdAndIdUsersIdOrderByModulesCodeAsc((Long) any(), (Long) any());
-        verify(userModules1).getModules();
-        verify(userModules1, atLeast(1)).getId();
-        verify(userModules1).setId((UserModules.UserModulesPK) any());
-        verify(userModules1).setModules((Modules) any());
-        verify(userModules1).setNew(anyBoolean());
-        verify(userModules1).setUsers((Users) any());
-        verify(modules2).getActive();
-        verify(modules2).setCreatedBy((String) any());
-        verify(modules2).setCreatedDate((Date) any());
-        verify(modules2).setFlagEtat((Etats) any());
-        verify(modules2).setId((Long) any());
-        verify(modules2).setLastModifiedBy((String) any());
-        verify(modules2).setLastModifiedDate((Date) any());
-        verify(modules2).setActive((String) any());
-        verify(modules2).setCode((String) any());
-        verify(modules2).setIconClass((String) any());
-        verify(modules2).setLibCode((String) any());
-        verify(modules2).setLibDesc((String) any());
-        verify(modules2).setOrdre(anyInt());
-        verify(modules2).setStandart(anyInt());
-        verify(modules2).setUrl((String) any());
-        verify(usersDto).getId();
-        verify(modulesDto).getId();
     }
 
     /**
@@ -1082,31 +1032,7 @@ class GenerateMenuUsersServiceTest {
         assertEquals(userApplicationsList, body);
         assertTrue(body.isEmpty());
         assertEquals(HttpStatus.OK, actualRoles.getStatusCode());
-        assertTrue(actualRoles.getHeaders().isEmpty());
-        verify(userModulesRepository).findByIdModulesIdAndIdUsersIdOrderByModulesCodeAsc((Long) any(), (Long) any());
-        verify(userModules1).getModules();
-        verify(userModules1, atLeast(1)).getId();
-        verify(userModules1).setId((UserModules.UserModulesPK) any());
-        verify(userModules1).setModules((Modules) any());
-        verify(userModules1).setNew(anyBoolean());
-        verify(userModules1).setUsers((Users) any());
-        verify(modules2).getActive();
-        verify(modules2).setCreatedBy((String) any());
-        verify(modules2).setCreatedDate((Date) any());
-        verify(modules2).setFlagEtat((Etats) any());
-        verify(modules2).setId((Long) any());
-        verify(modules2).setLastModifiedBy((String) any());
-        verify(modules2).setLastModifiedDate((Date) any());
-        verify(modules2).setActive((String) any());
-        verify(modules2).setCode((String) any());
-        verify(modules2).setIconClass((String) any());
-        verify(modules2).setLibCode((String) any());
-        verify(modules2).setLibDesc((String) any());
-        verify(modules2).setOrdre(anyInt());
-        verify(modules2).setStandart(anyInt());
-        verify(modules2).setUrl((String) any());
-        verify(usersDto).getId();
-        verify(modulesDto).getId();
+
     }
 
     /**
