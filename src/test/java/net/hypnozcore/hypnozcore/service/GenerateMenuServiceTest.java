@@ -30,44 +30,7 @@ class GenerateMenuServiceTest {
     @Autowired
     private GenerateMenuService generateMenuService;
 
-    /**
-     * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
-     */
-    @Test
-    void testCreateDefaultModule() {
-        Structures structures = new Structures();
-        structures.setActiviteCommerciale("Activite Commerciale");
-        structures.setAdresse("Adresse");
-        structures.setBilanSocail("Bilan Socail");
-        structures.setCapital("Capital");
-        structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        structures.setDateFiscale(LocalDate.ofEpochDay(1L));
-        structures.setDepartement("Departement");
-        structures.setDescription("The characteristics of someone or something");
-        structures.setEmail("jane.doe@example.org");
-        structures.setFlagEtat(Etats.INACTIVE);
-        structures.setFormJuridique("Form Juridique");
-        structures.setId(123L);
-        structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        structures.setLogo("Logo");
-        structures.setPays("Pays");
-        structures.setQualiteResponsable("Qualite Responsable");
-        structures.setRaisonSocial("Raison Social");
-        structures.setResponsable("Responsable");
-        structures.setSigle("Sigle");
-        structures.setSiteweb("Siteweb");
-        structures.setTelephone("4105551212");
-        structures.setTypeEntreprise(TypeEntreprise.SA);
-        structures.setVille("Ville");
-        structures.setZoneFiscale("Zone Fiscale");
-        structures.setZoneFiscale2("Zone Fiscale2");
-        generateMenuService.createDefaultModule(structures);
-        assertEquals("Logo",structures.getLogo());
-    }
+
 
     /**
      * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
