@@ -1,17 +1,8 @@
 package net.hypnozcore.hypnozcore.service;
 
-import net.hypnozcore.hypnozcore.emus.Etats;
-import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
-import net.hypnozcore.hypnozcore.models.Applications;
-import net.hypnozcore.hypnozcore.models.Modules;
-import net.hypnozcore.hypnozcore.models.Structures;
-import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +11,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import net.hypnozcore.hypnozcore.emus.Etats;
+import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
+import net.hypnozcore.hypnozcore.models.Applications;
+import net.hypnozcore.hypnozcore.models.Modules;
+import net.hypnozcore.hypnozcore.models.Structures;
+import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
 @ActiveProfiles({"test"})
@@ -29,13 +32,49 @@ class GenerateMenuServiceTest {
     @Autowired
     private GenerateMenuService generateMenuService;
 
-
+    /**
+     * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
+     */
+    @Test
+    void testCreateDefaultModule() {
+        Structures structures = new Structures();
+        structures.setActiviteCommerciale("Activite Commerciale");
+        structures.setAdresse("Adresse");
+        structures.setBilanSocail("Bilan Socail");
+        structures.setCapital("Capital");
+        structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        structures.setDateFiscale(LocalDate.ofEpochDay(1L));
+        structures.setDepartement("Departement");
+        structures.setDescription("The characteristics of someone or something");
+        structures.setEmail("jane.doe@example.org");
+        structures.setFlagEtat(Etats.INACTIVE);
+        structures.setFormJuridique("Form Juridique");
+        structures.setId(123L);
+        structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+        structures.setLogo("Logo");
+        structures.setPays("Pays");
+        structures.setQualiteResponsable("Qualite Responsable");
+        structures.setRaisonSocial("Raison Social");
+        structures.setResponsable("Responsable");
+        structures.setSigle("Sigle");
+        structures.setSiteweb("Siteweb");
+        structures.setTelephone("4105551212");
+        structures.setTypeEntreprise(TypeEntreprise.SA);
+        structures.setVille("Ville");
+        structures.setZoneFiscale("Zone Fiscale");
+        structures.setZoneFiscale2("Zone Fiscale2");
+        assertEquals(8, generateMenuService.createDefaultModule(structures).size());
+    }
 
     /**
      * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
      */
     @Test
-    void testCreateDefaultModule3() {
+    void testCreateDefaultModule2() {
         Structures structures = new Structures();
         structures.setActiviteCommerciale("Activite Commerciale");
         structures.setAdresse("Adresse");
