@@ -76,4 +76,6 @@ public class GenerateMenuGroupeService {
         groupesModulesRepository.deleteByModulesAndGroupes(groupesModulesOptional.get().getModules(), groupesModulesOptional.get().getGroupes());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesModulesOptional.get());
     }
+
+
 }
