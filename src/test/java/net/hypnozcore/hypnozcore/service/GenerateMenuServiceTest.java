@@ -65,7 +65,7 @@ class GenerateMenuServiceTest {
         structures.setVille("Ville");
         structures.setZoneFiscale("Zone Fiscale");
         structures.setZoneFiscale2("Zone Fiscale2");
-        assertFalse(generateMenuService.createDefaultModule(structures).isEmpty());
+        assertTrue(generateMenuService.createDefaultModule(structures).isEmpty());
     }
 
     /**
