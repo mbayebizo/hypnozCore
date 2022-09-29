@@ -18,28 +18,27 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import net.hypnozcore.hypnozcore.dto.ApplicationsDto;
 import net.hypnozcore.hypnozcore.dto.Menus;
 import net.hypnozcore.hypnozcore.dto.ModulesDto;
 import net.hypnozcore.hypnozcore.dto.UsersDto;
 
 import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
-
 import net.hypnozcore.hypnozcore.mapper.ApplicationsMapper;
 import net.hypnozcore.hypnozcore.mapper.FonctionsMapper;
 import net.hypnozcore.hypnozcore.mapper.ModulesMapper;
 import net.hypnozcore.hypnozcore.models.Applications;
 import net.hypnozcore.hypnozcore.models.Modules;
-import net.hypnozcore.hypnozcore.models.ModulesStructure;
 import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.models.UserApplications;
 import net.hypnozcore.hypnozcore.models.UserModules;
 import net.hypnozcore.hypnozcore.models.Users;
 import net.hypnozcore.hypnozcore.repository.ApplicationsRepository;
 import net.hypnozcore.hypnozcore.repository.FonctionsRepository;
+import net.hypnozcore.hypnozcore.repository.GroupesApplicationsRepository;
+import net.hypnozcore.hypnozcore.repository.GroupesFonctionsRepository;
+import net.hypnozcore.hypnozcore.repository.GroupesModulesRepository;
 import net.hypnozcore.hypnozcore.repository.ModulesRepository;
 import net.hypnozcore.hypnozcore.repository.ModulesStructureRepository;
 import net.hypnozcore.hypnozcore.repository.StructuresRepository;
@@ -47,19 +46,19 @@ import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
 import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
 import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {GenerateMenuService.class})
+@SpringBootTest
 @ActiveProfiles({"test"})
 @ExtendWith(SpringExtension.class)
 class GenerateMenuServiceTest {
@@ -75,8 +74,14 @@ class GenerateMenuServiceTest {
     @MockBean
     private FonctionsRepository fonctionsRepository;
 
-    @Autowired
-    private GenerateMenuService generateMenuService;
+    @MockBean
+    private GroupesApplicationsRepository groupesApplicationsRepository;
+
+    @MockBean
+    private GroupesFonctionsRepository groupesFonctionsRepository;
+
+    @MockBean
+    private GroupesModulesRepository groupesModulesRepository;
 
     @MockBean
     private ModulesMapper modulesMapper;
@@ -99,77 +104,34 @@ class GenerateMenuServiceTest {
     @MockBean
     private UserModulesRepository userModulesRepository;
 
-    /**
-     * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
-     */
-    @Test
-    void testCreateDefaultModule() {
-        Modules modules = new Modules();
-        modules.setActive("Active");
-        modules.setCode("Code");
-        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("Icon Class");
-        modules.setId(123L);
-        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("Lib Code");
-        modules.setLibDesc("Lib Desc");
-        modules.setOrdre(1);
-        modules.setStandart(1);
-        modules.setUrl("https://example.org/example");
-        Optional<Modules> ofResult = Optional.of(modules);
-        when(modulesRepository.findByCode((String) any())).thenReturn(ofResult);
-
-        Structures structures = new Structures();
-        structures.setActiviteCommerciale("Activite Commerciale");
-        structures.setAdresse("Adresse");
-        structures.setBilanSocail("Bilan Socail");
-        structures.setCapital("Capital");
-        structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        structures.setDateFiscale(LocalDate.ofEpochDay(1L));
-        structures.setDepartement("Departement");
-        structures.setDescription("The characteristics of someone or something");
-        structures.setEmail("jane.doe@example.org");
-        structures.setFlagEtat(Etats.INACTIVE);
-        structures.setFormJuridique("Form Juridique");
-        structures.setId(123L);
-        structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
-        structures.setLogo("Logo");
-        structures.setPays("Pays");
-        structures.setQualiteResponsable("Qualite Responsable");
-        structures.setRaisonSocial("Raison Social");
-        structures.setResponsable("Responsable");
-        structures.setSigle("Sigle");
-        structures.setSiteweb("Siteweb");
-        structures.setTelephone("4105551212");
-        structures.setTypeEntreprise(TypeEntreprise.SA);
-        structures.setVille("Ville");
-        structures.setZoneFiscale("Zone Fiscale");
-        structures.setZoneFiscale2("Zone Fiscale2");
-        assertEquals(8, generateMenuService.createDefaultModule(structures).size());
-        verify(modulesRepository, atLeast(1)).findByCode((String) any());
-    }
+    @Autowired
+    private GenerateMenuService generateMenuService;
 
     /**
      * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
      */
     @Test
     @Disabled("TODO: Complete this test")
-    void testCreateDefaultModule2() {
+    void testCreateDefaultModule() {
         // TODO: Complete this test.
         //   Reason: R013 No inputs found that don't throw a trivial exception.
         //   Diffblue Cover tried to run the arrange/act section, but the method under
         //   test threw
-        //   java.lang.NullPointerException: Cannot invoke "java.util.Optional.isEmpty()" because the return value of "net.hypnozcore.hypnozcore.repository.ModulesRepository.findByCode(String)" is null
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.lambda$createDefaultModule$0(GenerateMenuService.java:78)
+        //   org.springframework.orm.jpa.JpaSystemException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]; nested exception is org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]
+        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:331)
+        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:233)
+        //       at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:551)
+        //       at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+        //       at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
+        //       at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:152)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215)
+        //       at jdk.proxy4.$Proxy192.saveAndFlush(null)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.lambda$createDefaultModule$0(GenerateMenuService.java:99)
         //       at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
         //       at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
         //       at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
@@ -179,14 +141,24 @@ class GenerateMenuServiceTest {
         //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
         //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
         //       at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.createDefaultModule(GenerateMenuService.java:95)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.createDefaultModule(GenerateMenuService.java:103)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$FastClassBySpringCGLIB$$965de7d7.invoke(<generated>)
+        //       at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
+        //       at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+        //       at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+        //       at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
+        //       at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$EnhancerBySpringCGLIB$$6f70f380.createDefaultModule(<generated>)
         //   In order to prevent createDefaultModule(Structures)
-        //   from throwing NullPointerException, add constructors or factory
+        //   from throwing JpaSystemException, add constructors or factory
         //   methods that make it easier to construct fully initialized objects used in
         //   createDefaultModule(Structures).
         //   See https://diff.blue/R013 to resolve this issue.
-
-        when(modulesRepository.findByCode((String) any())).thenReturn(null);
 
         Structures structures = new Structures();
         structures.setActiviteCommerciale("Activite Commerciale");
@@ -225,76 +197,63 @@ class GenerateMenuServiceTest {
      * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
      */
     @Test
-    void testCreateDefaultModule3() {
-        Modules modules = new Modules();
-        modules.setActive("Active");
-        modules.setCode("Code");
-        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("Icon Class");
-        modules.setId(123L);
-        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("Lib Code");
-        modules.setLibDesc("Lib Desc");
-        modules.setOrdre(1);
-        modules.setStandart(1);
-        modules.setUrl("https://example.org/example");
-        when(modulesRepository.saveAndFlush((Modules) any())).thenReturn(modules);
-        when(modulesRepository.findByCode((String) any())).thenReturn(Optional.empty());
-
-        Modules modules1 = new Modules();
-        modules1.setActive("Active");
-        modules1.setCode("Code");
-        modules1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules1.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        modules1.setFlagEtat(Etats.INACTIVE);
-        modules1.setIconClass("Icon Class");
-        modules1.setId(123L);
-        modules1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules1.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
-        modules1.setLibCode("Lib Code");
-        modules1.setLibDesc("Lib Desc");
-        modules1.setOrdre(1);
-        modules1.setStandart(1);
-        modules1.setUrl("https://example.org/example");
-        when(modulesMapper.toEntity((ModulesDto) any())).thenReturn(modules1);
-
-        ModulesStructure.ModulesStructurePK modulesStructurePK = new ModulesStructure.ModulesStructurePK();
-        modulesStructurePK.setModulesId(123L);
-        modulesStructurePK.setStructuresId(123L);
-
-        Modules modules2 = new Modules();
-        modules2.setActive("Active");
-        modules2.setCode("Code");
-        modules2.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules2.setCreatedDate(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
-        modules2.setFlagEtat(Etats.INACTIVE);
-        modules2.setIconClass("Icon Class");
-        modules2.setId(123L);
-        modules2.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules2.setLastModifiedDate(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
-        modules2.setLibCode("Lib Code");
-        modules2.setLibDesc("Lib Desc");
-        modules2.setOrdre(1);
-        modules2.setStandart(1);
-        modules2.setUrl("https://example.org/example");
+    @Disabled("TODO: Complete this test")
+    void testCreateDefaultModule2() {
+        // TODO: Complete this test.
+        //   Reason: R013 No inputs found that don't throw a trivial exception.
+        //   Diffblue Cover tried to run the arrange/act section, but the method under
+        //   test threw
+        //   org.springframework.orm.jpa.JpaSystemException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]; nested exception is org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [net.hypnozcore.hypnozcore.models.ModulesStructure.structures]
+        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:331)
+        //       at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:233)
+        //       at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:551)
+        //       at org.springframework.dao.support.ChainedPersistenceExceptionTranslator.translateExceptionIfPossible(ChainedPersistenceExceptionTranslator.java:61)
+        //       at org.springframework.dao.support.DataAccessUtils.translateIfNecessary(DataAccessUtils.java:242)
+        //       at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:152)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215)
+        //       at jdk.proxy4.$Proxy192.saveAndFlush(null)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.lambda$createDefaultModule$0(GenerateMenuService.java:99)
+        //       at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+        //       at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+        //       at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+        //       at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+        //       at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+        //       at java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+        //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+        //       at java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+        //       at java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.createDefaultModule(GenerateMenuService.java:103)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$FastClassBySpringCGLIB$$965de7d7.invoke(<generated>)
+        //       at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:793)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
+        //       at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+        //       at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+        //       at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+        //       at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        //       at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
+        //       at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService$$EnhancerBySpringCGLIB$$6f70f380.createDefaultModule(<generated>)
+        //   In order to prevent createDefaultModule(Structures)
+        //   from throwing JpaSystemException, add constructors or factory
+        //   methods that make it easier to construct fully initialized objects used in
+        //   createDefaultModule(Structures).
+        //   See https://diff.blue/R013 to resolve this issue.
 
         Structures structures = new Structures();
-        structures.setActiviteCommerciale("Activite Commerciale");
+        structures.setActiviteCommerciale("l.UlUlUlUlUl.U");
         structures.setAdresse("Adresse");
         structures.setBilanSocail("Bilan Socail");
         structures.setCapital("Capital");
         structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         structures.setDateFiscale(LocalDate.ofEpochDay(1L));
         structures.setDepartement("Departement");
         structures.setDescription("The characteristics of someone or something");
@@ -303,8 +262,8 @@ class GenerateMenuServiceTest {
         structures.setFormJuridique("Form Juridique");
         structures.setId(123L);
         structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult7 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setLastModifiedDate(Date.from(atStartOfDayResult7.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
         structures.setLogo("Logo");
         structures.setPays("Pays");
         structures.setQualiteResponsable("Qualite Responsable");
@@ -317,115 +276,32 @@ class GenerateMenuServiceTest {
         structures.setVille("Ville");
         structures.setZoneFiscale("Zone Fiscale");
         structures.setZoneFiscale2("Zone Fiscale2");
-
-        ModulesStructure modulesStructure = new ModulesStructure();
-        modulesStructure.setId(modulesStructurePK);
-        modulesStructure.setModules(modules2);
-        modulesStructure.setNew(true);
-        modulesStructure.setStructures(structures);
-        when(modulesStructureRepository.saveAndFlush((ModulesStructure) any())).thenReturn(modulesStructure);
-
-        Structures structures1 = new Structures();
-        structures1.setActiviteCommerciale("Activite Commerciale");
-        structures1.setAdresse("Adresse");
-        structures1.setBilanSocail("Bilan Socail");
-        structures1.setCapital("Capital");
-        structures1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult8 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures1.setCreatedDate(Date.from(atStartOfDayResult8.atZone(ZoneId.of("UTC")).toInstant()));
-        structures1.setDateFiscale(LocalDate.ofEpochDay(1L));
-        structures1.setDepartement("Departement");
-        structures1.setDescription("The characteristics of someone or something");
-        structures1.setEmail("jane.doe@example.org");
-        structures1.setFlagEtat(Etats.INACTIVE);
-        structures1.setFormJuridique("Form Juridique");
-        structures1.setId(123L);
-        structures1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult9 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures1.setLastModifiedDate(Date.from(atStartOfDayResult9.atZone(ZoneId.of("UTC")).toInstant()));
-        structures1.setLogo("Logo");
-        structures1.setPays("Pays");
-        structures1.setQualiteResponsable("Qualite Responsable");
-        structures1.setRaisonSocial("Raison Social");
-        structures1.setResponsable("Responsable");
-        structures1.setSigle("Sigle");
-        structures1.setSiteweb("Siteweb");
-        structures1.setTelephone("4105551212");
-        structures1.setTypeEntreprise(TypeEntreprise.SA);
-        structures1.setVille("Ville");
-        structures1.setZoneFiscale("Zone Fiscale");
-        structures1.setZoneFiscale2("Zone Fiscale2");
-        assertEquals(8, generateMenuService.createDefaultModule(structures1).size());
-        verify(modulesRepository, atLeast(1)).saveAndFlush((Modules) any());
-        verify(modulesRepository, atLeast(1)).findByCode((String) any());
-        verify(modulesMapper, atLeast(1)).toEntity((ModulesDto) any());
-        verify(modulesStructureRepository, atLeast(1)).saveAndFlush((ModulesStructure) any());
+        generateMenuService.createDefaultModule(structures);
     }
 
     /**
      * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
      */
     @Test
-    void testCreateDefaultModule4() {
-        Modules modules = new Modules();
-        modules.setActive("Active");
-        modules.setCode("Code");
-        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("Icon Class");
-        modules.setId(123L);
-        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("Lib Code");
-        modules.setLibDesc("Lib Desc");
-        modules.setOrdre(1);
-        modules.setStandart(1);
-        modules.setUrl("https://example.org/example");
-        when(modulesRepository.saveAndFlush((Modules) any())).thenReturn(modules);
-        when(modulesRepository.findByCode((String) any())).thenReturn(Optional.empty());
-
-        Modules modules1 = new Modules();
-        modules1.setActive("Active");
-        modules1.setCode("Code");
-        modules1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules1.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        modules1.setFlagEtat(Etats.INACTIVE);
-        modules1.setIconClass("Icon Class");
-        modules1.setId(123L);
-        modules1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules1.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
-        modules1.setLibCode("Lib Code");
-        modules1.setLibDesc("Lib Desc");
-        modules1.setOrdre(1);
-        modules1.setStandart(1);
-        modules1.setUrl("https://example.org/example");
-        when(modulesMapper.toEntity((ModulesDto) any())).thenReturn(modules1);
-        when(modulesStructureRepository.saveAndFlush((ModulesStructure) any()))
-                .thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-
+    void testCreateDefaultModule3() {
         Structures structures = new Structures();
         structures.setActiviteCommerciale("Activite Commerciale");
         structures.setAdresse("Adresse");
         structures.setBilanSocail("Bilan Socail");
         structures.setCapital("Capital");
         structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setCreatedDate(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         structures.setDateFiscale(LocalDate.ofEpochDay(1L));
         structures.setDepartement("Departement");
         structures.setDescription("The characteristics of someone or something");
         structures.setEmail("jane.doe@example.org");
         structures.setFlagEtat(Etats.INACTIVE);
         structures.setFormJuridique("Form Juridique");
-        structures.setId(123L);
+        structures.setId(null);
         structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        structures.setLastModifiedDate(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        structures.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
         structures.setLogo("Logo");
         structures.setPays("Pays");
         structures.setQualiteResponsable("Qualite Responsable");
@@ -439,10 +315,6 @@ class GenerateMenuServiceTest {
         structures.setZoneFiscale("Zone Fiscale");
         structures.setZoneFiscale2("Zone Fiscale2");
         assertThrows(ResponseException.class, () -> generateMenuService.createDefaultModule(structures));
-        verify(modulesRepository).saveAndFlush((Modules) any());
-        verify(modulesRepository).findByCode((String) any());
-        verify(modulesMapper).toEntity((ModulesDto) any());
-        verify(modulesStructureRepository).saveAndFlush((ModulesStructure) any());
     }
 
     /**
@@ -459,19 +331,19 @@ class GenerateMenuServiceTest {
     @Test
     void testCreateDefaultApplication2() {
         Modules modules = new Modules();
-        modules.setActive("config/Applications.json");
-        modules.setCode("config/Applications.json");
+        modules.setActive("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
+        modules.setCode("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("config/Applications.json");
+        modules.setIconClass("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setId(123L);
         modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
         LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
         modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("config/Applications.json");
-        modules.setLibDesc("config/Applications.json");
+        modules.setLibCode("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
+        modules.setLibDesc("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setOrdre(1);
         modules.setStandart(1);
         modules.setUrl("https://example.org/example");
@@ -487,19 +359,19 @@ class GenerateMenuServiceTest {
     @Test
     void testCreateDefaultApplication3() {
         Modules modules = new Modules();
-        modules.setActive("config/Applications.json");
-        modules.setCode("config/Applications.json");
+        modules.setActive("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
+        modules.setCode("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
         modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
         modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("config/Applications.json");
+        modules.setIconClass("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setId(123L);
         modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
         LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
         modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("config/Applications.json");
-        modules.setLibDesc("config/Applications.json");
+        modules.setLibCode("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
+        modules.setLibDesc("createDefaultApplication(Ljava/util/List;)Ljava/util/List;");
         modules.setOrdre(1);
         modules.setStandart(1);
         modules.setUrl("https://example.org/example");
@@ -528,150 +400,6 @@ class GenerateMenuServiceTest {
         assertTrue(generateMenuService.createDefaultApplication(modulesList).isEmpty());
     }
 
-    /**
-     * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
-     */
-    @Test
-    void testCreateDefaultApplication4() {
-        Applications applications = new Applications();
-        applications.setActive("Active");
-        applications.setCode("Code");
-        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setFlagEtat(Etats.INACTIVE);
-        applications.setIconClass("Icon Class");
-        applications.setId(123L);
-        applications.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setLibCode("Lib Code");
-        applications.setLibDesc("Lib Desc");
-        applications.setModule("Module");
-        applications.setModulesId(123L);
-        applications.setOrdre(1);
-        applications.setUrl("https://example.org/example");
-        when(applicationsMapper.toEntity((ApplicationsDto) any())).thenReturn(applications);
-
-        Applications applications1 = new Applications();
-        applications1.setActive("Active");
-        applications1.setCode("Code");
-        applications1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications1.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        applications1.setFlagEtat(Etats.INACTIVE);
-        applications1.setIconClass("Icon Class");
-        applications1.setId(123L);
-        applications1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications1.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
-        applications1.setLibCode("Lib Code");
-        applications1.setLibDesc("Lib Desc");
-        applications1.setModule("Module");
-        applications1.setModulesId(123L);
-        applications1.setOrdre(1);
-        applications1.setUrl("https://example.org/example");
-
-        Applications applications2 = new Applications();
-        applications2.setActive("Active");
-        applications2.setCode("Code");
-        applications2.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications2.setCreatedDate(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
-        applications2.setFlagEtat(Etats.INACTIVE);
-        applications2.setIconClass("Icon Class");
-        applications2.setId(123L);
-        applications2.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications2.setLastModifiedDate(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
-        applications2.setLibCode("Lib Code");
-        applications2.setLibDesc("Lib Desc");
-        applications2.setModule("Module");
-        applications2.setModulesId(123L);
-        applications2.setOrdre(1);
-        applications2.setUrl("https://example.org/example");
-        Optional<Applications> ofResult = Optional.of(applications2);
-        when(applicationsRepository.saveAndFlush((Applications) any())).thenReturn(applications1);
-        when(applicationsRepository.findByCodeAndModule((String) any(), (String) any())).thenReturn(ofResult);
-
-        Modules modules = new Modules();
-        modules.setActive("config/Applications.json");
-        modules.setCode("M0");
-        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("config/Applications.json");
-        modules.setId(123L);
-        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult7 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setLastModifiedDate(Date.from(atStartOfDayResult7.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("config/Applications.json");
-        modules.setLibDesc("config/Applications.json");
-        modules.setOrdre(1);
-        modules.setStandart(1);
-        modules.setUrl("https://example.org/example");
-
-        ArrayList<Modules> modulesList = new ArrayList<>();
-        modulesList.add(modules);
-        assertEquals(3, generateMenuService.createDefaultApplication(modulesList).size());
-        verify(applicationsMapper, atLeast(1)).toEntity((ApplicationsDto) any());
-        verify(applicationsRepository, atLeast(1)).findByCodeAndModule((String) any(), (String) any());
-    }
-
-    /**
-     * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
-     */
-    @Test
-    void testCreateDefaultApplication5() {
-        Applications applications = new Applications();
-        applications.setActive("Active");
-        applications.setCode("Code");
-        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setFlagEtat(Etats.INACTIVE);
-        applications.setIconClass("Icon Class");
-        applications.setId(123L);
-        applications.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setLibCode("Lib Code");
-        applications.setLibDesc("Lib Desc");
-        applications.setModule("Module");
-        applications.setModulesId(123L);
-        applications.setOrdre(1);
-        applications.setUrl("https://example.org/example");
-        when(applicationsMapper.toEntity((ApplicationsDto) any())).thenReturn(applications);
-        when(applicationsRepository.saveAndFlush((Applications) any()))
-                .thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-        when(applicationsRepository.findByCodeAndModule((String) any(), (String) any()))
-                .thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-
-        Modules modules = new Modules();
-        modules.setActive("config/Applications.json");
-        modules.setCode("M0");
-        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setFlagEtat(Etats.INACTIVE);
-        modules.setIconClass("config/Applications.json");
-        modules.setId(123L);
-        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        modules.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
-        modules.setLibCode("config/Applications.json");
-        modules.setLibDesc("config/Applications.json");
-        modules.setOrdre(1);
-        modules.setStandart(1);
-        modules.setUrl("https://example.org/example");
-
-        ArrayList<Modules> modulesList = new ArrayList<>();
-        modulesList.add(modules);
-        assertThrows(ResponseException.class, () -> generateMenuService.createDefaultApplication(modulesList));
-        verify(applicationsMapper).toEntity((ApplicationsDto) any());
-        verify(applicationsRepository).findByCodeAndModule((String) any(), (String) any());
-    }
 
     /**
      * Method under test: {@link GenerateMenuService#createDefaultFonctions(List)}
@@ -686,22 +414,40 @@ class GenerateMenuServiceTest {
      */
     @Test
     void testCreateDefaultFonctions2() {
-        Applications applications = new Applications();
-        applications.setActive("config/fonctions.json");
-        applications.setCode("config/fonctions.json");
-        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        Modules modules = new Modules();
+        modules.setActive("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setFlagEtat(Etats.INACTIVE);
+        modules.setIconClass("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setId(123L);
+        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setLibCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setLibDesc("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setOrdre(1);
+        modules.setStandart(1);
+        modules.setUrl("https://example.org/example");
+
+        Applications applications = new Applications();
+        applications.setActive("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
         applications.setFlagEtat(Etats.INACTIVE);
-        applications.setIconClass("config/fonctions.json");
+        applications.setIconClass("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
         applications.setId(123L);
         applications.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setLibCode("config/fonctions.json");
-        applications.setLibDesc("config/fonctions.json");
-        applications.setModule("config/fonctions.json");
-        applications.setModulesId(123L);
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+        applications.setLibCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setLibDesc("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setModule("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setModules(modules);
         applications.setOrdre(1);
         applications.setUrl("https://example.org/example");
 
@@ -715,41 +461,77 @@ class GenerateMenuServiceTest {
      */
     @Test
     void testCreateDefaultFonctions3() {
-        Applications applications = new Applications();
-        applications.setActive("config/fonctions.json");
-        applications.setCode("config/fonctions.json");
-        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        Modules modules = new Modules();
+        modules.setActive("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
         LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setFlagEtat(Etats.INACTIVE);
+        modules.setIconClass("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setId(123L);
+        modules.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
+        modules.setLibCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setLibDesc("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        modules.setOrdre(1);
+        modules.setStandart(1);
+        modules.setUrl("https://example.org/example");
+
+        Applications applications = new Applications();
+        applications.setActive("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
         applications.setFlagEtat(Etats.INACTIVE);
-        applications.setIconClass("config/fonctions.json");
+        applications.setIconClass("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
         applications.setId(123L);
         applications.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-        applications.setLibCode("config/fonctions.json");
-        applications.setLibDesc("config/fonctions.json");
-        applications.setModule("config/fonctions.json");
-        applications.setModulesId(123L);
+        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+        applications.setLibCode("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setLibDesc("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setModule("createDefaultFonctions(Ljava/util/List;)Ljava/util/List;");
+        applications.setModules(modules);
         applications.setOrdre(1);
         applications.setUrl("https://example.org/example");
+
+        Modules modules1 = new Modules();
+        modules1.setActive("config/fonctions.json");
+        modules1.setCode("config/fonctions.json");
+        modules1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
+        LocalDateTime atStartOfDayResult4 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules1.setCreatedDate(Date.from(atStartOfDayResult4.atZone(ZoneId.of("UTC")).toInstant()));
+        modules1.setFlagEtat(Etats.INACTIVE);
+        modules1.setIconClass("config/fonctions.json");
+        modules1.setId(123L);
+        modules1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
+        LocalDateTime atStartOfDayResult5 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        modules1.setLastModifiedDate(Date.from(atStartOfDayResult5.atZone(ZoneId.of("UTC")).toInstant()));
+        modules1.setLibCode("config/fonctions.json");
+        modules1.setLibDesc("config/fonctions.json");
+        modules1.setOrdre(1);
+        modules1.setStandart(1);
+        modules1.setUrl("https://example.org/example");
 
         Applications applications1 = new Applications();
         applications1.setActive("config/fonctions.json");
         applications1.setCode("config/fonctions.json");
         applications1.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-        LocalDateTime atStartOfDayResult2 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications1.setCreatedDate(Date.from(atStartOfDayResult2.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult6 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications1.setCreatedDate(Date.from(atStartOfDayResult6.atZone(ZoneId.of("UTC")).toInstant()));
         applications1.setFlagEtat(Etats.INACTIVE);
         applications1.setIconClass("config/fonctions.json");
         applications1.setId(123L);
         applications1.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-        LocalDateTime atStartOfDayResult3 = LocalDate.of(1970, 1, 1).atStartOfDay();
-        applications1.setLastModifiedDate(Date.from(atStartOfDayResult3.atZone(ZoneId.of("UTC")).toInstant()));
+        LocalDateTime atStartOfDayResult7 = LocalDate.of(1970, 1, 1).atStartOfDay();
+        applications1.setLastModifiedDate(Date.from(atStartOfDayResult7.atZone(ZoneId.of("UTC")).toInstant()));
         applications1.setLibCode("config/fonctions.json");
         applications1.setLibDesc("config/fonctions.json");
         applications1.setModule("config/fonctions.json");
-        applications1.setModulesId(123L);
+        applications1.setModules(modules1);
         applications1.setOrdre(1);
         applications1.setUrl("https://example.org/example");
 
@@ -790,7 +572,7 @@ class GenerateMenuServiceTest {
         UsersDto usersDto = mock(UsersDto.class);
         when(usersDto.getId()).thenReturn(123L);
         ModulesDto modulesDto = mock(ModulesDto.class);
-        when(modulesDto.getId()).thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
+        when(modulesDto.getId()).thenThrow(new ResponseException("An error occurred"));
         assertThrows(ResponseException.class, () -> generateMenuService.getRoles(usersDto, modulesDto));
         verify(modulesDto).getId();
     }
@@ -1830,7 +1612,7 @@ class GenerateMenuServiceTest {
         //   Diffblue Cover tried to run the arrange/act section, but the method under
         //   test threw
         //   java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "str" is null
-        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.getRoles(GenerateMenuService.java:165)
+        //       at net.hypnozcore.hypnozcore.service.GenerateMenuService.getRoles(GenerateMenuService.java:173)
         //   In order to prevent getRoles(UsersDto, ModulesDto)
         //   from throwing NullPointerException, add constructors or factory
         //   methods that make it easier to construct fully initialized objects used in
@@ -2008,6 +1790,57 @@ class GenerateMenuServiceTest {
         ModulesDto modulesDto = mock(ModulesDto.class);
         when(modulesDto.getId()).thenReturn(123L);
         generateMenuService.getRoles(usersDto, modulesDto);
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteFonctionByGroupe(Long, Long)}
+     */
+    @Test
+    void testDeleteFonctionByGroupe() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteFonctionByGroupe(1L, 1L));
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteFonctionByGroupe(2L, 1L));
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteGroupeApplication(long, long)}
+     */
+    @Test
+    void testDeleteGroupeApplication() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteGroupeApplication(1L, 1L));
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteGroupeApplication(2L, 1L));
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteGroupeModule(Long, Long)}
+     */
+    @Test
+    void testDeleteGroupeModule() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteGroupeModule(1L, 1L));
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteGroupeModule(2L, 1L));
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteUserFonction(Long, Long)}
+     */
+    @Test
+    void testDeleteUserFonction() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteUserFonction(123L, 123L));
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteUserApplication(Long, Long)}
+     */
+    @Test
+    void testDeleteUserApplication() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteUserApplication(123L, 123L));
+    }
+
+    /**
+     * Method under test: {@link GenerateMenuService#deleteUserModules(Long, Long)}
+     */
+    @Test
+    void testDeleteUserModules() {
+        assertThrows(ResponseException.class, () -> generateMenuService.deleteUserModules(123L, 123L));
     }
 }
 
