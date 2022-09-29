@@ -25,7 +25,9 @@ public class ApplicationConstantService {
 
     public ApplicationConstantDto save(ApplicationConstantDto applicationConstantDto) {
         ApplicationConstant entity = applicationConstantMapper.toEntity(applicationConstantDto);
-        return applicationConstantMapper.toDto(repository.save(entity));
+        repository.saveAndFlush(entity);
+       ApplicationConstantDto constantDto= applicationConstantMapper.toDto(entity);
+        return constantDto;
     }
 
     public void deleteById(String id) {
@@ -39,7 +41,7 @@ public class ApplicationConstantService {
     public ApplicationConstantDto update(ApplicationConstantDto applicationConstantDto, String id) {
         ApplicationConstantDto dto = findById(id);
         ApplicationConstant entity = applicationConstantMapper.toEntity(applicationConstantDto);
-       BeanUtils.copyProperties(dto, entity);
-        return save(applicationConstantMapper.toDto(entity));
+        ApplicationConstantDto  constantDto = save(applicationConstantMapper.toDto(entity));
+        return constantDto;
     }
 }
