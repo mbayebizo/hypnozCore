@@ -14,4 +14,6 @@ public interface GroupesApplicationsRepository extends JpaRepository<GroupesAppl
     Optional<GroupesApplications> findByIdApplicationsIdAndIdGroupesId(Long applicationsId, Long groupesId);
 
     void deleteByApplicationsAndGroupes(Applications applications, Groupes groupes);
+
+
 }
