@@ -2,9 +2,11 @@ package net.hypnozcore.hypnozcore.models;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serial;
 
 @Getter
@@ -24,10 +26,16 @@ public class Applications extends AbstractEntity {
     private String url;
     private String iconClass;
     String module;
-    Long modulesId;
     String active;
     int ordre;
 
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(foreignKey = @ForeignKey(name = "mod_fk", value = ConstraintMode.NO_CONSTRAINT),
+            insertable = false, updatable = false)
+    @MapsId("modulesId")
+    private Modules modules;
 
     @Override
     public void beforePrePersit() {

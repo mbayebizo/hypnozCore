@@ -119,9 +119,12 @@ public class GenerateMenuService {
         List<Applications> list = new ArrayList<>();
         for (ApplicationsDto applicationsDto : applicationsDtoList) {
             List<Applications> listApp = modulesList.stream().filter(modules -> modules.getCode().equals(applicationsDto.getModule())).map(mod -> {
+                Optional<Modules> modules = modulesRepository.findByCode(mod.getCode());
+
                 Applications applications = applicationsMapper.toEntity(applicationsDto);
                 if (applicationsRepository.findByCodeAndModule(applicationsDto.getCode(), applicationsDto.getModule()).isEmpty()) {
-                    applications.setModulesId(mod.getId());
+                    modules.ifPresent(applications::setModules);
+
                     applications.setLibCode(FormatText.formatCode(applicationsDto.getLibCode()));
                     applications.setOrdre(FormatText.getOrdre(applicationsDto.getCode()));
                     applicationsRepository.saveAndFlush(applications);
