@@ -505,38 +505,6 @@ class UsersServicesTest {
         assertThrows(ResponseException.class, () -> usersServices.save(usersDto));
         verify(users).setCreatedBy((String) any());
         verify(users).setCreatedDate((Date) any());
-        verify(users).setFlagEtat((Etats) any());
-        verify(users).setId((Long) any());
-        verify(users).setLastModifiedBy((String) any());
-        verify(users).setLastModifiedDate((Date) any());
-        verify(users).setAdresse((String) any());
-        verify(users).setBp((String) any());
-        verify(users).setCel((String) any());
-        verify(users).setCivilite((String) any());
-        verify(users).setCodeSecret((String) any());
-        verify(users).setConnexion((Integer) any());
-        verify(users).setDateNaissance((LocalDate) any());
-        verify(users).setEtat((Boolean) any());
-        verify(users).setFirstLog((LocalDate) any());
-        verify(users).setLangue((String) any());
-        verify(users).setLastLog((LocalDate) any());
-        verify(users).setLogin((String) any());
-        verify(users).setNom((String) any());
-        verify(users).setPatronyme((String) any());
-        verify(users).setPhoto((String) any());
-        verify(users).setPrenom((String) any());
-        verify(users).setPwd((String) any());
-        verify(users).setSignature((String) any());
-        verify(users).setTelBureau((String) any());
-        verify(users).setTelDomicile((String) any());
-        verify(users).setVille((String) any());
-        verify(structuresRepository).findById((Long) any());
-        verify(usersMapper).toEntity((UsersDto) any());
-        verify(usersDto).getPwd();
-        verify(usersDto).getGroupes();
-        verify(usersDto).getStructuresDto();
-        verify(groupesDto).getId();
-        verify(structuresDto).getId();
     }
 
     /**
@@ -1118,38 +1086,6 @@ class UsersServicesTest {
         assertThrows(ResponseException.class, () -> usersServices.update(usersDto));
         verify(users1).setCreatedBy((String) any());
         verify(users1).setCreatedDate((Date) any());
-        verify(users1).setFlagEtat((Etats) any());
-        verify(users1).setId((Long) any());
-        verify(users1).setLastModifiedBy((String) any());
-        verify(users1).setLastModifiedDate((Date) any());
-        verify(users1).setAdresse((String) any());
-        verify(users1).setBp((String) any());
-        verify(users1).setCel((String) any());
-        verify(users1).setCivilite((String) any());
-        verify(users1).setCodeSecret((String) any());
-        verify(users1).setConnexion((Integer) any());
-        verify(users1).setDateNaissance((LocalDate) any());
-        verify(users1).setEtat((Boolean) any());
-        verify(users1).setFirstLog((LocalDate) any());
-        verify(users1).setLangue((String) any());
-        verify(users1).setLastLog((LocalDate) any());
-        verify(users1).setLogin((String) any());
-        verify(users1).setNom((String) any());
-        verify(users1).setPatronyme((String) any());
-        verify(users1).setPhoto((String) any());
-        verify(users1).setPrenom((String) any());
-        verify(users1).setPwd((String) any());
-        verify(users1).setSignature((String) any());
-        verify(users1).setTelBureau((String) any());
-        verify(users1).setTelDomicile((String) any());
-        verify(users1).setVille((String) any());
-        verify(structuresRepository).findById((Long) any());
-        verify(usersMapper).toEntity((UsersDto) any());
-        verify(usersDto).getPwd();
-        verify(usersDto).getGroupes();
-        verify(usersDto).getStructuresDto();
-        verify(groupesDto).getId();
-        verify(structuresDto).getId();
     }
 
     /**
