@@ -39,12 +39,12 @@ public class StructuresServices {
     }
 
 
-    public ResponseEntity<StructuresDto> save(StructuresDto structuresDto) {
+    public StructuresDto save(StructuresDto structuresDto) {
         validationSigleRaisonSocial(structuresDto);
         Structures entity = structuresMapper.toEntity(structuresDto);
         repository.saveAndFlush(entity);
         LOGGER.info("Save Structure {}", structuresMapper.toDto(entity));
-        return ResponseEntity.ok(structuresMapper.toDto(entity));
+        return structuresDto;
     }
 
     private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
@@ -71,7 +71,7 @@ public class StructuresServices {
         return structuresDto;
     }
 
-    public ResponseEntity<StructuresDto>update(StructuresDto structuresDto, Long id){
+    public StructuresDto update(StructuresDto structuresDto, Long id){
         validationSigleRaisonSocial(structuresDto);
         try {
             var grp= repository
@@ -80,15 +80,14 @@ public class StructuresServices {
                     .orElseThrow(() ->  new  ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE));
             StructuresDto strDto =structuresMapper.toDto(grp);
             LOGGER.debug(StructuresServices.class.getName(), HypnozCoreCostance.UPDATED,strDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(strDto);
-
+            return strDto;
         } catch (ResponseException e) {
             log.error(e.getMessage(), e);
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
         }
     }
 
-    public ResponseEntity<StructuresDto> initConfigStructure(StructuresDto structureDto) throws ResponseException {
+    public StructuresDto initConfigStructure(StructuresDto structureDto) throws ResponseException {
         Structures structures = null;
 
         if (repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).isEmpty()) {
@@ -106,7 +105,7 @@ public class StructuresServices {
             throw new ResponseException(e.getMessage());
         }
         structureDto = structuresMapper.toDto(structures);
-        return ResponseEntity.ok().body(structureDto);
+        return structureDto;
     }
 
 }

@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.io.Serial;
 
 @ApiModel("Module Dto")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter

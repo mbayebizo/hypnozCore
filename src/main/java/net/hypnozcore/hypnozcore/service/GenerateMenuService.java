@@ -45,7 +45,7 @@ public class GenerateMenuService {
     }
 
 
-    public List<Modules>createDefaultModule(Structures structures) {
+    public List<Modules> createDefaultModule(Structures structures) {
         if (structures.getId() == null) throw new ResponseException(RequestErrorEnum.ID_STRUCTURE_EMPTY);
         //read file
         Resource resource = new ClassPathResource("config/modules.json");

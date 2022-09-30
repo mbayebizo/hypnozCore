@@ -19,9 +19,10 @@ import java.time.LocalDate;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class UsersDto extends AbstractDto {
+public class UsersDto{
     @Serial
     static final long serialVersionUID = -2251460200601550695L;
+    Long id;
     String civilite;
     String nom;
     String prenom;

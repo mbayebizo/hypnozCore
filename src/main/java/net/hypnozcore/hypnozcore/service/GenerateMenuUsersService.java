@@ -31,7 +31,7 @@ public class GenerateMenuUsersService {
         this.userApplicationsRepository = userApplicationsRepository;
         this.userFonctionsRepository = userFonctionsRepository;
     }
-    public ResponseEntity<List<Menus>> getRoles(UsersDto usersDto, ModulesDto modulesDto) {
+    public List<Menus> getRoles(UsersDto usersDto, ModulesDto modulesDto) {
         List<Menus> lmenu = new ArrayList<>();
         List<UserModules> userModules = userModulesRepository.findByIdModulesIdAndIdUsersIdOrderByModulesCodeAsc(modulesDto.getId(), usersDto.getId());
         for (UserModules um : userModules) {
@@ -40,7 +40,7 @@ public class GenerateMenuUsersService {
                 lmenu.addAll(l);
             }
         }
-        return ResponseEntity.ok(lmenu);
+        return lmenu;
     }
 
     public List<Menus> getMenuByUser(UserModules userModules) {
@@ -88,17 +88,17 @@ public class GenerateMenuUsersService {
         return menusList;
     }
 
-    public ResponseEntity<UserFonctions> deleteUserFonction(Long usrId,Long foncId){
+    public UserFonctions deleteUserFonction(Long usrId,Long foncId){
         Optional<UserFonctions> userFonctionsOptional = userFonctionsRepository.findByIdFonctionsIdAndIdUsersId(foncId,usrId);
         if (userFonctionsOptional.isEmpty()){
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
         }
 
         userFonctionsRepository.deleteByFonctionsAndUsers(userFonctionsOptional.get().getFonctions(), userFonctionsOptional.get().getUsers());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userFonctionsOptional.get());
+        return userFonctionsOptional.get();
     }
 
-    public ResponseEntity<UserApplications> deleteUserApplication(Long usrId,Long appId){
+    public UserApplications deleteUserApplication(Long usrId,Long appId){
         Optional<UserApplications> userApplicationsOptional = userApplicationsRepository.findByIdApplicationsIdAndIdUsersId(appId,usrId);
         if(userApplicationsOptional.isEmpty()){
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
@@ -106,19 +106,19 @@ public class GenerateMenuUsersService {
 
         userApplicationsRepository.deleteByApplicationsAndUsers(userApplicationsOptional.get().getApplications(),
                 userApplicationsOptional.get().getUsers());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userApplicationsOptional.get());
+        return userApplicationsOptional.get();
     }
 
-    public ResponseEntity<UserModules> deleteUserModules(Long usrId,Long modId){
+    public UserModules deleteUserModules(Long usrId,Long modId){
         Optional<UserModules> userModulesOptional = userModulesRepository.findByIdModulesIdAndIdUsersId(modId,usrId);
         if(userModulesOptional.isEmpty()){
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
         }
         userModulesRepository.deleteByModulesAndUsers(userModulesOptional.get().getModules(), userModulesOptional.get().getUsers());
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userModulesOptional.get());
+        return userModulesOptional.get();
     }
 
-    public ResponseEntity<UserModules> addUserModules(Users users, Modules modules) {
+    public UserModules addUserModules(Users users, Modules modules) {
         Optional<UserModules> userModulesOptional= userModulesRepository.findByIdModulesIdAndIdUsersId(modules.getId(), users.getId());
         if(userModulesOptional.isPresent()){
             userModulesRepository.deleteByModulesAndUsers(modules,users);
@@ -132,10 +132,10 @@ public class GenerateMenuUsersService {
                 .users(users)
                 .build();
         userModulesRepository.saveAndFlush(userModules);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userModules);
+        return userModules;
     }
 
-    public ResponseEntity<UserFonctions> addUserFonction(Users users,Fonctions fonctions){
+    public UserFonctions addUserFonction(Users users,Fonctions fonctions){
         Optional<UserFonctions> userFonctionsOptional = userFonctionsRepository.findByIdFonctionsIdAndIdUsersId(fonctions.getId(),users.getId());
         if(userFonctionsOptional.isPresent()){
             userFonctionsRepository.deleteByFonctionsAndUsers(fonctions,users);
@@ -149,10 +149,10 @@ public class GenerateMenuUsersService {
                 .users(users)
                 .build();
         userFonctionsRepository.saveAndFlush(userFonctions);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userFonctions);
+        return userFonctions;
     }
 
-    public ResponseEntity<UserApplications> addUsersApplications(Users users,Applications applications){
+    public UserApplications addUsersApplications(Users users,Applications applications){
         Optional<UserApplications> userApplicationsOptional = userApplicationsRepository.findByIdApplicationsIdAndIdUsersId(applications.getId(), users.getId());
         if (userApplicationsOptional.isPresent()){
             userApplicationsRepository.deleteByApplicationsAndUsers(applications,users);
@@ -167,6 +167,6 @@ public class GenerateMenuUsersService {
                 .applications(applications)
                 .build();
         userApplicationsRepository.saveAndFlush(userApplications);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userApplications);
+        return userApplications;
     }
 }

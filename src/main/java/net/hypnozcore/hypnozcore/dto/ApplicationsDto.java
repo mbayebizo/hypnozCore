@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 import java.io.Serial;
 
 @ApiModel("Application Dto")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -26,4 +26,5 @@ public class ApplicationsDto extends AbstractDto {
     String module;
     String active;
     int ordre;
+    ModulesDto modulesDto;
 }
