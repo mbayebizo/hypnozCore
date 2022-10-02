@@ -12,11 +12,10 @@ import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
@@ -25,87 +24,96 @@ import java.util.Optional;
 @Service
 @Transactional
 public class StructuresServices {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StructuresServices.class);
-    private final StructuresRepository repository;
-    private final StructuresMapper structuresMapper;
-    private final GenerateMenuService generateMenuService;
-    private final GenerateDefaultDocService generateDefaultDocService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(StructuresServices.class);
+	private final StructuresRepository repository;
+	private final StructuresMapper structuresMapper;
+	private final GenerateMenuService generateMenuService;
+	private final GenerateDefaultDocService generateDefaultDocService;
 
-    public StructuresServices(StructuresRepository repository, StructuresMapper structuresMapper, GenerateMenuService generateMenuService, GenerateDefaultDocService generateDefaultDocService) {
-        this.repository = repository;
-        this.structuresMapper = structuresMapper;
-        this.generateMenuService = generateMenuService;
-        this.generateDefaultDocService = generateDefaultDocService;
-    }
+	public StructuresServices(StructuresRepository repository, StructuresMapper structuresMapper, GenerateMenuService generateMenuService, GenerateDefaultDocService generateDefaultDocService) {
+		this.repository = repository;
+		this.structuresMapper = structuresMapper;
+		this.generateMenuService = generateMenuService;
+		this.generateDefaultDocService = generateDefaultDocService;
+	}
 
 
-    public StructuresDto save(StructuresDto structuresDto) {
-        validationSigleRaisonSocial(structuresDto);
-        Structures entity = structuresMapper.toEntity(structuresDto);
-        repository.saveAndFlush(entity);
-        LOGGER.info("Save Structure {}", structuresMapper.toDto(entity));
-        return structuresDto;
-    }
+	public StructuresDto save(StructuresDto structuresDto) {
+		if (structuresDto == null) throw new ResponseException(RequestErrorEnum.NULL_ENTITY);
+		validationSigleRaisonSocial(structuresDto);
+		Structures entity = structuresMapper.toEntity(structuresDto);
+		repository.saveAndFlush(entity);
+		LOGGER.info("Save Structure {}", structuresMapper.toDto(entity));
+		return structuresDto;
+	}
 
-    private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
-        if (structuresDto.getSigle().length() < 2 || structuresDto.getSigle().length() > 50) {
-            throw new ResponseException(RequestErrorEnum.ERROR_SIGLE);
-        }
-        if (structuresDto.getRaisonSocial().length() < 2 || structuresDto.getRaisonSocial().length() > 150) {
-            throw new ResponseException(RequestErrorEnum.ERROR_RAISON_SOCIAL);
-        }
-    }
+	private void validationSigleRaisonSocial(@NotNull StructuresDto structuresDto) {
+		if (structuresDto.getSigle() == null || structuresDto.getSigle().length() < 2 || structuresDto.getSigle().length() > 50) {
+			throw new ResponseException(RequestErrorEnum.ERROR_SIGLE);
+		}
+		if (structuresDto.getRaisonSocial() == null || structuresDto.getRaisonSocial().length() < 2 || structuresDto.getRaisonSocial().length() > 150) {
+			throw new ResponseException(RequestErrorEnum.ERROR_RAISON_SOCIAL);
+		}
+	}
 
-    public void deleteById(long id) {
-        repository.deleteById(id);
-    }
+	public void deleteById(long id) {
+		if (repository.findById(id).isEmpty()) {
+			throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+		}
+		repository.deleteById(id);
+	}
 
-    public StructuresDto findById(long id) {
-        StructuresDto structuresDto=null;
-        Optional<Structures> structuresOptional =repository.findById(id);
-        if(structuresOptional.isPresent()){
-            structuresDto = structuresMapper.toDto(structuresOptional.get());
-        }else {
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
-        }
-        return structuresDto;
-    }
+	public StructuresDto findById(long id) {
+		StructuresDto structuresDto = null;
+		Optional<Structures> structuresOptional = repository.findById(id);
+		if (structuresOptional.isPresent()) {
+			structuresDto = structuresMapper.toDto(structuresOptional.get());
+			return structuresDto;
+		} else {
+			throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+		}
+	}
 
-    public StructuresDto update(StructuresDto structuresDto, Long id){
-        validationSigleRaisonSocial(structuresDto);
-        try {
-            var grp= repository
-                    .findById(id)
-                    .map(oldEntity -> repository.saveAndFlush(structuresMapper.toEntity(structuresDto)))
-                    .orElseThrow(() ->  new  ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE));
-            StructuresDto strDto =structuresMapper.toDto(grp);
-            LOGGER.debug(StructuresServices.class.getName(), HypnozCoreCostance.UPDATED,strDto);
-            return strDto;
-        } catch (ResponseException e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
-        }
-    }
+	public StructuresDto update(@Valid StructuresDto structuresDto, @Valid Long id) {
+		if (structuresDto == null) throw new ResponseException(RequestErrorEnum.NULL_ENTITY);
+		validationSigleRaisonSocial(structuresDto);
+		try {
+			var grp = repository
+					.findById(id)
+					.map(oldEntity -> repository.saveAndFlush(structuresMapper.toEntity(structuresDto)))
+					.orElseThrow(() -> new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE));
+			StructuresDto strDto = structuresMapper.toDto(grp);
+			LOGGER.debug(StructuresServices.class.getName(), HypnozCoreCostance.UPDATED, strDto);
+			return strDto;
+		} catch (ResponseException e) {
+			log.error(e.getMessage(), e);
+			throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+		}
+	}
 
-    public StructuresDto initConfigStructure(StructuresDto structureDto) throws ResponseException {
-        Structures structures = null;
+	public StructuresDto initConfigStructure(@Valid StructuresDto structureDto) {
+		Structures structures = null;
+		if (structureDto == null) throw new ResponseException(RequestErrorEnum.NULL_ENTITY);
+		if (structureDto.getSigle().isEmpty() && structureDto.getSigle() == null) throw new ResponseException(RequestErrorEnum.ERROR_SIGLE);
+		if (structureDto.getRaisonSocial().isEmpty() && structureDto.getRaisonSocial() == null)
+			throw new ResponseException(RequestErrorEnum.ERROR_RAISON_SOCIAL);
+		try {
+			if (repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).isEmpty()) {
+				structures = structuresMapper.toEntity(structureDto);
+				structures = repository.saveAndFlush(structures);
+			} else {
+				structures = repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).orElseThrow();
+			}
+			List<Modules> modulesList = generateMenuService.createDefaultModule(structures);
+			List<Applications> applicationsList = generateMenuService.createDefaultApplication(modulesList);
+			generateMenuService.createDefaultFonctions(applicationsList);
 
-        if (repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).isEmpty()) {
-            structures = structuresMapper.toEntity(structureDto);
-            structures = repository.saveAndFlush(structures);
-        } else {
-            structures = repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).orElseThrow();
-        }
-        List<Modules> modulesList = generateMenuService.createDefaultModule(structures);
-        List<Applications> applicationsList = generateMenuService.createDefaultApplication(modulesList);
-        generateMenuService.createDefaultFonctions(applicationsList);
-        try {
-            generateDefaultDocService.create();
-        } catch (Exception e) {
-            throw new ResponseException(e.getMessage());
-        }
-        structureDto = structuresMapper.toDto(structures);
-        return structureDto;
-    }
+			generateDefaultDocService.create();
+			structureDto = structuresMapper.toDto(structures);
+			return structureDto;
+		} catch (Exception e) {
+			throw new ResponseException(e.getMessage());
+		}
+	}
 
 }

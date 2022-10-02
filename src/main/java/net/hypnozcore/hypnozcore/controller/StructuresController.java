@@ -1,16 +1,22 @@
 package net.hypnozcore.hypnozcore.controller;
 
 import io.swagger.annotations.Api;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.service.StructuresServices;
-import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RequestMapping("/structures")
 @RestController
@@ -23,40 +29,34 @@ public class StructuresController {
         this.structuresServices = structuresServices;
     }
 
-    @SneakyThrows(ResponseException.class)
+
     @PostMapping
-    public ResponseEntity<StructuresDto> save(@RequestBody @Validated StructuresDto structuresDto) {
-        StructuresDto response =structuresServices.save(structuresDto);
+    public ResponseEntity<StructuresDto>  save(@RequestBody @Validated StructuresDto structuresDto) {
+        StructuresDto  response = structuresServices.save(structuresDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @SneakyThrows(ResponseException.class)
+
     @GetMapping("/{id}")
     public ResponseEntity<StructuresDto> findById(@PathVariable("id") Long id) {
-        StructuresDto applicationConstant = structuresServices.findById(id);
-        return ResponseEntity.ok(applicationConstant);
+        StructuresDto  dto = structuresServices.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
-    @SneakyThrows(ResponseException.class)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        try {
-            structuresServices.deleteById(id);
-        } catch (ResourceNotFoundException e) {
-            log.error("Unable to delete non-existent data！" + e);
-        }
+        structuresServices.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @SneakyThrows(ResponseException.class)
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody @Validated StructuresDto structuresDto, @PathVariable("id") Long id) {
-        structuresServices.update(structuresDto, id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<StructuresDto> update(@Valid @RequestBody StructuresDto structuresDto, @PathVariable("id") Long id) {
+       StructuresDto    dto = structuresServices.update(structuresDto, id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @SneakyThrows(ResponseException.class)
     @PostMapping("/initSysteme")
-    public ResponseEntity<StructuresDto> initSystement(@RequestBody StructuresDto structuresDto) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<StructuresDto> initSysteme(@Valid @RequestBody StructuresDto structuresDto) {
+        StructuresDto  dto = structuresServices.initConfigStructure(structuresDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

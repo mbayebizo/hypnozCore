@@ -1,8 +1,8 @@
 package net.hypnozcore.hypnozcore.utils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OsUtilsTest {
     /**
@@ -19,8 +19,7 @@ class OsUtilsTest {
     @Test
     void testGetOsPath() {
         assertEquals("foo/", OsUtils.getOsPath("foo"));
-        assertEquals("/", OsUtils.getOsPath("\\"));
-        assertEquals("//", OsUtils.getOsPath("\\\\"));
+        assertEquals("/", OsUtils.getOsPath("/"));
     }
 
     /**

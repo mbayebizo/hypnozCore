@@ -1,11 +1,21 @@
 package net.hypnozcore.hypnozcore.models;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 import java.io.Serial;
 import java.time.LocalDate;
 import java.util.Objects;

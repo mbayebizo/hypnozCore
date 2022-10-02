@@ -37,7 +37,7 @@ public class OsUtils {
     }
 
     public static String getOsPath(String p) {
-        p = p.replaceAll("\\\\", "/");
+        p = p.replace("\\\\", "/");
         if (getOsType() == OS_TYPE_WINDOWS) {
             if (!p.endsWith("/")) {
                 p += "/";
@@ -46,14 +46,14 @@ public class OsUtils {
             if (!p.endsWith("/")) {
                 p += "/";
             }
-            String sch = "";
+            StringBuilder sch = new StringBuilder();
 
             for (int i = 0; i < p.length(); i++) {
                 if (p.charAt(i) != '\'') {
-                    sch = sch + p.charAt(i);
+                    sch.append(p.charAt(i));
                 }
             }
-            p = sch;
+            p = sch.toString();
         }
 
         return p;

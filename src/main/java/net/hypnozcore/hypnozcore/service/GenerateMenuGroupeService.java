@@ -1,7 +1,21 @@
 package net.hypnozcore.hypnozcore.service;
 
-import net.hypnozcore.hypnozcore.models.*;
-import net.hypnozcore.hypnozcore.repository.*;
+import net.hypnozcore.hypnozcore.models.Applications;
+import net.hypnozcore.hypnozcore.models.Fonctions;
+import net.hypnozcore.hypnozcore.models.Groupes;
+import net.hypnozcore.hypnozcore.models.GroupesApplications;
+import net.hypnozcore.hypnozcore.models.GroupesFonctions;
+import net.hypnozcore.hypnozcore.models.GroupesModules;
+import net.hypnozcore.hypnozcore.models.Modules;
+import net.hypnozcore.hypnozcore.models.UserApplications;
+import net.hypnozcore.hypnozcore.models.UserFonctions;
+import net.hypnozcore.hypnozcore.models.UserModules;
+import net.hypnozcore.hypnozcore.repository.GroupesApplicationsRepository;
+import net.hypnozcore.hypnozcore.repository.GroupesFonctionsRepository;
+import net.hypnozcore.hypnozcore.repository.GroupesModulesRepository;
+import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
+import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
+import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.springframework.http.HttpStatus;

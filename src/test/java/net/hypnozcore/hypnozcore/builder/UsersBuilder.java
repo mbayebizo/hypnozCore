@@ -1,14 +1,9 @@
 package net.hypnozcore.hypnozcore.builder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.hypnozcore.hypnozcore.dto.UsersDto;
-import net.hypnozcore.hypnozcore.emus.Etats;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class UsersBuilder {
