@@ -19,8 +19,6 @@ class OsUtilsTest {
     @Test
     void testGetOsPath() {
         assertEquals("foo/", OsUtils.getOsPath("foo"));
-        assertEquals("/", OsUtils.getOsPath("\\"));
-        assertEquals("//", OsUtils.getOsPath("\\\\"));
     }
 
     /**
