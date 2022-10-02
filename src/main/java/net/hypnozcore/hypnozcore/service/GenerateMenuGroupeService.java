@@ -1,21 +1,7 @@
 package net.hypnozcore.hypnozcore.service;
 
-import net.hypnozcore.hypnozcore.models.Applications;
-import net.hypnozcore.hypnozcore.models.Fonctions;
-import net.hypnozcore.hypnozcore.models.Groupes;
-import net.hypnozcore.hypnozcore.models.GroupesApplications;
-import net.hypnozcore.hypnozcore.models.GroupesFonctions;
-import net.hypnozcore.hypnozcore.models.GroupesModules;
-import net.hypnozcore.hypnozcore.models.Modules;
-import net.hypnozcore.hypnozcore.models.UserApplications;
-import net.hypnozcore.hypnozcore.models.UserFonctions;
-import net.hypnozcore.hypnozcore.models.UserModules;
-import net.hypnozcore.hypnozcore.repository.GroupesApplicationsRepository;
-import net.hypnozcore.hypnozcore.repository.GroupesFonctionsRepository;
-import net.hypnozcore.hypnozcore.repository.GroupesModulesRepository;
-import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
-import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
-import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
+import net.hypnozcore.hypnozcore.models.*;
+import net.hypnozcore.hypnozcore.repository.*;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.springframework.http.HttpStatus;
@@ -62,7 +48,7 @@ public class GenerateMenuGroupeService {
 
     }
 
-    public GroupesApplications deleteGroupeApplication(long idgroupe, long idapp) {
+    public ResponseEntity<GroupesApplications> deleteGroupeApplication(long idgroupe, long idapp) {
         List<UserApplications> userApplicationsList = userApplicationsRepository.findByIdApplicationsId(idapp);
         if (!userApplicationsList.isEmpty()) {
             throw new ResponseException(RequestErrorEnum.LIST_NOT_EMPTY);
@@ -74,11 +60,11 @@ public class GenerateMenuGroupeService {
 
         groupesApplicationsRepository.deleteByApplicationsAndGroupes(groupesApplicationsOptional.get().getApplications(),
                 groupesApplicationsOptional.get().getGroupes());
-        return groupesApplicationsOptional.get();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesApplicationsOptional.get());
 
     }
 
-    public GroupesModules deleteGroupeModule(Long idModule, Long idGroupe){
+    public ResponseEntity<GroupesModules> deleteGroupeModule(Long idModule, Long idGroupe){
         List<UserModules> userModulesList = userModulesRepository.findByIdModulesId(idGroupe);
         if(!userModulesList.isEmpty()){
             throw new ResponseException(RequestErrorEnum.LIST_NOT_EMPTY);
@@ -88,10 +74,10 @@ public class GenerateMenuGroupeService {
             throw new ResponseException(RequestErrorEnum.LIST_NOT_EMPTY);
         }
         groupesModulesRepository.deleteByModulesAndGroupes(groupesModulesOptional.get().getModules(), groupesModulesOptional.get().getGroupes());
-        return groupesModulesOptional.get();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesModulesOptional.get());
     }
 
-    public GroupesModules addGroupesModules(Groupes groupes,Modules modules ){
+    public ResponseEntity<GroupesModules> addGroupesModules(Groupes groupes,Modules modules ){
         Optional<GroupesModules> groupesModulesOptional = groupesModulesRepository.findByIdModulesIdAndIdGroupesId(modules.getId(), groupes.getId());
         if(groupesModulesOptional.isPresent()){
             groupesModulesRepository.deleteByModulesAndGroupes(modules,groupes);
@@ -107,10 +93,10 @@ public class GenerateMenuGroupeService {
                 .build();
 
         groupesModulesRepository.saveAndFlush(groupesModules);
-        return groupesModules;
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(groupesModules);
     }
 
-    public GroupesFonctions addGroupesFonctions(Groupes groupes,Fonctions fonctions) {
+    public ResponseEntity<GroupesFonctions> addGroupesFonctions(Groupes groupes,Fonctions fonctions) {
         Optional<GroupesFonctions> groupesFonctionsOptional = groupesFonctionsRepository.findByIdGroupesIdAndIdFonctionsId(groupes.getId(), fonctions.getId());
         if(groupesFonctionsOptional.isPresent()){
             groupesFonctionsRepository.deleteByFonctionsAndGroupes(fonctions,groupes);
@@ -124,10 +110,10 @@ public class GenerateMenuGroupeService {
                 .groupes(groupes)
                 .build();
         groupesFonctionsRepository.saveAndFlush(groupesFonctions);
-        return groupesFonctions;
+        return ResponseEntity.status(HttpStatus.CREATED).body(groupesFonctions);
     }
 
-    public GroupesApplications addGroupesApplications(Groupes groupes,Applications applications){
+    public ResponseEntity<GroupesApplications> addGroupesApplications(Groupes groupes,Applications applications){
         Optional<GroupesApplications> groupesApplicationsOptional = groupesApplicationsRepository.findByIdApplicationsIdAndIdGroupesId(applications.getId(),groupes.getId());
         if(groupesApplicationsOptional.isPresent()){
             groupesApplicationsRepository.deleteByApplicationsAndGroupes(applications,groupes);
@@ -143,7 +129,7 @@ public class GenerateMenuGroupeService {
                 .build();
 
         groupesApplicationsRepository.saveAndFlush(groupesApplications);
-        return groupesApplications;
+        return ResponseEntity.status(HttpStatus.CREATED).body(groupesApplications);
     }
 
 }

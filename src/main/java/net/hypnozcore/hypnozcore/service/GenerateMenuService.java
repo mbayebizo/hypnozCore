@@ -5,11 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import net.hypnozcore.hypnozcore.models.Applications;
-import net.hypnozcore.hypnozcore.models.Fonctions;
-import net.hypnozcore.hypnozcore.models.Modules;
-import net.hypnozcore.hypnozcore.models.ModulesStructure;
-import net.hypnozcore.hypnozcore.models.Structures;
+import net.hypnozcore.hypnozcore.models.*;
 import net.hypnozcore.hypnozcore.repository.ApplicationsRepository;
 import net.hypnozcore.hypnozcore.repository.FonctionsRepository;
 import net.hypnozcore.hypnozcore.repository.ModulesRepository;
@@ -49,7 +45,7 @@ public class GenerateMenuService {
     }
 
 
-    public List<Modules> createDefaultModule(Structures structures) {
+    public List<Modules>createDefaultModule(Structures structures) {
         if (structures.getId() == null) throw new ResponseException(RequestErrorEnum.ID_STRUCTURE_EMPTY);
         //read file
         Resource resource = new ClassPathResource("config/modules.json");
