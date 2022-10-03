@@ -37,7 +37,6 @@ public class StructuresServices {
 		this.generateDefaultDocService = generateDefaultDocService;
 	}
 
-
 	public StructuresDto save(StructuresDto structuresDto) {
 		if (structuresDto == null) throw new ResponseException(RequestErrorEnum.NULL_ENTITY);
 		validationSigleRaisonSocial(structuresDto);
@@ -56,14 +55,16 @@ public class StructuresServices {
 		}
 	}
 
-	public void deleteById(long id) {
+	public void deleteById(Long id) {
+		if(id==null) throw new ResponseException(RequestErrorEnum.ID_NULL);
 		if (repository.findById(id).isEmpty()) {
 			throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
 		}
 		repository.deleteById(id);
 	}
 
-	public StructuresDto findById(long id) {
+	public StructuresDto findById(Long id) {
+		if(id==null) throw new ResponseException(RequestErrorEnum.ID_NULL);
 		StructuresDto structuresDto = null;
 		Optional<Structures> structuresOptional = repository.findById(id);
 		if (structuresOptional.isPresent()) {
@@ -75,6 +76,7 @@ public class StructuresServices {
 	}
 
 	public StructuresDto update(@Valid StructuresDto structuresDto, @Valid Long id) {
+		if(id==null) throw new ResponseException(RequestErrorEnum.ID_NULL);
 		if (structuresDto == null) throw new ResponseException(RequestErrorEnum.NULL_ENTITY);
 		validationSigleRaisonSocial(structuresDto);
 		try {

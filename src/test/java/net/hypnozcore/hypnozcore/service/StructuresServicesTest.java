@@ -1,52 +1,36 @@
 package net.hypnozcore.hypnozcore.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
 import net.hypnozcore.hypnozcore.mapper.StructuresMapper;
-import net.hypnozcore.hypnozcore.models.Applications;
-import net.hypnozcore.hypnozcore.models.Modules;
 import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.repository.StructuresRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
@@ -83,7 +67,7 @@ class StructuresServicesTest {
 		when(structuresDto.getRaisonSocial()).thenReturn("Raison Social");
 		when(structuresDto.getSigle()).thenReturn("Sigle");
 		StructuresDto actualSaveResult = structuresServices.save(structuresDto);
-		Assertions.assertEquals(structuresDto.getSigle(),actualSaveResult.getSigle());
+		Assertions.assertEquals(structuresDto.getSigle(), actualSaveResult.getSigle());
 		verify(structuresRepository).saveAndFlush((Structures) any());
 		verify(structuresMapper, atLeast(1)).toDto((Structures) any());
 		verify(structuresMapper).toEntity((StructuresDto) any());
@@ -91,61 +75,43 @@ class StructuresServicesTest {
 		verify(structuresDto, atLeast(1)).getSigle();
 	}
 
-
-
-	/**
-	 * Method under test: {@link StructuresServices#save(StructuresDto)}
-	 */
 	@Test
-	void testSave2() {
-		Structures structures = getStructures();
-		when(structuresRepository.saveAndFlush((Structures) any())).thenReturn(structures);
-		when(structuresMapper.toDto((Structures) any())).thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-		when(structuresMapper.toEntity((StructuresDto) any()))
-				.thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
+	void should_be_test_save_when_sigle_is_null() {
+		Structures structures= new Structures();
+		structures.setSigle("");
+		when(structuresMapper.toDto((Structures) any())).thenReturn(mock(StructuresDto.class));
+		when(structuresMapper.toEntity((StructuresDto) any())).thenReturn(structures);
 		StructuresDto structuresDto = mock(StructuresDto.class);
 		when(structuresDto.getRaisonSocial()).thenReturn("Raison Social");
+		when(structuresDto.getSigle()).thenReturn("");
+		assertThrows(ResponseException.class, () -> structuresServices.save(structuresDto));
+	}
+
+	@Test
+	void should_be_test_save_when_raison_social_is_null() {
+		Structures structures= new Structures();
+		structures.setRaisonSocial("");
+		when(structuresMapper.toDto((Structures) any())).thenReturn(mock(StructuresDto.class));
+		when(structuresMapper.toEntity((StructuresDto) any())).thenReturn(structures);
+		StructuresDto structuresDto = mock(StructuresDto.class);
+		when(structuresDto.getRaisonSocial()).thenReturn("");
 		when(structuresDto.getSigle()).thenReturn("Sigle");
 		assertThrows(ResponseException.class, () -> structuresServices.save(structuresDto));
-		verify(structuresMapper).toEntity((StructuresDto) any());
-		verify(structuresDto, atLeast(1)).getRaisonSocial();
-		verify(structuresDto, atLeast(1)).getSigle();
 	}
 
-
-
-	/**
-	 * Method under test: {@link StructuresServices#findById(long)}
-	 */
 	@Test
-	void testFindById() {
+	void should_be_test_save_when_structures_is_null(){
+		StructuresDto structuresDto = null;
+		assertThrows(ResponseException.class, () -> structuresServices.save(structuresDto));
+	}
+
+	@Test
+	void should_be_test_findby_id_when_entity_no_exist() {
 		assertThrows(ResponseException.class, () -> structuresServices.findById(123L));
 	}
-
-
-
-	/**
-	 * Method under test: {@link StructuresServices#update(StructuresDto, Long)}
-	 */
 	@Test
-	void testUpdate2() {
-		Structures structures = getStructures();
-		Optional<Structures> ofResult = Optional.of(structures);
-
-		Structures structures1 = getStructures();
-		when(structuresRepository.saveAndFlush((Structures) any())).thenReturn(structures1);
-		when(structuresRepository.findById((Long) any())).thenReturn(ofResult);
-		when(structuresMapper.toDto((Structures) any())).thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-		when(structuresMapper.toEntity((StructuresDto) any()))
-				.thenThrow(new ResponseException(RequestErrorEnum.LIST_EMPTY));
-		StructuresDto structuresDto = mock(StructuresDto.class);
-		when(structuresDto.getRaisonSocial()).thenReturn("Raison Social");
-		when(structuresDto.getSigle()).thenReturn("Sigle");
-		assertThrows(ResponseException.class, () -> structuresServices.update(structuresDto, 123L));
-		verify(structuresRepository).findById((Long) any());
-		verify(structuresMapper).toEntity((StructuresDto) any());
-		verify(structuresDto, atLeast(1)).getRaisonSocial();
-		verify(structuresDto, atLeast(1)).getSigle();
+	void should_be_test_findby_id_when_id_null() {
+		assertThrows(ResponseException.class, () -> structuresServices.findById(null));
 	}
 
 

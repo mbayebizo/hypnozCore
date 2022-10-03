@@ -25,7 +25,8 @@ public enum RequestErrorEnum {
     IMPOSSIBLE_DELETED(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Impossible de supprimer User" ,"Impossible de supprimer User" ),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "Lecture du ficher Incorrecte", "Lecture du ficher Incorrecte"),
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "User Not FOUND" ,"Find User not found" ),
-    NULL_ENTITY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name() ,"Le parametre ne doit pas etre nulle" ,"Le parametre ne doit pas etre nulle" );
+    NULL_ENTITY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name() ,"Le parametre ne doit pas etre nulle" ,"Le parametre ne doit pas etre nulle" ),
+    ID_NULL(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name() ,"L'ID ne doit pas etre nulle" ,"L'ID ne doit pas etre nulle" );
 
     final HttpStatus httpStatus;
     final String errorCode;
