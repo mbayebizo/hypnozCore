@@ -21,7 +21,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class StructuresDto extends AbstractDto {
+public class StructuresDto {
+    Long id;
     String raisonSocial;
     String sigle;
     String description;

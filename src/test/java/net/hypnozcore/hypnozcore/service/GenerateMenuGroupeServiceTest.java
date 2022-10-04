@@ -1,11 +1,5 @@
 package net.hypnozcore.hypnozcore.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Optional;
-
 import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.models.Applications;
 import net.hypnozcore.hypnozcore.models.Fonctions;
@@ -30,6 +24,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

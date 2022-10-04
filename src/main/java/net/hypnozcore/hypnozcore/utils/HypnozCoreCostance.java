@@ -28,8 +28,7 @@ public class HypnozCoreCostance {
     public static final String LOGIN_NOT_EMPTY = "Le login ne peut pas être null";
 
 
-
-    public static void logDebug(Object o){
+	public static void logDebug(Object o){
         log.debug("Faux {e}",o);
     }
 }

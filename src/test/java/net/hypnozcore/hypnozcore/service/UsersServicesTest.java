@@ -6,8 +6,16 @@ import net.hypnozcore.hypnozcore.dto.UsersDto;
 import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
 import net.hypnozcore.hypnozcore.mapper.UsersMapper;
-import net.hypnozcore.hypnozcore.models.*;
-import net.hypnozcore.hypnozcore.repository.*;
+import net.hypnozcore.hypnozcore.models.Groupes;
+import net.hypnozcore.hypnozcore.models.Structures;
+import net.hypnozcore.hypnozcore.models.UserGroupes;
+import net.hypnozcore.hypnozcore.models.UserStructures;
+import net.hypnozcore.hypnozcore.models.Users;
+import net.hypnozcore.hypnozcore.repository.GroupesRepository;
+import net.hypnozcore.hypnozcore.repository.StructuresRepository;
+import net.hypnozcore.hypnozcore.repository.UserGroupesRepository;
+import net.hypnozcore.hypnozcore.repository.UserStructuresRepository;
+import net.hypnozcore.hypnozcore.repository.UsersRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
 import org.junit.jupiter.api.Test;
@@ -26,8 +34,14 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles({"test"})

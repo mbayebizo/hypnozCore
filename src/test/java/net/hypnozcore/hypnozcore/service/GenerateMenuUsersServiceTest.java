@@ -1,5 +1,37 @@
 package net.hypnozcore.hypnozcore.service;
 
+import net.hypnozcore.hypnozcore.dto.Menus;
+import net.hypnozcore.hypnozcore.dto.ModulesDto;
+import net.hypnozcore.hypnozcore.dto.UsersDto;
+import net.hypnozcore.hypnozcore.emus.Etats;
+import net.hypnozcore.hypnozcore.models.Fonctions;
+import net.hypnozcore.hypnozcore.models.Modules;
+import net.hypnozcore.hypnozcore.models.UserApplications;
+import net.hypnozcore.hypnozcore.models.UserFonctions;
+import net.hypnozcore.hypnozcore.models.UserModules;
+import net.hypnozcore.hypnozcore.models.Users;
+import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
+import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
+import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
+import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -12,41 +44,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import net.hypnozcore.hypnozcore.dto.Menus;
-import net.hypnozcore.hypnozcore.dto.ModulesDto;
-import net.hypnozcore.hypnozcore.dto.UsersDto;
-
-import net.hypnozcore.hypnozcore.emus.Etats;
-import net.hypnozcore.hypnozcore.models.Applications;
-import net.hypnozcore.hypnozcore.models.Fonctions;
-import net.hypnozcore.hypnozcore.models.Modules;
-import net.hypnozcore.hypnozcore.models.UserApplications;
-import net.hypnozcore.hypnozcore.models.UserFonctions;
-import net.hypnozcore.hypnozcore.models.UserModules;
-import net.hypnozcore.hypnozcore.models.Users;
-import net.hypnozcore.hypnozcore.repository.UserApplicationsRepository;
-import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
-import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
-import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
 @ActiveProfiles({"test"})

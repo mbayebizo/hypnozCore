@@ -6,7 +6,6 @@ import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.service.StructuresServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,7 @@ public class StructuresController {
 
 
     @PostMapping
-    public ResponseEntity<StructuresDto>  save(@RequestBody @Validated StructuresDto structuresDto) {
+    public ResponseEntity<StructuresDto>  save(@RequestBody @Valid StructuresDto structuresDto) {
         StructuresDto  response = structuresServices.save(structuresDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

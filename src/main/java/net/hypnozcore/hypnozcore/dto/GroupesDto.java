@@ -25,9 +25,10 @@ import java.io.Serial;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class GroupesDto extends AbstractDto {
+public class GroupesDto {
     @Serial
     static final long serialVersionUID = 3001109767306041516L;
+    Long id;
     @NotNull(message = HypnozCoreCostance.CODE_NOT_EMPTY)
     @Size(min = 2, max = 50, message = HypnozCoreCostance.TAILLE_SIZE_INCORRECT)
     String code;
