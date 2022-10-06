@@ -54,8 +54,8 @@ public class UsersController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody @Validated UsersDto usersDto, @PathVariable("id") Long id) {
+    @PutMapping
+    public ResponseEntity<Void> update(@RequestBody @Validated UsersDto usersDto) {
         usersService.update(usersDto);
         return ResponseEntity.ok().build();
     }

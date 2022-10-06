@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnozcore.hypnozcore.dto.GroupesDto;
 import net.hypnozcore.hypnozcore.service.GroupesServices;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,34 +26,30 @@ public class GroupesController {
 	public GroupesController(GroupesServices groupesServices) {
 		this.groupesServices = groupesServices;
 	}
- @PostMapping
-    public ResponseEntity<GroupesDto> save(@RequestBody @Validated GroupesDto groupesDto) {
-        GroupesDto grpDto=groupesServices.save(groupesDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(grpDto);
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GroupesDto> findById(@PathVariable("id") Long id) {
-        GroupesDto groupes = groupesServices.findById(id).orElse(null);
-        return ResponseEntity.ok(groupes);
-    }
+	@PostMapping
+	public ResponseEntity<GroupesDto> save(@RequestBody @Validated GroupesDto groupesDto) {
+		GroupesDto grpDto = groupesServices.save(groupesDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(grpDto);
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-       try {
-           groupesServices.findById(id);
-           groupesServices.deleteById(id);
-           return ResponseEntity.ok().build();
-       }catch (ResourceNotFoundException e){
-           throw new ResourceNotFoundException();
-       }
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<GroupesDto> findById(@PathVariable("id") Long id) {
+		GroupesDto groupes = groupesServices.findById(id).orElse(null);
+		return ResponseEntity.ok(groupes);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+		groupesServices.findById(id);
+		groupesServices.deleteById(id);
+		return ResponseEntity.ok().build();
+	}
 
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody @Validated GroupesDto groupesDto, @PathVariable("id") Long id) {
-        groupesServices.update(groupesDto, id);
-        return ResponseEntity.ok().build();
-    }
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> update(@RequestBody @Validated GroupesDto groupesDto, @PathVariable("id") Long id) {
+		groupesServices.update(groupesDto, id);
+		return ResponseEntity.ok().build();
+	}
 }

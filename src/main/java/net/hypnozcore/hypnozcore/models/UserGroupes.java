@@ -35,7 +35,7 @@ import java.io.Serializable;
 @Setter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class UserGroupes implements Persistable<UserGroupes.UserGroupesPK> {
     @EmbeddedId
     private UserGroupesPK id;

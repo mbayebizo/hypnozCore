@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 import java.io.Serial;
 
 @ApiModel("Groupe Dto")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter

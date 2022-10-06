@@ -49,7 +49,7 @@ public class GenerateMenuService {
     }
 
 
-    public List<Modules>createDefaultModule(Structures structures) {
+    public List<Modules> createDefaultModule(Structures structures) {
         if (structures.getId() == null) throw new ResponseException(RequestErrorEnum.ID_STRUCTURE_EMPTY);
         //read file
         Resource resource = new ClassPathResource("config/modules.json");
@@ -62,7 +62,8 @@ public class GenerateMenuService {
         } catch (IOException e) {
             throw new ResponseException(RequestErrorEnum.FILE_NOT_FOUND);
         }
-        return modulesDtoList.stream().map(modules -> {
+
+        return modulesDtoList.stream().peek(modules -> {
             if (modulesRepository.findByCode(modules.getCode()).isEmpty()) {
                 modules.setLibCode(FormatText.formatCode(modules.getLibCode()));
                 modules.setOrdre(FormatText.getOrdre(modules.getCode()));
@@ -78,7 +79,6 @@ public class GenerateMenuService {
                 modulesStructureRepository.saveAndFlush(modulesStructure);
 
             }
-            return modules;
         }).toList();
     }
 
