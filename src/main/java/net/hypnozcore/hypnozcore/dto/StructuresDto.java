@@ -1,24 +1,28 @@
 package net.hypnozcore.hypnozcore.dto;
 
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
 
-import java.io.Serial;
 import java.time.LocalDate;
 
 @ApiModel("Structure Dto")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-public class StructuresDto extends AbstractDto {
-    @Serial
-    long serialVersionUID = 5570157676629231277L;
+public class StructuresDto {
+    Long id;
     String raisonSocial;
     String sigle;
     String description;

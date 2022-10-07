@@ -14,6 +14,7 @@ public class ResponseException extends RuntimeException{
 
     public ResponseException(RequestErrorEnum requestErrorEnum) {
         super(requestErrorEnum.getErrorDescription());
+
     }
 
     public ResponseException(RequestErrorEnum requestErrorEnum, Throwable e){

@@ -3,8 +3,16 @@ package net.hypnozcore.hypnozcore.service;
 import lombok.extern.slf4j.Slf4j;
 import net.hypnozcore.hypnozcore.dto.UsersDto;
 import net.hypnozcore.hypnozcore.mapper.UsersMapper;
-import net.hypnozcore.hypnozcore.models.*;
-import net.hypnozcore.hypnozcore.repository.*;
+import net.hypnozcore.hypnozcore.models.Groupes;
+import net.hypnozcore.hypnozcore.models.Structures;
+import net.hypnozcore.hypnozcore.models.UserGroupes;
+import net.hypnozcore.hypnozcore.models.UserStructures;
+import net.hypnozcore.hypnozcore.models.Users;
+import net.hypnozcore.hypnozcore.repository.GroupesRepository;
+import net.hypnozcore.hypnozcore.repository.StructuresRepository;
+import net.hypnozcore.hypnozcore.repository.UserGroupesRepository;
+import net.hypnozcore.hypnozcore.repository.UserStructuresRepository;
+import net.hypnozcore.hypnozcore.repository.UsersRepository;
 import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
@@ -42,18 +50,11 @@ public class UsersServices {
         this.userStructuresRepository = userStructuresRepository;
     }
 
-    public ResponseEntity<UsersDto> save(UsersDto usersDto) {
-        valideUser(usersDto);
-        Users users = usersMapper.toEntity(usersDto);
-
+    public UsersDto save(UsersDto usersDto) {
         Optional<Structures> structuresOptional = structuresRepository.findById(usersDto.getStructuresDto().getId());
-        if (structuresOptional.isEmpty()) {
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
-        }
         Optional<Groupes> groupesOptional = groupesRepository.findById(usersDto.getGroupes().getId());
-        if (groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())) {
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
-        }
+        Users users = getValidUsers(usersDto,structuresOptional,groupesOptional);
+
         users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
         usersRepository.saveAndFlush(users);
 
@@ -79,7 +80,7 @@ public class UsersServices {
         userGroupesRepository.saveAndFlush(userGroupes);
         usersDto = usersMapper.toDto(users);
         LOGGER.debug(UsersServices.class.getName(), HypnozCoreCostance.CREATED, usersDto);
-        return ResponseEntity.ok(usersDto);
+        return usersDto;
     }
 
     private void valideUser(UsersDto usersDto) {
@@ -144,18 +145,9 @@ public class UsersServices {
     }
 
     public ResponseEntity<UsersDto> update(UsersDto usersDto) {
-        valideUser(usersDto);
-        Users users = usersMapper.toEntity(usersDto);
         Optional<Structures> structuresOptional = structuresRepository.findById(usersDto.getStructuresDto().getId());
-        if (structuresOptional.isEmpty()) {
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
-        }
         Optional<Groupes> groupesOptional = groupesRepository.findById(usersDto.getGroupes().getId());
-        if (groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructuresId(), structuresOptional.get().getId())) {
-            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
-        }
-
-
+        Users users = getValidUsers(usersDto,structuresOptional,groupesOptional);
         Optional<Users> optionalUsers = usersRepository.findById(users.getId());
         if (optionalUsers.isPresent()) {
             users.setPatronyme(usersDto.getNom() + " " + usersDto.getPrenom());
@@ -167,19 +159,43 @@ public class UsersServices {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(usersDto);
     }
 
+
+
     public ResponseEntity<UsersDto> delete(Long id) {
-        Optional<Users> optionalUsers = usersRepository.findById(id);
-        UsersDto usersDto;
-        if (optionalUsers.isPresent()) {
-            usersDto = usersMapper.toDto(optionalUsers.get());
+
+        try {
+            Optional<Users> optionalUsers = usersRepository.findById(id);
+            UsersDto usersDto;
+
+            usersDto = usersMapper.toDto(optionalUsers.orElse(null));
             userGroupesRepository.removeByIdUsersIdAllIgnoreCase(id);
             userStructuresRepository.deleteByIdUsersIdAllIgnoreCase(id);
             usersRepository.deleteById(id);
-        } else {
+            return ResponseEntity.ok(usersDto);
+        }catch (ResponseException e){
             throw new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
         }
-        return ResponseEntity.ok(usersDto);
     }
 
 
+	public UsersDto findById(Long id) {
+        Optional<Users> optionalUsers = Optional.ofNullable(usersRepository.findById(id).orElseThrow(() -> {
+            log.debug("Impossible delete for id: " + id);
+            return new ResponseException(RequestErrorEnum.NOT_FOUND_USER);
+        }));
+        return optionalUsers.map(usersMapper::toDto).orElse(null);
+	}
+
+    private Users getValidUsers(UsersDto usersDto, Optional<Structures> structuresOptional, Optional<Groupes> groupesOptional) {
+        valideUser(usersDto);
+        Users users = usersMapper.toEntity(usersDto);
+
+        if (structuresOptional.isEmpty()) {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_STRUCTURE);
+        }
+        if (groupesOptional.isEmpty() || !Objects.equals(groupesOptional.get().getStructures().getId(), structuresOptional.get().getId())) {
+            throw new ResponseException(RequestErrorEnum.NOT_FOUND_GROUPE);
+        }
+        return users;
+    }
 }

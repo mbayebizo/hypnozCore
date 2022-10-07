@@ -1,13 +1,20 @@
 package net.hypnozcore.hypnozcore.dto;
 
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serial;
 
 @ApiModel("Application Dto")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -26,4 +33,5 @@ public class ApplicationsDto extends AbstractDto {
     String module;
     String active;
     int ordre;
+    ModulesDto modulesDto;
 }

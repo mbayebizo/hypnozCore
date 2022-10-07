@@ -14,7 +14,7 @@ public enum RequestErrorEnum {
     LIST_NOT_EMPTY(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Liste empty" ,"Liste est vide" ),
 
     ERROR_SIGLE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"sigle.error" ,"sigle.error.description" ),
-    NOT_FOUND_STRUCTURE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Structure Not FOUND" ,"Find Structure not found" ),
+    NOT_FOUND_STRUCTURE(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(),"Structure Not FOUND" ,"Find Structure not found" ),
     ERROR_RAISON_SOCIAL(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(), "raison.social.error", "raison.social.error.description"),
     ERROR_INSERT_OR_UPDATE_IN_DATABASE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(), "raison.social.error", "raison.social.error.description"),
     ID_STRUCTURE_EMPTY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name(),"ID Structure not Found","ID Structure not Found\"" ),
@@ -24,7 +24,9 @@ public enum RequestErrorEnum {
     MDP_INCORRECT(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Veillez donner un bon mot de passe" ,"Veillez donner un bon mot de passe" ),
     IMPOSSIBLE_DELETED(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.name(),"Impossible de supprimer User" ,"Impossible de supprimer User" ),
     FILE_NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "Lecture du ficher Incorrecte", "Lecture du ficher Incorrecte"),
-    NOT_FOUND_USER(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "User Not FOUND" ,"Find User not found" );
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.name(), "User Not FOUND" ,"Find User not found" ),
+    NULL_ENTITY(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name() ,"Le parametre ne doit pas etre nulle" ,"Le parametre ne doit pas etre nulle" ),
+    ID_NULL(HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.name() ,"L'ID ne doit pas etre nulle" ,"L'ID ne doit pas etre nulle" );
 
     final HttpStatus httpStatus;
     final String errorCode;

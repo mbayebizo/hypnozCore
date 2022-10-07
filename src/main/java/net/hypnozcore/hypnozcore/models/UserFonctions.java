@@ -1,11 +1,28 @@
 package net.hypnozcore.hypnozcore.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.*;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -17,6 +34,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserFonctions implements Persistable<UserFonctions.UserFonctionsPK> {
     @EmbeddedId
     private UserFonctionsPK id;

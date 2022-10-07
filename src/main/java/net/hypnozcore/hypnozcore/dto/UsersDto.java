@@ -1,7 +1,14 @@
 package net.hypnozcore.hypnozcore.dto;
 
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import net.hypnozcore.hypnozcore.utils.HypnozCoreCostance;
 
@@ -19,9 +26,10 @@ import java.time.LocalDate;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class UsersDto extends AbstractDto {
+public class UsersDto{
     @Serial
     static final long serialVersionUID = -2251460200601550695L;
+    Long id;
     String civilite;
     String nom;
     String prenom;
