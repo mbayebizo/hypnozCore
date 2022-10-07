@@ -19,10 +19,10 @@ import net.hypnozcore.hypnozcore.repository.UserFonctionsRepository;
 import net.hypnozcore.hypnozcore.repository.UserModulesRepository;
 import net.hypnozcore.hypnozcore.utils.exceptions.ResponseException;
 import net.hypnozcore.hypnozcore.utils.request.RequestErrorEnum;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
