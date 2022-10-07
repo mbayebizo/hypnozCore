@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 public class FileUtils {
     static final int BUFFER = 2048;
 
-
     public static boolean copier(File source, File dest) {
         try {
             // Declaration et ouverture des flux
@@ -39,9 +38,9 @@ public class FileUtils {
             }
         } catch (Exception e) {
             HypnozCoreCostance.logDebug(e);
-            return false; // Erreur
+            return false; // error
         }
-        return true; // Résultat OK
+        return true; // Resultant OK
     }
 
     public static boolean existed(String pathDestination) {
@@ -61,11 +60,12 @@ public class FileUtils {
     /**
      * Creer un repertoire
      */
-    public static void mkdir(String pathDestination) {
+    public static boolean mkdir(String pathDestination) {
         File f = new File(pathDestination);
         if (!f.exists()) {
-            f.mkdirs();
+           return f.mkdirs();
         }
+        return false;
     }
 
 
@@ -143,7 +143,7 @@ public class FileUtils {
     public static String getMIMEType(String pathDestination) {
         File f = new File(pathDestination);
         try {
-            URL url = f.toURL();
+            URL url = f.toURI().toURL();
             URLConnection connection = url.openConnection();
             return connection.getContentType();
         } catch (IOException mue) {

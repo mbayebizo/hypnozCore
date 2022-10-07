@@ -1,108 +1,89 @@
 package net.hypnozcore.hypnozcore.controller;
 
-import net.hypnozcore.hypnozcore.builder.CustomUtils;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
-import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
-import net.hypnozcore.hypnozcore.models.Structures;
 import net.hypnozcore.hypnozcore.service.StructuresServices;
-import org.jetbrains.annotations.NotNull;
-import org.junit.Rule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@Transactional
+@ContextConfiguration(classes = {StructuresController.class})
+@ExtendWith(SpringExtension.class)
 class StructuresControllerTest {
-	private static final String ENDPOINT_URL = "/structures";
-	@InjectMocks
+	@Autowired
 	private StructuresController structuresController;
-	@Mock
-	private StructuresServices structuresServices;
-	private MockMvc mockMvc;
-	@Rule
-	public ExpectedException exceptionRule = ExpectedException.none();
-	@BeforeEach
-	void setup() {
-		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders
-				.standaloneSetup(structuresController)
-				.build();
-	}
 
+	@MockBean
+	private StructuresServices structuresServices;
 
 	/**
-	 * Method under test: {@link StructuresController#save(StructuresDto)}
+	 * Method under test: {@link StructuresController#findById(Long)}
 	 */
-
 	@Test
-	 void should_be_save_structure_complet() throws Exception {
-		Mockito.when(structuresServices.save(ArgumentMatchers.any(StructuresDto.class))).thenReturn(getStructuresDto());
-		mockMvc.perform(
-				MockMvcRequestBuilders.post(ENDPOINT_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(CustomUtils.asJsonString(getStructuresDto())))
-                .andExpect(status().isCreated());
-
+	void testFindById() throws Exception {
+		when(structuresServices.findById((Long) any())).thenReturn(new StructuresDto());
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/structures/{id}", 123L);
+		MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content()
+						.string(
+								"{\"id\":null,\"raisonSocial\":null,\"sigle\":null,\"description\":null,\"zoneFiscale\":null,\"zoneFiscale2\":null"
+										+ ",\"dateFiscale\":null,\"typeEntreprise\":null,\"bilanSocail\":null,\"formJuridique\":null,\"adresse\":null,\"ville"
+										+ "\":null,\"departement\":null,\"pays\":null,\"telephone\":null,\"email\":null,\"siteweb\":null,\"logo\":null,"
+										+ "\"activiteCommerciale\":null,\"responsable\":null,\"qualiteResponsable\":null,\"capital\":null}"));
 	}
 
-	
-
-	@NotNull
-	private static Structures getStructures() {
-		Structures structures = new Structures();
-		structures.setActiviteCommerciale("Activite Commerciale");
-		structures.setAdresse("Adresse");
-		structures.setBilanSocail("Bilan Socail");
-		structures.setCapital("Capital");
-		structures.setCreatedBy("Jan 1, 2020 8:00am GMT+0100");
-		LocalDateTime atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
-		structures.setCreatedDate(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
-		structures.setDateFiscale(LocalDate.ofEpochDay(1L));
-		structures.setDepartement("Departement");
-		structures.setDescription("The characteristics of someone or something");
-		structures.setEmail("jane.doe@example.org");
-		structures.setFlagEtat(Etats.INACTIVE);
-		structures.setFormJuridique("Form Juridique");
-		structures.setId(123L);
-		structures.setLastModifiedBy("Jan 1, 2020 9:00am GMT+0100");
-		LocalDateTime atStartOfDayResult1 = LocalDate.of(1970, 1, 1).atStartOfDay();
-		structures.setLastModifiedDate(Date.from(atStartOfDayResult1.atZone(ZoneId.of("UTC")).toInstant()));
-		structures.setLogo("Logo");
-		structures.setPays("Pays");
-		structures.setQualiteResponsable("Qualite Responsable");
-		structures.setRaisonSocial("Raison Social");
-		structures.setResponsable("Responsable");
-		structures.setSigle("Sigle");
-		structures.setSiteweb("Siteweb");
-		structures.setTelephone("4105551212");
-		structures.setTypeEntreprise(TypeEntreprise.SA);
-		structures.setVille("Ville");
-		structures.setZoneFiscale("Zone Fiscale");
-		structures.setZoneFiscale2("Zone Fiscale2");
-		return structures;
+	/**
+	 * Method under test: {@link StructuresController#delete(Long)}
+	 */
+	@Test
+	void testDelete() throws Exception {
+		doNothing().when(structuresServices).deleteById((Long) any());
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/structures/{id}", 123L);
+		MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(requestBuilder)
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	/**
+	 * Method under test: {@link StructuresController#delete(Long)}
+	 */
+	@Test
+	void testDelete2() throws Exception {
+		doNothing().when(structuresServices).deleteById((Long) any());
+		MockHttpServletRequestBuilder deleteResult = MockMvcRequestBuilders.delete("/structures/{id}", 123L);
+		deleteResult.characterEncoding("Encoding");
+		MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(deleteResult)
+				.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
-	@NotNull
-	private static StructuresDto getStructuresDto() {
+	/**
+	 * Method under test: {@link StructuresController#update(StructuresDto, Long)}
+	 */
+	@Test
+	void testUpdate() throws Exception {
+		when(structuresServices.update((StructuresDto) any(), (Long) any())).thenReturn(new StructuresDto());
+
 		StructuresDto structuresDto = new StructuresDto();
 		structuresDto.setActiviteCommerciale("Activite Commerciale");
 		structuresDto.setAdresse("Adresse");
@@ -126,7 +107,106 @@ class StructuresControllerTest {
 		structuresDto.setVille("Ville");
 		structuresDto.setZoneFiscale("Zone Fiscale");
 		structuresDto.setZoneFiscale2("Zone Fiscale2");
-		return structuresDto;
+		String content = (new ObjectMapper()).writeValueAsString(structuresDto);
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/structures/{id}", 123L)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(content);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content()
+						.string(
+								"{\"id\":null,\"raisonSocial\":null,\"sigle\":null,\"description\":null,\"zoneFiscale\":null,\"zoneFiscale2\":null"
+										+ ",\"dateFiscale\":null,\"typeEntreprise\":null,\"bilanSocail\":null,\"formJuridique\":null,\"adresse\":null,\"ville"
+										+ "\":null,\"departement\":null,\"pays\":null,\"telephone\":null,\"email\":null,\"siteweb\":null,\"logo\":null,"
+										+ "\"activiteCommerciale\":null,\"responsable\":null,\"qualiteResponsable\":null,\"capital\":null}"));
+	}
+
+	/**
+	 * Method under test: {@link StructuresController#initSysteme(StructuresDto)}
+	 */
+	@Test
+	void testInitSysteme() throws Exception {
+		when(structuresServices.initConfigStructure((StructuresDto) any())).thenReturn(new StructuresDto());
+
+		StructuresDto structuresDto = new StructuresDto();
+		structuresDto.setActiviteCommerciale("Activite Commerciale");
+		structuresDto.setAdresse("Adresse");
+		structuresDto.setBilanSocail("Bilan Socail");
+		structuresDto.setCapital("Capital");
+		structuresDto.setDateFiscale(null);
+		structuresDto.setDepartement("Departement");
+		structuresDto.setDescription("The characteristics of someone or something");
+		structuresDto.setEmail("jane.doe@example.org");
+		structuresDto.setFormJuridique("Form Juridique");
+		structuresDto.setId(123L);
+		structuresDto.setLogo("Logo");
+		structuresDto.setPays("Pays");
+		structuresDto.setQualiteResponsable("Qualite Responsable");
+		structuresDto.setRaisonSocial("Raison Social");
+		structuresDto.setResponsable("Responsable");
+		structuresDto.setSigle("Sigle");
+		structuresDto.setSiteweb("Siteweb");
+		structuresDto.setTelephone("4105551212");
+		structuresDto.setTypeEntreprise(TypeEntreprise.SA);
+		structuresDto.setVille("Ville");
+		structuresDto.setZoneFiscale("Zone Fiscale");
+		structuresDto.setZoneFiscale2("Zone Fiscale2");
+		String content = (new ObjectMapper()).writeValueAsString(structuresDto);
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/structures/initSysteme")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(content);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
+				.andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+				.andExpect(MockMvcResultMatchers.content()
+						.string(
+								"{\"id\":null,\"raisonSocial\":null,\"sigle\":null,\"description\":null,\"zoneFiscale\":null,\"zoneFiscale2\":null"
+										+ ",\"dateFiscale\":null,\"typeEntreprise\":null,\"bilanSocail\":null,\"formJuridique\":null,\"adresse\":null,\"ville"
+										+ "\":null,\"departement\":null,\"pays\":null,\"telephone\":null,\"email\":null,\"siteweb\":null,\"logo\":null,"
+										+ "\"activiteCommerciale\":null,\"responsable\":null,\"qualiteResponsable\":null,\"capital\":null}"));
+	}
+
+	/**
+	 * Method under test: {@link StructuresController#save(StructuresDto)}
+	 */
+	@Test
+	void testSave() throws Exception {
+		StructuresDto structuresDto = new StructuresDto();
+		structuresDto.setActiviteCommerciale("Activite Commerciale");
+		structuresDto.setAdresse("Adresse");
+		structuresDto.setBilanSocail("Bilan Socail");
+		structuresDto.setCapital("Capital");
+		structuresDto.setDateFiscale(null);
+		structuresDto.setDepartement("Departement");
+		structuresDto.setDescription("The characteristics of someone or something");
+		structuresDto.setEmail("jane.doe@example.org");
+		structuresDto.setFormJuridique("Form Juridique");
+		structuresDto.setId(123L);
+		structuresDto.setLogo("Logo");
+		structuresDto.setPays("Pays");
+		structuresDto.setQualiteResponsable("Qualite Responsable");
+		structuresDto.setRaisonSocial("Raison Social");
+		structuresDto.setResponsable("Responsable");
+		structuresDto.setSigle("Sigle");
+		structuresDto.setSiteweb("Siteweb");
+		structuresDto.setTelephone("4105551212");
+		structuresDto.setTypeEntreprise(TypeEntreprise.SA);
+		structuresDto.setVille("Ville");
+		structuresDto.setZoneFiscale("Zone Fiscale");
+		structuresDto.setZoneFiscale2("Zone Fiscale2");
+		String content = (new ObjectMapper()).writeValueAsString(structuresDto);
+		MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/structures")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(content);
+		ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(structuresController)
+				.build()
+				.perform(requestBuilder);
+		actualPerformResult.andExpect(MockMvcResultMatchers.status().is(405));
 	}
 }
 
