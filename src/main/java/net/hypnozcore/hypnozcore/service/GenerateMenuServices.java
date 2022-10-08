@@ -34,14 +34,14 @@ import java.util.Optional;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Transactional
-public class GenerateMenuService {
-    static final Logger LOGGER = LoggerFactory.getLogger(GenerateMenuService.class);
+public class GenerateMenuServices {
+    static final Logger LOGGER = LoggerFactory.getLogger(GenerateMenuServices.class);
     final ModulesRepository modulesRepository;
     final FonctionsRepository fonctionsRepository;
     final ApplicationsRepository applicationsRepository;
     final ModulesStructureRepository modulesStructureRepository;
 
-    public GenerateMenuService(ModulesRepository modulesRepository, FonctionsRepository fonctionsRepository, ApplicationsRepository applicationsRepository, ModulesStructureRepository modulesStructureRepository) {
+    public GenerateMenuServices(ModulesRepository modulesRepository, FonctionsRepository fonctionsRepository, ApplicationsRepository applicationsRepository, ModulesStructureRepository modulesStructureRepository) {
         this.modulesRepository = modulesRepository;
         this.fonctionsRepository = fonctionsRepository;
         this.applicationsRepository = applicationsRepository;

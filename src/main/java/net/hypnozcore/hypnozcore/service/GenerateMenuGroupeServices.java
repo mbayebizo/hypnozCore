@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @Slf4j
-public class GenerateMenuGroupeService {
+public class GenerateMenuGroupeServices {
 	final GroupesFonctionsRepository groupesFonctionsRepository;
 	final GroupesApplicationsRepository groupesApplicationsRepository;
 	final GroupesModulesRepository groupesModulesRepository;
@@ -37,7 +37,7 @@ public class GenerateMenuGroupeService {
 	final UserApplicationsRepository userApplicationsRepository;
 	final UserFonctionsRepository userFonctionsRepository;
 
-	public GenerateMenuGroupeService(GroupesFonctionsRepository groupesFonctionsRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesModulesRepository groupesModulesRepository, UserModulesRepository userModulesRepository, UserApplicationsRepository userApplicationsRepository, UserFonctionsRepository userFonctionsRepository) {
+	public GenerateMenuGroupeServices(GroupesFonctionsRepository groupesFonctionsRepository, GroupesApplicationsRepository groupesApplicationsRepository, GroupesModulesRepository groupesModulesRepository, UserModulesRepository userModulesRepository, UserApplicationsRepository userApplicationsRepository, UserFonctionsRepository userFonctionsRepository) {
 		this.groupesFonctionsRepository = groupesFonctionsRepository;
 		this.groupesApplicationsRepository = groupesApplicationsRepository;
 		this.groupesModulesRepository = groupesModulesRepository;

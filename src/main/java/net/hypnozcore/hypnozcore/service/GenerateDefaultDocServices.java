@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Transactional
 @NoArgsConstructor
-public class GenerateDefaultDocService {
-    static final Logger LOGGER = LoggerFactory.getLogger(GenerateDefaultDocService.class);
+public class GenerateDefaultDocServices {
+    static final Logger LOGGER = LoggerFactory.getLogger(GenerateDefaultDocServices.class);
 
     public String create() throws ResponseException {
         String path = OsUtils.getOsHomeDir();

@@ -1,9 +1,5 @@
 package net.hypnozcore.hypnozcore.controller;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
@@ -20,6 +16,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {StructuresController.class})
 @ExtendWith(SpringExtension.class)

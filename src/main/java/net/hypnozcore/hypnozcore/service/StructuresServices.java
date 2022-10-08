@@ -27,14 +27,14 @@ public class StructuresServices {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StructuresServices.class);
 	private final StructuresRepository repository;
 	private final StructuresMapper structuresMapper;
-	private final GenerateMenuService generateMenuService;
-	private final GenerateDefaultDocService generateDefaultDocService;
+	private final GenerateMenuServices generateMenuServices;
+	private final GenerateDefaultDocServices generateDefaultDocServices;
 
-	public StructuresServices(StructuresRepository repository, StructuresMapper structuresMapper, GenerateMenuService generateMenuService, GenerateDefaultDocService generateDefaultDocService) {
+	public StructuresServices(StructuresRepository repository, StructuresMapper structuresMapper, GenerateMenuServices generateMenuServices, GenerateDefaultDocServices generateDefaultDocServices) {
 		this.repository = repository;
 		this.structuresMapper = structuresMapper;
-		this.generateMenuService = generateMenuService;
-		this.generateDefaultDocService = generateDefaultDocService;
+		this.generateMenuServices = generateMenuServices;
+		this.generateDefaultDocServices = generateDefaultDocServices;
 	}
 
 	public StructuresDto save(StructuresDto structuresDto) {
@@ -106,11 +106,11 @@ public class StructuresServices {
 			} else {
 				structures = repository.findByRaisonSocialAndSigle(structureDto.getRaisonSocial(), structureDto.getSigle()).orElseThrow();
 			}
-			List<Modules> modulesList = generateMenuService.createDefaultModule(structures);
-			List<Applications> applicationsList = generateMenuService.createDefaultApplication(modulesList);
-			generateMenuService.createDefaultFonctions(applicationsList);
+			List<Modules> modulesList = generateMenuServices.createDefaultModule(structures);
+			List<Applications> applicationsList = generateMenuServices.createDefaultApplication(modulesList);
+			generateMenuServices.createDefaultFonctions(applicationsList);
 
-			generateDefaultDocService.create();
+			generateDefaultDocServices.create();
 			structureDto = structuresMapper.toDto(structures);
 			return structureDto;
 		} catch (Exception e) {

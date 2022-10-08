@@ -1,24 +1,6 @@
 package net.hypnozcore.hypnozcore.service;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
-
 import net.hypnozcore.hypnozcore.emus.Etats;
 import net.hypnozcore.hypnozcore.emus.TypeEntreprise;
 import net.hypnozcore.hypnozcore.mapper.StructuresMapper;
@@ -35,14 +17,31 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ContextConfiguration(classes = {StructuresServices.class})
 @ExtendWith(SpringExtension.class)
 class StructuresServicesTest {
 	@MockBean
-	private GenerateDefaultDocService generateDefaultDocService;
+	private GenerateDefaultDocServices generateDefaultDocServices;
 
 	@MockBean
-	private GenerateMenuService generateMenuService;
+	private GenerateMenuServices generateMenuServices;
 
 	@MockBean
 	private StructuresMapper structuresMapper;
@@ -282,18 +281,6 @@ class StructuresServicesTest {
 	@Test
 	@Disabled("TODO: Complete this test")
 	void testDeleteById3() {
-		// TODO: Complete this test.
-		//   Reason: R013 No inputs found that don't throw a trivial exception.
-		//   Diffblue Cover tried to run the arrange/act section, but the method under
-		//   test threw
-		//   java.lang.NullPointerException: Cannot invoke "java.util.Optional.isEmpty()" because the return value of "net.hypnozcore.hypnozcore.repository.StructuresRepository.findById(Object)" is null
-		//       at net.hypnozcore.hypnozcore.service.StructuresServices.deleteById(StructuresServices.java:60)
-		//   In order to prevent deleteById(Long)
-		//   from throwing NullPointerException, add constructors or factory
-		//   methods that make it easier to construct fully initialized objects used in
-		//   deleteById(Long).
-		//   See https://diff.blue/R013 to resolve this issue.
-
 		doNothing().when(structuresRepository).deleteById((Long) any());
 		when(structuresRepository.findById((Long) any())).thenReturn(null);
 		structuresServices.deleteById(123L);
@@ -860,10 +847,10 @@ class StructuresServicesTest {
 		when(structuresRepository.findByRaisonSocialAndSigle((String) any(), (String) any())).thenReturn(ofResult);
 		StructuresDto structuresDto = new StructuresDto();
 		when(structuresMapper.toDto((Structures) any())).thenReturn(structuresDto);
-		when(generateMenuService.createDefaultApplication((List<Modules>) any())).thenReturn(new ArrayList<>());
-		when(generateMenuService.createDefaultFonctions((List<Applications>) any())).thenReturn(new ArrayList<>());
-		when(generateMenuService.createDefaultModule((Structures) any())).thenReturn(new ArrayList<>());
-		when(generateDefaultDocService.create()).thenReturn("Create");
+		when(generateMenuServices.createDefaultApplication((List<Modules>) any())).thenReturn(new ArrayList<>());
+		when(generateMenuServices.createDefaultFonctions((List<Applications>) any())).thenReturn(new ArrayList<>());
+		when(generateMenuServices.createDefaultModule((Structures) any())).thenReturn(new ArrayList<>());
+		when(generateDefaultDocServices.create()).thenReturn("Create");
 
 		StructuresDto structuresDto1 = new StructuresDto();
 		structuresDto1.setRaisonSocial("Raison Social");
@@ -871,10 +858,10 @@ class StructuresServicesTest {
 		assertSame(structuresDto, structuresServices.initConfigStructure(structuresDto1));
 		verify(structuresRepository, atLeast(1)).findByRaisonSocialAndSigle((String) any(), (String) any());
 		verify(structuresMapper).toDto((Structures) any());
-		verify(generateMenuService).createDefaultApplication((List<Modules>) any());
-		verify(generateMenuService).createDefaultFonctions((List<Applications>) any());
-		verify(generateMenuService).createDefaultModule((Structures) any());
-		verify(generateDefaultDocService).create();
+		verify(generateMenuServices).createDefaultApplication((List<Modules>) any());
+		verify(generateMenuServices).createDefaultFonctions((List<Applications>) any());
+		verify(generateMenuServices).createDefaultModule((Structures) any());
+		verify(generateDefaultDocServices).create();
 	}
 
 	/**
@@ -947,20 +934,20 @@ class StructuresServicesTest {
 		when(structuresRepository.saveAndFlush((Structures) any())).thenReturn(structures);
 		when(structuresRepository.findByRaisonSocialAndSigle((String) any(), (String) any())).thenReturn(ofResult);
 		when(structuresMapper.toDto((Structures) any())).thenReturn(new StructuresDto());
-		when(generateMenuService.createDefaultApplication((List<Modules>) any())).thenReturn(new ArrayList<>());
-		when(generateMenuService.createDefaultFonctions((List<Applications>) any())).thenReturn(new ArrayList<>());
-		when(generateMenuService.createDefaultModule((Structures) any())).thenReturn(new ArrayList<>());
-		when(generateDefaultDocService.create()).thenThrow(new ResponseException("An error occurred"));
+		when(generateMenuServices.createDefaultApplication((List<Modules>) any())).thenReturn(new ArrayList<>());
+		when(generateMenuServices.createDefaultFonctions((List<Applications>) any())).thenReturn(new ArrayList<>());
+		when(generateMenuServices.createDefaultModule((Structures) any())).thenReturn(new ArrayList<>());
+		when(generateDefaultDocServices.create()).thenThrow(new ResponseException("An error occurred"));
 
 		StructuresDto structuresDto = new StructuresDto();
 		structuresDto.setRaisonSocial("Raison Social");
 		structuresDto.setSigle("");
 		assertThrows(ResponseException.class, () -> structuresServices.initConfigStructure(structuresDto));
 		verify(structuresRepository, atLeast(1)).findByRaisonSocialAndSigle((String) any(), (String) any());
-		verify(generateMenuService).createDefaultApplication((List<Modules>) any());
-		verify(generateMenuService).createDefaultFonctions((List<Applications>) any());
-		verify(generateMenuService).createDefaultModule((Structures) any());
-		verify(generateDefaultDocService).create();
+		verify(generateMenuServices).createDefaultApplication((List<Modules>) any());
+		verify(generateMenuServices).createDefaultFonctions((List<Applications>) any());
+		verify(generateMenuServices).createDefaultModule((Structures) any());
+		verify(generateDefaultDocServices).create();
 	}
 }
 
