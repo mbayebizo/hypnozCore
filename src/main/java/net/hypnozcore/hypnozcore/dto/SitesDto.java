@@ -12,7 +12,6 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @ApiModel("Application Dto")
 @NoArgsConstructor
@@ -23,16 +22,16 @@ import java.util.Date;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class SitesDto{
-    Long id;
-    @Size(max = 20)
-    private String code;
-    @Size(max = 100)
-    private String libelle;
-    private int inactif;
-    private long sitIdResponsable;
-    @Size(max = 100)
-    private String sitNomResponsable;
-    private long sitIdClient;
-    private Long structuresId;
+public class SitesDto {
+	Long id;
+	@Size(max = 20)
+	private String code;
+	@Size(max = 100)
+	private String libelle;
+	private int inactif;
+	private long sitIdResponsable;
+	@Size(max = 100)
+	private String sitNomResponsable;
+	private long sitIdClient;
+	private StructuresDto structuresDto;
 }

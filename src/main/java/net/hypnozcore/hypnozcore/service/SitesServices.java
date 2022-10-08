@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.*;
 
 @Service
 @Slf4j
@@ -35,11 +32,10 @@ public class SitesServices {
 	public SitesDto saveSites(SitesDto dto) {
 		if (dto == null) throw new ResponseException(RequestErrorEnum.NOT_FOUND);
 		if (dto.getCode() == null) throw new ResponseException(RequestErrorEnum.CODE_EMPTY);
-		Structures structures = structuresRepository.findById(dto.getStructuresId())
+		 structuresRepository.findById(dto.getStructuresDto().getId())
 				.orElseThrow(() -> new ResponseException(RequestErrorEnum.NOT_FOUND));
 
 		var sites = sitesMapper.toEntity(dto);
-		sites.setStructures(structures);
 		sitesRepository.saveAndFlush(sites);
 		return sitesMapper.toDto(sites);
 	}

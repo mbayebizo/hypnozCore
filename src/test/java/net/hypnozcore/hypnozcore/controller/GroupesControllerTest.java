@@ -1,13 +1,6 @@
 package net.hypnozcore.hypnozcore.controller;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Optional;
-
 import net.hypnozcore.hypnozcore.dto.GroupesDto;
 import net.hypnozcore.hypnozcore.dto.StructuresDto;
 import net.hypnozcore.hypnozcore.service.GroupesServices;
@@ -23,6 +16,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {GroupesController.class})
 @ExtendWith(SpringExtension.class)
