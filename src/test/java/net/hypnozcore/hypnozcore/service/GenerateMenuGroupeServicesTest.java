@@ -43,11 +43,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {GenerateMenuGroupeService.class})
+@ContextConfiguration(classes = {GenerateMenuGroupeServices.class})
 @ExtendWith(SpringExtension.class)
-class GenerateMenuGroupeServiceTest {
+class GenerateMenuGroupeServicesTest {
 	@Autowired
-	private GenerateMenuGroupeService generateMenuGroupeService;
+	private GenerateMenuGroupeServices generateMenuGroupeServices;
 
 	@MockBean
 	private GroupesApplicationsRepository groupesApplicationsRepository;
@@ -68,7 +68,7 @@ class GenerateMenuGroupeServiceTest {
 	private UserModulesRepository userModulesRepository;
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteFonctionByGroupe(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteFonctionByGroupe(Long, Long)}
 	 */
 	@Test
 	void testDeleteFonctionByGroupe() {
@@ -152,14 +152,14 @@ class GenerateMenuGroupeServiceTest {
 		doNothing().when(groupesFonctionsRepository).deleteByFonctionsAndGroupes((Fonctions) any(), (Groupes) any());
 		when(groupesFonctionsRepository.findByIdGroupesIdAndIdFonctionsId((Long) any(), (Long) any())).thenReturn(ofResult);
 		when(userFonctionsRepository.findByIdFonctionsId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteFonctionByGroupe(1L, 1L);
+		generateMenuGroupeServices.deleteFonctionByGroupe(1L, 1L);
 		verify(groupesFonctionsRepository).findByIdGroupesIdAndIdFonctionsId((Long) any(), (Long) any());
 		verify(groupesFonctionsRepository).deleteByFonctionsAndGroupes((Fonctions) any(), (Groupes) any());
 		verify(userFonctionsRepository).findByIdFonctionsId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteFonctionByGroupe(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteFonctionByGroupe(Long, Long)}
 	 */
 	@Test
 	void testDeleteFonctionByGroupe2() {
@@ -245,12 +245,12 @@ class GenerateMenuGroupeServiceTest {
 				.thenReturn(ofResult);
 		when(userFonctionsRepository.findByIdFonctionsId((Long) any()))
 				.thenThrow(new ResponseException("An error occurred"));
-		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeService.deleteFonctionByGroupe(1L, 1L));
+		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeServices.deleteFonctionByGroupe(1L, 1L));
 		verify(userFonctionsRepository).findByIdFonctionsId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteFonctionByGroupe(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteFonctionByGroupe(Long, Long)}
 	 */
 	@Test
 	void testDeleteFonctionByGroupe3() {
@@ -407,7 +407,7 @@ class GenerateMenuGroupeServiceTest {
 		when(groupesFonctionsRepository.findByIdGroupesIdAndIdFonctionsId((Long) any(), (Long) any()))
 				.thenReturn(ofResult);
 		when(userFonctionsRepository.findByIdFonctionsId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteFonctionByGroupe(1L, 1L);
+		generateMenuGroupeServices.deleteFonctionByGroupe(1L, 1L);
 		verify(groupesFonctionsRepository).findByIdGroupesIdAndIdFonctionsId((Long) any(), (Long) any());
 		verify(groupesFonctionsRepository).deleteByFonctionsAndGroupes((Fonctions) any(), (Groupes) any());
 		verify(groupesFonctions).getFonctions();
@@ -420,7 +420,7 @@ class GenerateMenuGroupeServiceTest {
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeApplication(long, long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeApplication(long, long)}
 	 */
 	@Test
 	void testDeleteGroupeApplication() {
@@ -520,14 +520,14 @@ class GenerateMenuGroupeServiceTest {
 		when(groupesApplicationsRepository.findByIdApplicationsIdAndIdGroupesId((Long) any(), (Long) any()))
 				.thenReturn(ofResult);
 		when(userApplicationsRepository.findByIdApplicationsId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteGroupeApplication(1L, 1L);
+		generateMenuGroupeServices.deleteGroupeApplication(1L, 1L);
 		verify(groupesApplicationsRepository).findByIdApplicationsIdAndIdGroupesId((Long) any(), (Long) any());
 		verify(groupesApplicationsRepository).deleteByApplicationsAndGroupes((Applications) any(), (Groupes) any());
 		verify(userApplicationsRepository).findByIdApplicationsId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeApplication(long, long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeApplication(long, long)}
 	 */
 	@Test
 	void testDeleteGroupeApplication2() {
@@ -628,12 +628,12 @@ class GenerateMenuGroupeServiceTest {
 				.thenReturn(ofResult);
 		when(userApplicationsRepository.findByIdApplicationsId((Long) any()))
 				.thenThrow(new ResponseException("An error occurred"));
-		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeService.deleteGroupeApplication(1L, 1L));
+		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeServices.deleteGroupeApplication(1L, 1L));
 		verify(userApplicationsRepository).findByIdApplicationsId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeApplication(long, long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeApplication(long, long)}
 	 */
 	@Test
 	void testDeleteGroupeApplication3() {
@@ -819,7 +819,7 @@ class GenerateMenuGroupeServiceTest {
 		when(groupesApplicationsRepository.findByIdApplicationsIdAndIdGroupesId((Long) any(), (Long) any()))
 				.thenReturn(ofResult);
 		when(userApplicationsRepository.findByIdApplicationsId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteGroupeApplication(1L, 1L);
+		generateMenuGroupeServices.deleteGroupeApplication(1L, 1L);
 		verify(groupesApplicationsRepository).findByIdApplicationsIdAndIdGroupesId((Long) any(), (Long) any());
 		verify(groupesApplicationsRepository).deleteByApplicationsAndGroupes((Applications) any(), (Groupes) any());
 		verify(groupesApplications).getApplications();
@@ -832,7 +832,7 @@ class GenerateMenuGroupeServiceTest {
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeModule(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeModule(Long, Long)}
 	 */
 	@Test
 	void testDeleteGroupeModule() {
@@ -911,14 +911,14 @@ class GenerateMenuGroupeServiceTest {
 		doNothing().when(groupesModulesRepository).deleteByModulesAndGroupes((Modules) any(), (Groupes) any());
 		when(groupesModulesRepository.findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any())).thenReturn(ofResult);
 		when(userModulesRepository.findByIdModulesId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteGroupeModule(1L, 1L);
+		generateMenuGroupeServices.deleteGroupeModule(1L, 1L);
 		verify(groupesModulesRepository).findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any());
 		verify(groupesModulesRepository).deleteByModulesAndGroupes((Modules) any(), (Groupes) any());
 		verify(userModulesRepository).findByIdModulesId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeModule(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeModule(Long, Long)}
 	 */
 	@Test
 	void testDeleteGroupeModule2() {
@@ -997,12 +997,12 @@ class GenerateMenuGroupeServiceTest {
 		doNothing().when(groupesModulesRepository).deleteByModulesAndGroupes((Modules) any(), (Groupes) any());
 		when(groupesModulesRepository.findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any())).thenReturn(ofResult);
 		when(userModulesRepository.findByIdModulesId((Long) any())).thenThrow(new ResponseException("An error occurred"));
-		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeService.deleteGroupeModule(1L, 1L));
+		Assertions.assertThrows(ResponseException.class, () -> generateMenuGroupeServices.deleteGroupeModule(1L, 1L));
 		verify(userModulesRepository).findByIdModulesId((Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#deleteGroupeModule(Long, Long)}
+	 * Method under test: {@link GenerateMenuGroupeServices#deleteGroupeModule(Long, Long)}
 	 */
 	@Test
 	void testDeleteGroupeModule3() {
@@ -1148,7 +1148,7 @@ class GenerateMenuGroupeServiceTest {
 		doNothing().when(groupesModulesRepository).deleteByModulesAndGroupes((Modules) any(), (Groupes) any());
 		when(groupesModulesRepository.findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any())).thenReturn(ofResult);
 		when(userModulesRepository.findByIdModulesId((Long) any())).thenReturn(new ArrayList<>());
-		generateMenuGroupeService.deleteGroupeModule(1L, 1L);
+		generateMenuGroupeServices.deleteGroupeModule(1L, 1L);
 		verify(groupesModulesRepository).findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any());
 		verify(groupesModulesRepository).deleteByModulesAndGroupes((Modules) any(), (Groupes) any());
 		verify(groupesModules).getGroupes();
@@ -1161,7 +1161,7 @@ class GenerateMenuGroupeServiceTest {
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#addGroupesModules(Groupes, Modules)}
+	 * Method under test: {@link GenerateMenuGroupeServices#addGroupesModules(Groupes, Modules)}
 	 */
 	@Test
 	@Disabled
@@ -1227,11 +1227,11 @@ class GenerateMenuGroupeServiceTest {
 		modules.setOrdre(1);
 		modules.setStandart(1);
 		modules.setUrl("https://example.org/example");
-		assertTrue(generateMenuGroupeService.addGroupesModules(groupes, modules).isNew());
+		assertTrue(generateMenuGroupeServices.addGroupesModules(groupes, modules).isNew());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#addGroupesModules(Groupes, Modules)}
+	 * Method under test: {@link GenerateMenuGroupeServices#addGroupesModules(Groupes, Modules)}
 	 */
 	@Test
 	@Disabled
@@ -1306,7 +1306,7 @@ class GenerateMenuGroupeServiceTest {
 		modules.setOrdre(1);
 		modules.setStandart(1);
 		modules.setUrl("https://example.org/example");
-		assertTrue(generateMenuGroupeService.addGroupesModules(groupes, modules).isNew());
+		assertTrue(generateMenuGroupeServices.addGroupesModules(groupes, modules).isNew());
 		verify(groupes).getId();
 		verify(groupes).setCreatedBy((String) any());
 		verify(groupes).setCreatedDate((Date) any());
@@ -1320,7 +1320,7 @@ class GenerateMenuGroupeServiceTest {
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#addGroupesModules(Groupes, Modules)}
+	 * Method under test: {@link GenerateMenuGroupeServices#addGroupesModules(Groupes, Modules)}
 	 */
 	@Test
 	void testAddGroupesModules3() {
@@ -1394,7 +1394,7 @@ class GenerateMenuGroupeServiceTest {
 		modules.setOrdre(1);
 		modules.setStandart(1);
 		modules.setUrl("https://example.org/example");
-		assertThrows(ResponseException.class, () -> generateMenuGroupeService.addGroupesModules(groupes, modules));
+		assertThrows(ResponseException.class, () -> generateMenuGroupeServices.addGroupesModules(groupes, modules));
 		verify(groupes).getId();
 		verify(groupes).setCreatedBy((String) any());
 		verify(groupes).setCreatedDate((Date) any());
@@ -1408,7 +1408,7 @@ class GenerateMenuGroupeServiceTest {
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#addGroupesModules(Groupes, Modules)}
+	 * Method under test: {@link GenerateMenuGroupeServices#addGroupesModules(Groupes, Modules)}
 	 */
 	@Test
 	void testAddGroupesModules4() {
@@ -1620,12 +1620,12 @@ class GenerateMenuGroupeServiceTest {
 		modules2.setOrdre(1);
 		modules2.setStandart(1);
 		modules2.setUrl("https://example.org/example");
-		assertSame(groupesModules1, generateMenuGroupeService.addGroupesModules(groupes2, modules2));
+		assertSame(groupesModules1, generateMenuGroupeServices.addGroupesModules(groupes2, modules2));
 		verify(groupesModulesRepository).findByIdModulesIdAndIdGroupesId((Long) any(), (Long) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuGroupeService#addGroupesFonctions(Groupes, Fonctions)}
+	 * Method under test: {@link GenerateMenuGroupeServices#addGroupesFonctions(Groupes, Fonctions)}
 	 */
 	@Test
 	void testAddGroupesFonctions() {
@@ -1853,7 +1853,7 @@ class GenerateMenuGroupeServiceTest {
 		fonctions2.setType("Type");
 		fonctions2.setUrl("https://example.org/example");
 		fonctions2.setUsed(true);
-		assertSame(groupesFonctions1, generateMenuGroupeService.addGroupesFonctions(groupes2, fonctions2));
+		assertSame(groupesFonctions1, generateMenuGroupeServices.addGroupesFonctions(groupes2, fonctions2));
 		verify(groupesFonctionsRepository).findByIdGroupesIdAndIdFonctionsId((Long) any(), (Long) any());
 	}
 

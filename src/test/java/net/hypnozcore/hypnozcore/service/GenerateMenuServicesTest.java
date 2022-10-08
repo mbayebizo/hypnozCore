@@ -34,9 +34,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ContextConfiguration(classes = {GenerateMenuService.class})
+@ContextConfiguration(classes = {GenerateMenuServices.class})
 @ExtendWith(SpringExtension.class)
-class GenerateMenuServiceTest {
+class GenerateMenuServicesTest {
 	@MockBean
 	private ApplicationsRepository applicationsRepository;
 
@@ -44,7 +44,7 @@ class GenerateMenuServiceTest {
 	private FonctionsRepository fonctionsRepository;
 
 	@Autowired
-	private GenerateMenuService generateMenuService;
+	private GenerateMenuServices generateMenuServices;
 
 	@MockBean
 	private ModulesRepository modulesRepository;
@@ -53,7 +53,7 @@ class GenerateMenuServiceTest {
 	private ModulesStructureRepository modulesStructureRepository;
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultModule(Structures)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultModule(Structures)}
 	 */
 	@Test
 	void testCreateDefaultModule() {
@@ -126,20 +126,20 @@ class GenerateMenuServiceTest {
 		structures.setVille("Ville");
 		structures.setZoneFiscale("Zone Fiscale");
 		structures.setZoneFiscale2("Zone Fiscale2");
-		assertEquals(8, generateMenuService.createDefaultModule(structures).size());
+		assertEquals(8, generateMenuServices.createDefaultModule(structures).size());
 		verify(modulesRepository, atLeast(1)).findByCode((String) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultApplication(List)}
 	 */
 	@Test
 	void testCreateDefaultApplication() {
-		assertTrue(generateMenuService.createDefaultApplication(new ArrayList<>()).isEmpty());
+		assertTrue(generateMenuServices.createDefaultApplication(new ArrayList<>()).isEmpty());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultApplication(List)}
 	 */
 	@Test
 	void testCreateDefaultApplication2() {
@@ -163,11 +163,11 @@ class GenerateMenuServiceTest {
 
 		ArrayList<Modules> modulesList = new ArrayList<>();
 		modulesList.add(modules);
-		assertTrue(generateMenuService.createDefaultApplication(modulesList).isEmpty());
+		assertTrue(generateMenuServices.createDefaultApplication(modulesList).isEmpty());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultApplication(List)}
 	 */
 	@Test
 	void testCreateDefaultApplication3() {
@@ -210,11 +210,11 @@ class GenerateMenuServiceTest {
 		ArrayList<Modules> modulesList = new ArrayList<>();
 		modulesList.add(modules1);
 		modulesList.add(modules);
-		assertTrue(generateMenuService.createDefaultApplication(modulesList).isEmpty());
+		assertTrue(generateMenuServices.createDefaultApplication(modulesList).isEmpty());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultApplication(List)}
 	 */
 	@Test
 	void testCreateDefaultApplication4() {
@@ -335,13 +335,13 @@ class GenerateMenuServiceTest {
 
 		ArrayList<Modules> modulesList = new ArrayList<>();
 		modulesList.add(modules3);
-		assertEquals(3, generateMenuService.createDefaultApplication(modulesList).size());
+		assertEquals(3, generateMenuServices.createDefaultApplication(modulesList).size());
 		verify(modulesRepository, atLeast(1)).findByCode((String) any());
 		verify(applicationsRepository, atLeast(1)).findByCodeAndModule((String) any(), (String) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultApplication(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultApplication(List)}
 	 */
 	@Test
 	void testCreateDefaultApplication5() {
@@ -389,21 +389,21 @@ class GenerateMenuServiceTest {
 
 		ArrayList<Modules> modulesList = new ArrayList<>();
 		modulesList.add(modules1);
-		assertThrows(ResponseException.class, () -> generateMenuService.createDefaultApplication(modulesList));
+		assertThrows(ResponseException.class, () -> generateMenuServices.createDefaultApplication(modulesList));
 		verify(modulesRepository).findByCode((String) any());
 		verify(applicationsRepository).findByCodeAndModule((String) any(), (String) any());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultFonctions(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultFonctions(List)}
 	 */
 	@Test
 	void testCreateDefaultFonctions() {
-		assertTrue(generateMenuService.createDefaultFonctions(new ArrayList<>()).isEmpty());
+		assertTrue(generateMenuServices.createDefaultFonctions(new ArrayList<>()).isEmpty());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultFonctions(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultFonctions(List)}
 	 */
 	@Test
 	void testCreateDefaultFonctions2() {
@@ -446,11 +446,11 @@ class GenerateMenuServiceTest {
 
 		ArrayList<Applications> applicationsList = new ArrayList<>();
 		applicationsList.add(applications);
-		assertTrue(generateMenuService.createDefaultFonctions(applicationsList).isEmpty());
+		assertTrue(generateMenuServices.createDefaultFonctions(applicationsList).isEmpty());
 	}
 
 	/**
-	 * Method under test: {@link GenerateMenuService#createDefaultFonctions(List)}
+	 * Method under test: {@link GenerateMenuServices#createDefaultFonctions(List)}
 	 */
 	@Test
 	void testCreateDefaultFonctions3() {
@@ -531,7 +531,7 @@ class GenerateMenuServiceTest {
 		ArrayList<Applications> applicationsList = new ArrayList<>();
 		applicationsList.add(applications1);
 		applicationsList.add(applications);
-		assertTrue(generateMenuService.createDefaultFonctions(applicationsList).isEmpty());
+		assertTrue(generateMenuServices.createDefaultFonctions(applicationsList).isEmpty());
 	}
 }
 
